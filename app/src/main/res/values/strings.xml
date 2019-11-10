@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Krowd</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="krowd_welcome">Welcome to Krowd</string>
+    <string name="description">the location based attendance taker!</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="about">About</string>
+    <string name="i_am_a">I am a ...</string>
+    <string name="student">Student</string>
+    <string name="instructor_professor">Instructor/Professor</string>
+    <string name="create_your_krowd_account">Create your Krowd account</string>
+    <string name="submit">Submit</string>
+    <string name="course">Course</string>
+    <string name="password">Password</string>
+    <string name="log_in">Log In</string>
+    <string name="user_name_same_as_your_name">User Name (Same as your first name)</string>
+    <string name="login">Login</string>
+    <string name="log_in_string">Log In</string>
+</resources>
