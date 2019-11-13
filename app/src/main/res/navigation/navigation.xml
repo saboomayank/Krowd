@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_mainPage_to_typeOfSignUp"
             app:destination="@id/typeOfSignUp" />
+        <action
+            android:id="@+id/action_mainPage_to_logIn"
+            app:destination="@id/logIn" />
     </fragment>
     <fragment
         android:id="@+id/signUpStudent"
@@ -36,7 +39,11 @@
         android:id="@+id/logIn"
         android:name="com.kruelkotlinkiller.krowd.logIn"
         android:label="fragment_log_in"
-        tools:layout="@layout/fragment_log_in" />
+        tools:layout="@layout/fragment_log_in" >
+        <action
+            android:id="@+id/action_logIn_to_homePage"
+            app:destination="@id/homePage" />
+    </fragment>
     <fragment
         android:id="@+id/typeOfSignUp"
         android:name="com.kruelkotlinkiller.krowd.typeOfSignUp"
@@ -49,4 +56,9 @@
             android:id="@+id/action_typeOfSignUp_to_signUpTeacher"
             app:destination="@id/signUpTeacher" />
     </fragment>
+    <fragment
+        android:id="@+id/homePage"
+        android:name="com.kruelkotlinkiller.krowd.homePage"
+        android:label="fragment_home_page"
+        tools:layout="@layout/fragment_home_page" />
 </navigation>

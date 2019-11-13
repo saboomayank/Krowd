@@ -3,27 +3,10 @@ package com.kruelkotlinkiller.krowd
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
-import androidx.databinding.DataBindingUtil
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
-import com.kruelkotlinkiller.krowd.databinding.FragmentLogInBinding
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.AuthResult
-import com.google.android.gms.tasks.Task
-import androidx.annotation.NonNull
-import com.google.android.gms.tasks.OnCompleteListener
-import android.R.attr.password
-import android.R.attr.password
-import androidx.navigation.findNavController
-
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -33,21 +16,16 @@ private const val ARG_PARAM2 = "param2"
 /**
  * A simple [Fragment] subclass.
  * Activities that contain this fragment must implement the
- * [logIn.OnFragmentInteractionListener] interface
+ * [homePage.OnFragmentInteractionListener] interface
  * to handle interaction events.
- * Use the [logIn.newInstance] factory method to
+ * Use the [homePage.newInstance] factory method to
  * create an instance of this fragment.
  */
-class logIn : Fragment() {
+class homePage : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
-    private lateinit var binding : FragmentLogInBinding
-    lateinit var email : EditText
-    lateinit var password : EditText
-    lateinit var logInBtn : Button
-    lateinit var mAuth : FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,43 +39,8 @@ class logIn : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        binding =  DataBindingUtil.inflate(inflater,R.layout.fragment_log_in, container, false)
-        email = binding.simpleEditText
-        password = binding.simpleEditText3
-        logInBtn = binding.button
-        mAuth = FirebaseAuth.getInstance()
-        logInBtn.setOnClickListener {
-
-            checkUser()
-
-        }
-
         // Inflate the layout for this fragment
-        return binding.root
-    }
-
-    fun checkUser(){
-
-        val emailA = email.text.toString().trim()
-        val pass = password.text.toString().trim()
-
-        if (emailA.isNotEmpty() && pass.isNotEmpty()) {
-            this.mAuth.signInWithEmailAndPassword(emailA, pass).addOnCompleteListener { task: Task<AuthResult> ->
-             if(task.isSuccessful) {
-                 logInBtn.setOnClickListener{ view : View ->
-                     view.findNavController().navigate(R.id.action_logIn_to_homePage)
-                 }
-             }else{
-                 Toast.makeText(context, "Incorrect credentials", Toast.LENGTH_SHORT).show()
-             }
-            }
-
-        }else {
-            Toast.makeText(context, "Please fill up the Credentials :|", Toast.LENGTH_SHORT).show()
-        }
-
-
+        return inflater.inflate(R.layout.fragment_home_page, container, false)
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -138,12 +81,12 @@ class logIn : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment logIn.
+         * @return A new instance of fragment homePage.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            logIn().apply {
+            homePage().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

@@ -1,4 +1,5 @@
 <resources>
+
     <string name="app_name">Krowd</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -18,4 +19,7 @@
     <string name="user_name_same_as_your_name">User Name (Same as your first name)</string>
     <string name="login">Login</string>
     <string name="log_in_string">Log In</string>
+    <string name="email">Email</string>
+
+
 </resources>

@@ -10,8 +10,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.NonNull
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.kruelkotlinkiller.krowd.databinding.FragmentSignUpStudentBinding
@@ -43,7 +47,10 @@ class signUpStudent : Fragment() {
     lateinit var fName : EditText
     lateinit var lName : EditText
     lateinit var pWord : EditText
-    lateinit var database :DatabaseReference
+    lateinit var email : EditText
+    lateinit var databaseReference: DatabaseReference
+    lateinit var database : FirebaseDatabase
+    lateinit var mAuth : FirebaseAuth
     lateinit var studentId : String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,9 +68,10 @@ class signUpStudent : Fragment() {
         submitBtn = binding.button
         fName = binding.simpleEditText
         lName = binding.simpleEditText3
-        pWord = binding.simpleEditText4
-        database = FirebaseDatabase.getInstance().reference
-
+        pWord = binding.simpleEditText6
+        email = binding.simpleEditText4
+        databaseReference = FirebaseDatabase.getInstance().reference
+        mAuth = FirebaseAuth.getInstance()
         submitBtn.setOnClickListener{ view : View ->
             saveStudent()
             view.findNavController().navigate(R.id.action_signUpStudent_to_logIn)
@@ -76,6 +84,7 @@ class signUpStudent : Fragment() {
        val firstName = fName.text.toString().trim()
         val lastName = lName.text.toString().trim()
         val password = pWord.text.toString().trim()
+        val emailA = email.text.toString().trim()
        if(firstName.isEmpty()){
            fName.error = "Please enter your first name"
        }
@@ -85,10 +94,25 @@ class signUpStudent : Fragment() {
         if(password.isEmpty()){
             pWord.error = "Please set a password"
         }
+        if(emailA.isEmpty()){
+            email.error = "Please enter an email"
+        }
         val ref = FirebaseDatabase.getInstance().getReference("Student")
         studentId = ref.push().key!!
-        val student = Student(studentId,firstName,lastName,password)
+        val student = Student(studentId,firstName,lastName)
         ref.child(studentId).setValue(student)
+
+
+        mAuth.createUserWithEmailAndPassword(emailA,password)
+            .addOnCompleteListener { task: Task<AuthResult> ->
+                if (task.isSuccessful) {
+                    Toast.makeText(context,"register successfully",Toast.LENGTH_LONG).show()
+                    val firebaseUser = this.mAuth.currentUser!!
+                } else {
+                    Toast.makeText(context,"register unsuccessfully",Toast.LENGTH_LONG).show()
+
+                }
+            }
 
     }
 

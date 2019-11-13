@@ -52,6 +52,9 @@ class mainPage : Fragment() {
         signUpBtn.setOnClickListener{ view : View ->
             view.findNavController().navigate(R.id.action_mainPage_to_typeOfSignUp)
         }
+        logInBtn.setOnClickListener {view:View->
+            view.findNavController().navigate(R.id.action_mainPage_to_logIn)
+        }
         return binding.root
     }
 

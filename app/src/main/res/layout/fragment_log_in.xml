@@ -37,7 +37,7 @@
             android:layout_marginBottom="532dp"
             android:background="@drawable/rect_textedit"
             android:fontFamily="casual"
-            android:hint="@string/user_name_same_as_your_name"
+            android:hint="@string/email"
             android:inputType="text"
             android:paddingLeft="10dp"
             android:textSize="18sp"

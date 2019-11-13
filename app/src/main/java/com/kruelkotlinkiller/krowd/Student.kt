@@ -4,8 +4,8 @@ import com.google.firebase.database.Exclude
 class Student(
     val id: String,
     val firstName: String,
-    val lastName: String,
-    val password: String){
+    val lastName: String
+   ){
 
 //    @Exclude
 //    fun toMap(): Map<String, Any?> {
