@@ -41,8 +41,11 @@
         android:label="fragment_log_in"
         tools:layout="@layout/fragment_log_in" >
         <action
-            android:id="@+id/action_logIn_to_homePage"
-            app:destination="@id/homePage" />
+            android:id="@+id/action_logIn_to_studentHomePage"
+            app:destination="@id/studentHomePage" />
+        <action
+            android:id="@+id/action_logIn_to_teacherHomePage"
+            app:destination="@id/teacherHomePage" />
     </fragment>
     <fragment
         android:id="@+id/typeOfSignUp"
@@ -57,8 +60,13 @@
             app:destination="@id/signUpTeacher" />
     </fragment>
     <fragment
-        android:id="@+id/homePage"
-        android:name="com.kruelkotlinkiller.krowd.homePage"
-        android:label="fragment_home_page"
-        tools:layout="@layout/fragment_home_page" />
+        android:id="@+id/studentHomePage"
+        android:name="com.kruelkotlinkiller.krowd.studentHomePage"
+        android:label="fragment_student_home_page"
+        tools:layout="@layout/fragment_student_home_page" />
+    <fragment
+        android:id="@+id/teacherHomePage"
+        android:name="com.kruelkotlinkiller.krowd.teacherHomePage"
+        android:label="fragment_teacher_home_page"
+        tools:layout="@layout/fragment_teacher_home_page" />
 </navigation>

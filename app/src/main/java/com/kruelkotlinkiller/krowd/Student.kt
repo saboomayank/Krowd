@@ -4,7 +4,8 @@ import com.google.firebase.database.Exclude
 class Student(
     val id: String,
     val firstName: String,
-    val lastName: String
+    val lastName: String,
+    val email : String
    ){
 
 //    @Exclude

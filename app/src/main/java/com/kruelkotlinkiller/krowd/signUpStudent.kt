@@ -1,5 +1,6 @@
 package com.kruelkotlinkiller.krowd
 
+import android.app.AlertDialog
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
@@ -73,49 +74,68 @@ class signUpStudent : Fragment() {
         databaseReference = FirebaseDatabase.getInstance().reference
         mAuth = FirebaseAuth.getInstance()
         submitBtn.setOnClickListener{ view : View ->
-            saveStudent()
-            view.findNavController().navigate(R.id.action_signUpStudent_to_logIn)
+            if(fName.text.toString().isNotEmpty()
+                && lName.text.toString().isNotEmpty()
+                && email.text.toString().isNotEmpty()
+                && pWord.text.toString().isNotEmpty()
+                && isEmailValid(email.text.toString())) {
+                saveStudent()
+                view.findNavController().navigate(R.id.action_signUpStudent_to_logIn)
+            }else{
+                val builder = AlertDialog.Builder(context)
+                builder.setTitle("ERROR")
+                builder.setMessage("Please fill in all the fields!")
+                builder.setPositiveButton("Ok"){dialog, which ->
+
+                }
+                val alert = builder.create()
+                alert.show()
+
+            }
         }
 
         return binding.root
     }
 
     private fun saveStudent() {
-       val firstName = fName.text.toString().trim()
+        val firstName = fName.text.toString().trim()
         val lastName = lName.text.toString().trim()
         val password = pWord.text.toString().trim()
         val emailA = email.text.toString().trim()
-       if(firstName.isEmpty()){
-           fName.error = "Please enter your first name"
-       }
-        if(lastName.isEmpty()){
-            lName.error = "Please enter your last name"
-        }
-        if(password.isEmpty()){
-            pWord.error = "Please set a password"
-        }
-        if(emailA.isEmpty()){
-            email.error = "Please enter an email"
-        }
-        val ref = FirebaseDatabase.getInstance().getReference("Student")
-        studentId = ref.push().key!!
-        val student = Student(studentId,firstName,lastName)
-        ref.child(studentId).setValue(student)
 
+        if(isEmailValid(emailA)) {
+            val ref = FirebaseDatabase.getInstance().getReference("Student")
+            studentId = ref.push().key!!
+            val student = Student(studentId,firstName,lastName, emailA)
+            ref.child(studentId).setValue(student)
+            mAuth.createUserWithEmailAndPassword(emailA, password)
+                .addOnCompleteListener { task: Task<AuthResult> ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(context, "register successfully", Toast.LENGTH_LONG).show()
+                        val firebaseUser = this.mAuth.currentUser!!
+                    } else {
+                        Toast.makeText(context, "register unsuccessfully", Toast.LENGTH_LONG).show()
 
-        mAuth.createUserWithEmailAndPassword(emailA,password)
-            .addOnCompleteListener { task: Task<AuthResult> ->
-                if (task.isSuccessful) {
-                    Toast.makeText(context,"register successfully",Toast.LENGTH_LONG).show()
-                    val firebaseUser = this.mAuth.currentUser!!
-                } else {
-                    Toast.makeText(context,"register unsuccessfully",Toast.LENGTH_LONG).show()
-
+                    }
                 }
+        }
+        else{
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle("ERROR")
+            builder.setMessage("Please Enter a valid email!")
+            builder.setPositiveButton("Ok"){dialog, which ->
+
             }
+            val alert = builder.create()
+            alert.show()
+
+        }
 
     }
-
+    val EMAIL_REGEX = "^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})"
+    fun isEmailValid(email: String): Boolean {
+        return EMAIL_REGEX.toRegex().matches(email)
+    }
     // TODO: Rename method, update argument and hook method into UI event
     fun onButtonPressed(uri: Uri) {
         listener?.onFragmentInteraction(uri)

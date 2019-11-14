@@ -1,5 +1,6 @@
 package com.kruelkotlinkiller.krowd
 
+import android.app.AlertDialog
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
@@ -8,8 +9,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.kruelkotlinkiller.krowd.databinding.FragmentSignUpTeacherBinding
 
 // TODO: Rename parameter arguments, choose names that match
@@ -31,7 +39,15 @@ class signUpTeacher : Fragment() {
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
     private lateinit var binding: FragmentSignUpTeacherBinding
+    lateinit var fname : EditText
+    lateinit var lname : EditText
+    lateinit var email : EditText
+    lateinit var password : EditText
     lateinit var submitBtn : Button
+    lateinit var databaseReference: DatabaseReference
+    lateinit var database : FirebaseDatabase
+    lateinit var mAuth : FirebaseAuth
+    lateinit var teacherId : String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -46,13 +62,75 @@ class signUpTeacher : Fragment() {
     ): View? {
         binding =  DataBindingUtil.inflate(inflater,R.layout.fragment_sign_up_teacher, container, false)
         submitBtn = binding.button
+        fname = binding.simpleEditText
+        lname = binding.simpleEditText2
+        email = binding.simpleEditText5
+        password = binding.simpleEditText7
+        databaseReference = FirebaseDatabase.getInstance().reference
+        mAuth = FirebaseAuth.getInstance()
         submitBtn.setOnClickListener{ view : View ->
-            view.findNavController().navigate(R.id.action_signUpTeacher_to_logIn)
+            if(fname.text.toString().isNotEmpty()
+                && lname.text.toString().isNotEmpty()
+                && email.text.toString().isNotEmpty()
+                && password.text.toString().isNotEmpty()
+                && isEmailValid(email.text.toString())) {
+                saveTeacher()
+                view.findNavController().navigate(R.id.action_signUpTeacher_to_logIn)
+            }else{
+                val builder = AlertDialog.Builder(context)
+                builder.setTitle("ERROR")
+                builder.setMessage("Please fill in all the fields!")
+                builder.setPositiveButton("Ok"){dialog, which ->
+
+                }
+                val alert = builder.create()
+                alert.show()
+
+            }
         }
         // Inflate the layout for this fragment
 
 
         return binding.root
+    }
+    private fun saveTeacher() {
+        val firstName = fname.text.toString().trim()
+        val lastName = lname.text.toString().trim()
+        val pass = password.text.toString().trim()
+        val emailA = email.text.toString().trim()
+
+        if(isEmailValid(emailA)) {
+            val ref = FirebaseDatabase.getInstance().getReference("Teacher")
+            teacherId = ref.push().key!!
+            val teacher = Teacher(teacherId,firstName,lastName, emailA)
+            ref.child(teacherId).setValue(teacher)
+            mAuth.createUserWithEmailAndPassword(emailA, pass)
+                .addOnCompleteListener { task: Task<AuthResult> ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(context, "register successfully", Toast.LENGTH_LONG).show()
+
+                    } else {
+                        Toast.makeText(context, "register unsuccessfully", Toast.LENGTH_LONG).show()
+
+                    }
+                }
+        }
+        else{
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle("ERROR")
+            builder.setMessage("Please Enter a valid email!")
+            builder.setPositiveButton("Ok"){dialog, which ->
+
+            }
+            val alert = builder.create()
+            alert.show()
+
+        }
+
+    }
+    val EMAIL_REGEX = "^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})"
+    fun isEmailValid(email: String): Boolean {
+        return EMAIL_REGEX.toRegex().matches(email)
     }
 
     // TODO: Rename method, update argument and hook method into UI event

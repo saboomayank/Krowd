@@ -78,16 +78,41 @@ class logIn : Fragment() {
     }
 
     fun checkUser(){
-
+        val refStudent = FirebaseDatabase.getInstance().getReference("Student")
+        val refTeacher = FirebaseDatabase.getInstance().getReference("Teacher")
         val emailA = email.text.toString().trim()
         val pass = password.text.toString().trim()
 
         if (emailA.isNotEmpty() && pass.isNotEmpty()) {
             this.mAuth.signInWithEmailAndPassword(emailA, pass).addOnCompleteListener { task: Task<AuthResult> ->
              if(task.isSuccessful) {
-                 logInBtn.setOnClickListener{ view : View ->
-                     view.findNavController().navigate(R.id.action_logIn_to_homePage)
-                 }
+                 refStudent.orderByChild("email").equalTo(emailA).addValueEventListener(object:ValueEventListener{
+                     override fun onDataChange(snapshot: DataSnapshot) {
+                       if(snapshot.exists()){
+                           logInBtn.setOnClickListener{ view : View ->
+                               view.findNavController().navigate(R.id.action_logIn_to_studentHomePage)
+                           }
+                       }
+                     }
+
+                     override fun onCancelled(error: DatabaseError) {}
+
+                 })
+                 refTeacher.orderByChild("email").equalTo(emailA).addValueEventListener(object : ValueEventListener{
+                     override fun onDataChange(p0: DataSnapshot) {
+                         if(p0.exists()){
+                             logInBtn.setOnClickListener{ view : View ->
+                                 view.findNavController().navigate(R.id.action_logIn_to_teacherHomePage)
+                             }
+                         }
+                     }
+
+                     override fun onCancelled(p0: DatabaseError) {
+                         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                     }
+
+                 })
+
              }else{
                  Toast.makeText(context, "Incorrect credentials", Toast.LENGTH_SHORT).show()
              }

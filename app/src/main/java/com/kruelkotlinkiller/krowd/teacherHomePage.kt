@@ -7,11 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import androidx.databinding.DataBindingUtil
-import androidx.navigation.findNavController
-import com.kruelkotlinkiller.krowd.databinding.FragmentMainPageBinding
-import com.kruelkotlinkiller.krowd.databinding.FragmentTypeOfSignUpBinding
+import android.widget.EditText
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,19 +17,18 @@ private const val ARG_PARAM2 = "param2"
 /**
  * A simple [Fragment] subclass.
  * Activities that contain this fragment must implement the
- * [typeOfSignUp.OnFragmentInteractionListener] interface
+ * [teacherHomePage.OnFragmentInteractionListener] interface
  * to handle interaction events.
- * Use the [typeOfSignUp.newInstance] factory method to
+ * Use the [teacherHomePage.newInstance] factory method to
  * create an instance of this fragment.
  */
-class typeOfSignUp : Fragment() {
+class teacherHomePage : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
-    private lateinit var binding: FragmentTypeOfSignUpBinding
-    lateinit var studentBtn : Button
-    lateinit var teacherBtn : Button
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -46,17 +41,8 @@ class typeOfSignUp : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding =  DataBindingUtil.inflate(inflater,R.layout.fragment_type_of_sign_up, container, false)
-        studentBtn = binding.button
-        teacherBtn = binding.button1
-        studentBtn.setOnClickListener{ view : View ->
-            view.findNavController().navigate(R.id.action_typeOfSignUp_to_signUpStudent)
-        }
-        teacherBtn.setOnClickListener { view : View ->
-            view.findNavController().navigate(R.id.action_typeOfSignUp_to_signUpTeacher)
-        }
         // Inflate the layout for this fragment
-        return binding.root
+        return inflater.inflate(R.layout.fragment_teacher_home_page, container, false)
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -97,12 +83,12 @@ class typeOfSignUp : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment typeOfSignUp.
+         * @return A new instance of fragment teacherHomePage.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            typeOfSignUp().apply {
+            teacherHomePage().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
