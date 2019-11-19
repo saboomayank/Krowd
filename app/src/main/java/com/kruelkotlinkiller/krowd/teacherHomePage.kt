@@ -7,7 +7,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
+import android.widget.Button
+import android.widget.TextView
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.findNavController
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.kruelkotlinkiller.krowd.databinding.FragmentTeacherHomePageBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,7 +37,10 @@ class teacherHomePage : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
-
+    private lateinit var binding : FragmentTeacherHomePageBinding
+    private lateinit var createClassBtn : Button
+    private lateinit var name : TextView
+    private var temp : String?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,8 +55,40 @@ class teacherHomePage : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_teacher_home_page, container, false)
+        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_teacher_home_page, container, false)
+        createClassBtn = binding.button2
+        name = binding.nameOfTeacher
+        val model = ViewModelProviders.of(activity!!).get(TeacherNameCommunicator::class.java)
+        model.message.observe(this,object: Observer<Any> {
+            override fun onChanged(t: Any?) {
+                temp = t!!.toString()
+                val ref = FirebaseDatabase.getInstance().reference
+                val ordersRef = ref.child("Teacher").orderByChild("email").equalTo(temp)
+                val valueEventListener = object : ValueEventListener{
+                    override fun onDataChange(p0: DataSnapshot) {
+                        for(ds in p0.children){
+                            val nameTemp = ds.child("firstName").getValue(String::class.java) + " " + ds.child("lastName").getValue(String::class.java)
+                            name.text = nameTemp
+                        }
+                    }
+
+                    override fun onCancelled(p0: DatabaseError) {
+                    }
+
+                }
+                ordersRef.addListenerForSingleValueEvent(valueEventListener)
+            }
+        })
+
+
+
+        createClassBtn.setOnClickListener {view : View ->
+            view.findNavController().navigate(R.id.action_teacherHomePage_to_manageClasses)
+        }
+
+        return binding.root
     }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     fun onButtonPressed(uri: Uri) {

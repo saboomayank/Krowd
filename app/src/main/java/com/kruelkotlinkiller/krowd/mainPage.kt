@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Switch
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import com.kruelkotlinkiller.krowd.databinding.FragmentMainPageBinding
@@ -33,6 +34,8 @@ class mainPage : Fragment() {
     private lateinit var binding: FragmentMainPageBinding
     lateinit var logInBtn : Button
     lateinit var signUpBtn : Button
+    lateinit var sw : Switch
+    private var isCheck : Boolean? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -49,12 +52,42 @@ class mainPage : Fragment() {
         binding =  DataBindingUtil.inflate(inflater,R.layout.fragment_main_page, container, false)
         signUpBtn = binding.button
         logInBtn = binding.button1
+        sw = binding.switch1
+        sw?.setOnCheckedChangeListener({ _, isChecked ->
+            val msg = if (isChecked) "Teacher" else "Student"
+            sw.text = msg
+            if(isChecked){
+                isCheck = true
+            }
+            else{
+                isCheck = false
+            }
+        })
+
         signUpBtn.setOnClickListener{ view : View ->
-            view.findNavController().navigate(R.id.action_mainPage_to_typeOfSignUp)
+
+                if(isCheck == true){
+                    view.findNavController().navigate(R.id.action_mainPage_to_signUpTeacher)
+                }
+                else{
+                    view.findNavController().navigate(R.id.action_mainPage_to_signUpStudent)
+                }
+
+
+
         }
         logInBtn.setOnClickListener {view:View->
-            view.findNavController().navigate(R.id.action_mainPage_to_logIn)
+
+                if(isCheck == true) {
+                    view.findNavController().navigate(R.id.action_mainPage_to_teacher_login)
+                }
+                else{
+                    view.findNavController().navigate(R.id.action_mainPage_to_student_logIn)
+                }
+
         }
+
+
         return binding.root
     }
 

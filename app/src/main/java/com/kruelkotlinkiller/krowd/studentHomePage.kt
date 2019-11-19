@@ -1,12 +1,24 @@
 package com.kruelkotlinkiller.krowd
 
+import android.app.AlertDialog
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.kruelkotlinkiller.krowd.databinding.FragmentStudentHomePageBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,6 +38,11 @@ class studentHomePage : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
+    private lateinit var binding : FragmentStudentHomePageBinding
+    private lateinit var addClassBtn : Button
+    private lateinit var name : TextView
+    private var temp : String?= null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,8 +56,33 @@ class studentHomePage : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_student_home_page, container, false)
+        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_student_home_page,container,false)
+        addClassBtn = binding.button2
+        name = binding.nameOfStudent
+        val model = ViewModelProviders.of(activity!!).get(TeacherNameCommunicator::class.java)
+        model.message.observe(this,object: Observer<Any> {
+            override fun onChanged(t: Any?) {
+                temp = t!!.toString()
+                val ref = FirebaseDatabase.getInstance().reference
+                val ordersRef = ref.child("Student").orderByChild("email").equalTo(temp)
+                val valueEventListener = object : ValueEventListener {
+                    override fun onDataChange(p0: DataSnapshot) {
+                        for(ds in p0.children){
+                            val nameTemp = ds.child("firstName").getValue(String::class.java) + " " + ds.child("lastName").getValue(String::class.java)
+                            name.text = nameTemp
+                        }
+                    }
+                    override fun onCancelled(p0: DatabaseError) {
+                    }
+
+                }
+                ordersRef.addListenerForSingleValueEvent(valueEventListener)
+            }
+        })
+
+
+
+        return binding.root
     }
 
     // TODO: Rename method, update argument and hook method into UI event

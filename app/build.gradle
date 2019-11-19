@@ -29,6 +29,7 @@ android {
 }
 
 dependencies {
+    implementation "android.arch.lifecycle:extensions:1.1.1"
     implementation 'com.google.firebase:firebase-analytics:17.2.0'
     implementation "android.arch.navigation:navigation-fragment-ktx:$navigationVersion"
     implementation "android.arch.navigation:navigation-ui-ktx:$navigationVersion"
