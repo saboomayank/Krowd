@@ -56,7 +56,7 @@ class teacherHomePage : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_teacher_home_page, container, false)
-        createClassBtn = binding.button2
+        createClassBtn = binding.button3
         name = binding.nameOfTeacher
         val model = ViewModelProviders.of(activity!!).get(TeacherNameCommunicator::class.java)
         model.message.observe(this,object: Observer<Any> {

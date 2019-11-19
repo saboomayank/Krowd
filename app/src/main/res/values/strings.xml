@@ -20,6 +20,17 @@
     <string name="login">Login</string>
     <string name="log_in_string">Log In</string>
     <string name="email">Email</string>
+    <string name="bio">CS 4540 Android Development
+        \n ---------------------------------
+    \nCS 3801 Societal and Ethical issues in Computing
+        \n ---------------------------------
+    \nCS 3035 Programming Language Paradigms
+        \n ---------------------------------
+    \nCS 5035 TOPICS IN FUNCTIONAL PROGRAMMING
+        \n ---------------------------------
+    \nCS 4551 MULTIMEDIA SOFTWARE SYSTEMS
+        \n ---------------------------------
+    </string>
 
 
 </resources>
