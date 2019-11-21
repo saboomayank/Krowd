@@ -40,6 +40,9 @@
         <action
             android:id="@+id/action_signUpTeacher_to_logIn"
             app:destination="@id/student_logIn" />
+        <action
+            android:id="@+id/action_signUpTeacher_to_teacher_login"
+            app:destination="@id/teacher_login" />
     </fragment>
     <fragment
         android:id="@+id/student_logIn"

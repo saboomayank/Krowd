@@ -1,17 +1,21 @@
 package com.kruelkotlinkiller.krowd
 
+import android.animation.Animator
 import android.content.Context
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.os.CountDownTimer
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.Switch
+import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import com.kruelkotlinkiller.krowd.databinding.FragmentMainPageBinding
+import kotlinx.android.synthetic.main.fragment_main_page.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,6 +39,11 @@ class mainPage : Fragment() {
     lateinit var logInBtn : Button
     lateinit var signUpBtn : Button
     lateinit var sw : Switch
+    lateinit var textBelow : TextView
+    lateinit var progressBar : ProgressBar
+    lateinit var im : ImageView
+    lateinit var afterAnimation : ConstraintLayout
+
     private var isCheck : Boolean? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +62,10 @@ class mainPage : Fragment() {
         signUpBtn = binding.button
         logInBtn = binding.button1
         sw = binding.switch1
+
+        progressBar = binding.loadingProgressBar
+        im = binding.bookIconImageView
+        afterAnimation = binding.afterAnimation
         sw?.setOnCheckedChangeListener({ _, isChecked ->
             val msg = if (isChecked) "Teacher" else "Student"
             sw.text = msg
@@ -87,8 +100,43 @@ class mainPage : Fragment() {
 
         }
 
+        object : CountDownTimer(3000,1000){
+            override fun onFinish() {
+
+                progressBar.visibility = View.GONE
+                im.setImageResource(R.drawable.logo)
+
+                startAnimation()
+            }
+
+            override fun onTick(millisUntilFinished: Long) {
+            }
+        }.start()
+
+
 
         return binding.root
+    }
+
+    private fun startAnimation() {
+        im.animate().apply {
+            x(50f)
+            y(100f)
+            duration = 1000
+        }.setListener(object : Animator.AnimatorListener {
+            override fun onAnimationCancel(animation: Animator?) {
+            }
+
+            override fun onAnimationEnd(animation: Animator?) {
+                afterAnimation.visibility = View.VISIBLE
+            }
+
+            override fun onAnimationRepeat(animation: Animator?) {
+            }
+
+            override fun onAnimationStart(animation: Animator?) {
+            }
+        })
     }
 
     // TODO: Rename method, update argument and hook method into UI event

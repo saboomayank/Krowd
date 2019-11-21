@@ -3,21 +3,19 @@ package com.kruelkotlinkiller.krowd
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
+import android.widget.*
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.kruelkotlinkiller.krowd.databinding.FragmentTeacherHomePageBinding
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -40,7 +38,10 @@ class teacherHomePage : Fragment() {
     private lateinit var binding : FragmentTeacherHomePageBinding
     private lateinit var createClassBtn : Button
     private lateinit var name : TextView
+    private lateinit var listView : ListView
+    private lateinit var databaseReference : DatabaseReference
     private var temp : String?=null
+    var arrayList = ArrayList<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,27 +59,60 @@ class teacherHomePage : Fragment() {
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_teacher_home_page, container, false)
         createClassBtn = binding.button3
         name = binding.nameOfTeacher
+        listView = binding.listView
         val model = ViewModelProviders.of(activity!!).get(TeacherNameCommunicator::class.java)
         model.message.observe(this,object: Observer<Any> {
             override fun onChanged(t: Any?) {
                 temp = t!!.toString()
-                val ref = FirebaseDatabase.getInstance().reference
-                val ordersRef = ref.child("Teacher").orderByChild("email").equalTo(temp)
+                Log.d("hi",temp.toString())
+
+                val ordersRef = FirebaseDatabase.getInstance().getReference("Teacher").orderByChild("email").equalTo(temp)
                 val valueEventListener = object : ValueEventListener{
                     override fun onDataChange(p0: DataSnapshot) {
                         for(ds in p0.children){
-                            val nameTemp = ds.child("firstName").getValue(String::class.java) + " " + ds.child("lastName").getValue(String::class.java)
-                            name.text = nameTemp
+                            Log.d("loooooooool",ds.toString())
+                            val firstName = ds.child("firstName").getValue(String::class.java)
+                            val lastName = ds.child("lastName").getValue(String::class.java)
+                            val fullName = firstName + " " + lastName
+                            name.text = fullName
                         }
                     }
-
-                    override fun onCancelled(p0: DatabaseError) {
-                    }
-
+                    override fun onCancelled(p0: DatabaseError) {}
                 }
                 ordersRef.addListenerForSingleValueEvent(valueEventListener)
+
+                 databaseReference = FirebaseDatabase.getInstance().getReference("Course")
+                 databaseReference.addValueEventListener(object: ValueEventListener{
+                    override fun onCancelled(p0: DatabaseError) {
+                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    }
+
+                    override fun onDataChange(p0: DataSnapshot) {
+
+                            for(e in p0.children){
+                                arrayList.clear()
+                               val courseName = p0.child("1").child("courseName").getValue(String::class.java)
+                                val courseId = p0.child("1").child("courseId").getValue(Long::class.java)
+                              println(courseName.toString())
+                                arrayList.add(courseName!! + " - " + courseId.toString())
+                            }
+                            val adapter =
+                                ArrayAdapter(context!!, android.R.layout.simple_list_item_1, arrayList)
+                            listView.adapter = adapter
+
+//                                Log.d("hi", courseList.size.toString())
+
+
+                        }
+                })
+
+
+
+
+
             }
         })
+
 
 
 

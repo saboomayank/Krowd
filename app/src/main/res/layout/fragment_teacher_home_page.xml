@@ -27,37 +27,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ScrollView
-            android:id="@+id/scrollView2"
-            android:layout_width="314dp"
-            android:layout_height="281dp"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="52dp"
-            android:layout_marginEnd="50dp"
-            android:background="#FFFFFF"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView5">
-
-            <TextView
-                android:id="@+id/bio_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/bio"
-                android:textColor="#F44336"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-            <!--            <ListView-->
-            <!--                android:id="@+id/listView1"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_alignParentLeft="true"-->
-            <!--                android:layout_alignParentTop="true"-->
-            <!--                android:entries="@array/sections">-->
-            <!--            </ListView>-->
-        </ScrollView>
-
         <TextView
             android:id="@+id/textView5"
             android:layout_width="wrap_content"
@@ -81,15 +50,27 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="120dp"
             android:layout_marginEnd="119dp"
+            android:layout_marginBottom="156dp"
             android:text="Manage my courses"
             android:textColor="#03A9F4"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="265dp"
+            android:layout_height="161dp"
+            android:layout_marginTop="45dp"
+            android:layout_marginBottom="47dp"
+            android:background="@color/cardview_light_background"
+            app:layout_constraintBottom_toTopOf="@+id/button3"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/scrollView2"
-            app:layout_constraintVertical_bias="0.442" />
+            app:layout_constraintTop_toBottomOf="@+id/textView5"
+            app:layout_constraintVertical_bias="0.145" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     </layout>

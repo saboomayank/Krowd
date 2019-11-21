@@ -84,7 +84,7 @@ class signUpTeacher : Fragment() {
                 && isEmailValid(email.text.toString())) {
 
                 saveTeacher()
-                view.findNavController().navigate(R.id.action_signUpTeacher_to_logIn)
+                view.findNavController().navigate(R.id.action_signUpTeacher_to_teacher_login)
 
             }
             else{
@@ -117,15 +117,15 @@ class signUpTeacher : Fragment() {
 
 
         if(isEmailValid(emailA)) {
-            val ref = FirebaseDatabase.getInstance().getReference("Teacher")
-            teacherId = ref.push().key!!
-            val teacher = Teacher(teacherId,firstName,lastName, emailA,0)
-            ref.child(teacherId).setValue(teacher)
+
 
             mAuth.createUserWithEmailAndPassword(emailA, pass)
                 .addOnCompleteListener { task: Task<AuthResult> ->
                     if (task.isSuccessful) {
-
+                        val ref = FirebaseDatabase.getInstance().getReference("Teacher")
+                        teacherId = ref.push().key!!
+                        val teacher = Teacher(0,firstName,lastName, emailA)
+                        ref.child(teacherId).setValue(teacher)
                         Toast.makeText(context, "register successfully", Toast.LENGTH_LONG).show()
 
 
