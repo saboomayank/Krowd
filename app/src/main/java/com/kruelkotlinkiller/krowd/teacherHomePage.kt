@@ -76,41 +76,36 @@ class teacherHomePage : Fragment() {
                             val fullName = firstName + " " + lastName
                             name.text = fullName
                         }
-                    }
-                    override fun onCancelled(p0: DatabaseError) {}
-                }
-                ordersRef.addListenerForSingleValueEvent(valueEventListener)
-
-                 databaseReference = FirebaseDatabase.getInstance().getReference("Course")
-                 databaseReference.addListenerForSingleValueEvent(object: ValueEventListener{
-                    override fun onCancelled(p0: DatabaseError) {
-                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                    }
-
-                    override fun onDataChange(p0: DataSnapshot) {
-                    if(p0.exists()){
-                        arrayList.clear()
-                            for(e in p0.children){
-//                                arrayList.clear()
-                                val course = e.getValue(Course::class.java)
-                                val courseName = course?.courseName
-                                val courseId = course?.courseId
-                                println(courseName.toString())
-                                arrayList.add(courseName!! + " - " + courseId.toString())
+                        databaseReference = FirebaseDatabase.getInstance().getReference("Course")
+                        databaseReference.orderByChild("professorName").equalTo(name.text.toString()).addListenerForSingleValueEvent(object: ValueEventListener{
+                            override fun onCancelled(p0: DatabaseError) {
+                                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
                             }
+
+                            override fun onDataChange(p0: DataSnapshot) {
+                                if(p0.exists()){
+                                    arrayList.clear()
+                                    for(e in p0.children){
+//                                arrayList.clear()
+                                        val course = e.getValue(Course::class.java)
+                                        val courseName = course?.courseName
+                                        val courseId = course?.courseId
+                                        println(courseName.toString())
+                                        arrayList.add(courseName!! + " - " + courseId.toString())
+                                    }
 
 
 //                                Log.d("hi", courseList.size.toString())
 
 
-                        }
-                    else{
-                        arrayList.add("You do not have any available course.")
+                                }
+                                else{
+                                    arrayList.add("You do not have any available course.")
 
-                    }
-                        val adapter =
-                            ArrayAdapter(context!!, android.R.layout.simple_list_item_1, arrayList)
-                        listView.adapter = adapter
+                                }
+                                val adapter =
+                                    ArrayAdapter(context!!, android.R.layout.simple_list_item_1, arrayList)
+                                listView.adapter = adapter
 
 
 //                        for(i in 0..listView.adapter.count){
@@ -123,8 +118,14 @@ class teacherHomePage : Fragment() {
 //                            }
 //                        }
 //
-                   }
-                })
+                            }
+                        })
+                    }
+                    override fun onCancelled(p0: DatabaseError) {}
+                }
+                ordersRef.addListenerForSingleValueEvent(valueEventListener)
+
+
 
 
                 val delimiter = " - "
@@ -150,6 +151,7 @@ class teacherHomePage : Fragment() {
 
             }
         })
+      //  showListView()
 
 
 
@@ -174,8 +176,12 @@ class teacherHomePage : Fragment() {
         }
         return binding.root
     }
+    private fun showListView(){
+        Log.d("Hey",name.text.toString())
 
+    }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+
         super.onCreateOptionsMenu(menu!!, inflater!!)
         inflater?.inflate(R.menu.menu, menu)
     }
