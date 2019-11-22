@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.annotation.NonNull
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import com.google.android.gms.tasks.Task
@@ -20,7 +19,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.kruelkotlinkiller.krowd.databinding.FragmentSignUpStudentBinding
-import com.kruelkotlinkiller.krowd.databinding.FragmentTypeOfSignUpBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -84,7 +82,11 @@ class signUpStudent : Fragment() {
             }else{
                 val builder = AlertDialog.Builder(context)
                 builder.setTitle("ERROR")
-                builder.setMessage("Please fill in all the fields!")
+                if(!isEmailValid(email.text.toString())){
+                    builder.setMessage("Please enter a valid email address")
+                }else {
+                    builder.setMessage("Please fill in all the fields!")
+                }
                 builder.setPositiveButton("Ok"){dialog, which ->
 
                 }
@@ -106,7 +108,7 @@ class signUpStudent : Fragment() {
         if(isEmailValid(emailA)) {
             val ref = FirebaseDatabase.getInstance().getReference("Student")
             studentId = ref.push().key!!
-            val student = Student(studentId,firstName,lastName, emailA)
+            val student = Student(studentId,firstName,lastName, emailA, 0)
             ref.child(studentId).setValue(student)
             mAuth.createUserWithEmailAndPassword(emailA, password)
                 .addOnCompleteListener { task: Task<AuthResult> ->

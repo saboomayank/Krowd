@@ -4,69 +4,74 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
     app:startDestination="@id/mainPage">
-
     <fragment
         android:id="@+id/mainPage"
         android:name="com.kruelkotlinkiller.krowd.mainPage"
-        android:label="fragment_main_page"
-        tools:layout="@layout/fragment_main_page" >
+        android:label="mainPage" >
         <action
-            android:id="@+id/action_mainPage_to_typeOfSignUp"
-            app:destination="@id/typeOfSignUp" />
+            android:id="@+id/action_mainPage_to_signUpStudent"
+            app:destination="@id/signUpStudent" />
         <action
             android:id="@+id/action_mainPage_to_logIn"
             app:destination="@id/logIn" />
+        <action
+            android:id="@+id/action_mainPage_to_signUpTeacher"
+            app:destination="@id/signUpTeacher" />
+        <action
+            android:id="@+id/action_mainPage_to_teacher_login"
+            app:destination="@id/teacher_login" />
+    </fragment>
+    <fragment
+        android:id="@+id/manageClasses"
+        android:name="com.kruelkotlinkiller.krowd.ManageClasses"
+        android:label="ManageClasses" >
+        <action
+            android:id="@+id/action_manageClasses_to_teacherHomePage"
+            app:destination="@id/teacherHomePage" />
     </fragment>
     <fragment
         android:id="@+id/signUpStudent"
         android:name="com.kruelkotlinkiller.krowd.signUpStudent"
-        android:label="fragment_sign_up_student"
-        tools:layout="@layout/fragment_sign_up_student" >
+        android:label="signUpStudent" >
         <action
             android:id="@+id/action_signUpStudent_to_logIn"
             app:destination="@id/logIn" />
     </fragment>
     <fragment
+        android:id="@+id/studentHomePage"
+        android:name="com.kruelkotlinkiller.krowd.studentHomePage"
+        android:label="studentHomePage" />
+    <fragment
+        android:id="@+id/teacherHomePage"
+        android:name="com.kruelkotlinkiller.krowd.teacherHomePage"
+        android:label="teacherHomePage" >
+
+        <action
+            android:id="@+id/action_teacherHomePage_to_manageClasses3"
+            app:destination="@id/manageClasses" />
+    </fragment>
+    <fragment
         android:id="@+id/signUpTeacher"
         android:name="com.kruelkotlinkiller.krowd.signUpTeacher"
-        android:label="fragment_sign_up_teacher"
-        tools:layout="@layout/fragment_sign_up_teacher" >
+        android:label="signUpTeacher" >
         <action
-            android:id="@+id/action_signUpTeacher_to_logIn"
-            app:destination="@id/logIn" />
+            android:id="@+id/action_signUpTeacher_to_teacher_login"
+            app:destination="@id/teacher_login" />
+    </fragment>
+    <fragment
+        android:id="@+id/teacher_login"
+        android:name="com.kruelkotlinkiller.krowd.teacher_login"
+        android:label="teacher_login" >
+        <action
+            android:id="@+id/action_teacher_login_to_teacherHomePage"
+            app:destination="@id/teacherHomePage" />
     </fragment>
     <fragment
         android:id="@+id/logIn"
         android:name="com.kruelkotlinkiller.krowd.logIn"
-        android:label="fragment_log_in"
-        tools:layout="@layout/fragment_log_in" >
+        android:label="logIn" >
         <action
             android:id="@+id/action_logIn_to_studentHomePage"
             app:destination="@id/studentHomePage" />
-        <action
-            android:id="@+id/action_logIn_to_teacherHomePage"
-            app:destination="@id/teacherHomePage" />
     </fragment>
-    <fragment
-        android:id="@+id/typeOfSignUp"
-        android:name="com.kruelkotlinkiller.krowd.typeOfSignUp"
-        android:label="fragment_type_of_sign_up"
-        tools:layout="@layout/fragment_type_of_sign_up" >
-        <action
-            android:id="@+id/action_typeOfSignUp_to_signUpStudent"
-            app:destination="@id/signUpStudent" />
-        <action
-            android:id="@+id/action_typeOfSignUp_to_signUpTeacher"
-            app:destination="@id/signUpTeacher" />
-    </fragment>
-    <fragment
-        android:id="@+id/studentHomePage"
-        android:name="com.kruelkotlinkiller.krowd.studentHomePage"
-        android:label="fragment_student_home_page"
-        tools:layout="@layout/fragment_student_home_page" />
-    <fragment
-        android:id="@+id/teacherHomePage"
-        android:name="com.kruelkotlinkiller.krowd.teacherHomePage"
-        android:label="fragment_teacher_home_page"
-        tools:layout="@layout/fragment_teacher_home_page" />
 </navigation>
