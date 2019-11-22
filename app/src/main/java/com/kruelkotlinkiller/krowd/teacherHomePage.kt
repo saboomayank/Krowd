@@ -112,6 +112,7 @@ class teacherHomePage : Fragment() {
                             ArrayAdapter(context!!, android.R.layout.simple_list_item_1, arrayList)
                         listView.adapter = adapter
 
+
 //                        for(i in 0..listView.adapter.count){
 //                            if("You do not have any available course."==(listView.adapter.getItem(i))){
 //                                createClassBtn.isClickable=true
