@@ -105,24 +105,42 @@ class teacherHomePage : Fragment() {
 
                         }
                     else{
-                        arrayList.clear()
                         arrayList.add("You do not have any available course.")
+
                     }
                         val adapter =
                             ArrayAdapter(context!!, android.R.layout.simple_list_item_1, arrayList)
                         listView.adapter = adapter
 
-
-                    }
+//                        for(i in 0..listView.adapter.count){
+//                            if("You do not have any available course."==(listView.adapter.getItem(i))){
+//                                createClassBtn.isClickable=true
+//                                createClassBtn.isEnabled=true
+//                            }else{
+//                                createClassBtn.isClickable= false
+//                                createClassBtn.isEnabled=false
+//                            }
+//                        }
+//
+                   }
                 })
+
+
                 val delimiter = " - "
-                listView.setOnItemClickListener{parent, view,position, id->
-                    if(position == 0){
-                        val id = arrayList.get(0).split(delimiter).get(1)
-                        Log.d("ID IS THAT " , id.toString())
+                listView.setOnItemClickListener{parent:AdapterView<*>?, view:View,position:Int, id:Long->
+                    if(!arrayList.contains("You do not have any available course.")){
+                        Log.d("My id is that: ", arrayList[position].split(delimiter)[1])
+
+                        model.setMsgCommunicator( name.text.toString())
+                        model.setIdCommunicator(arrayList[position].split(delimiter)[1].toDouble())
+                        val myFragment = ManageClasses()
+                        val fragmentTransaction = fragmentManager!!.beginTransaction()
+                        fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
+                        fragmentTransaction.addToBackStack(null)
+                        fragmentTransaction.commit()
+                        view.findNavController().navigate(R.id.action_teacherHomePage_to_manageClasses3)
+
                     }
-
-
                 }
 
 
@@ -132,9 +150,18 @@ class teacherHomePage : Fragment() {
             }
         })
 
-        createClassBtn.setOnClickListener {view : View ->
-          view.findNavController().navigate(R.id.action_teacherHomePage_to_manageClasses3)
 
+
+
+        createClassBtn.setOnClickListener {view : View ->
+            model.setMsgCommunicator( name.text.toString())
+            model.setIdCommunicator(-1.0)
+            val myFragment = ManageClasses()
+            val fragmentTransaction = fragmentManager!!.beginTransaction()
+            fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
+            view.findNavController().navigate(R.id.action_teacherHomePage_to_manageClasses3)
         }
 
         setHasOptionsMenu(true)

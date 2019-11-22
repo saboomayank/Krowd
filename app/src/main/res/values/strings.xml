@@ -34,6 +34,8 @@
     <string name="Krowd">Krowd</string>
     <string name="SignUp">Sign Up</string>
     <string name="Add">Add</string>
+    <string name="description_course">Course Description</string>
+    <string name="BackToHome">Back To Home</string>
 
 
 </resources>
