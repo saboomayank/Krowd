@@ -105,7 +105,7 @@
 
                 android:fontFamily="casual"
                 android:hint="@string/password"
-                android:inputType="text"
+                android:inputType="textPassword"
                 android:paddingLeft="10dp"
                 android:textColor="#10100F"
                 android:textSize="10sp"

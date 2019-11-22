@@ -4,15 +4,15 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.*
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.kruelkotlinkiller.krowd.databinding.FragmentTeacherHomePageBinding
 
@@ -82,29 +82,48 @@ class teacherHomePage : Fragment() {
                 ordersRef.addListenerForSingleValueEvent(valueEventListener)
 
                  databaseReference = FirebaseDatabase.getInstance().getReference("Course")
-                 databaseReference.addValueEventListener(object: ValueEventListener{
+                 databaseReference.addListenerForSingleValueEvent(object: ValueEventListener{
                     override fun onCancelled(p0: DatabaseError) {
                         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
                     }
 
                     override fun onDataChange(p0: DataSnapshot) {
-
+                    if(p0.exists()){
+                        arrayList.clear()
                             for(e in p0.children){
-                                arrayList.clear()
-                               val courseName = p0.child("1").child("courseName").getValue(String::class.java)
-                                val courseId = p0.child("1").child("courseId").getValue(Long::class.java)
-                              println(courseName.toString())
+//                                arrayList.clear()
+                                val course = e.getValue(Course::class.java)
+                                val courseName = course?.courseName
+                                val courseId = course?.courseId
+                                println(courseName.toString())
                                 arrayList.add(courseName!! + " - " + courseId.toString())
                             }
-                            val adapter =
-                                ArrayAdapter(context!!, android.R.layout.simple_list_item_1, arrayList)
-                            listView.adapter = adapter
+
 
 //                                Log.d("hi", courseList.size.toString())
 
 
                         }
+                    else{
+                        arrayList.clear()
+                        arrayList.add("You do not have any available course.")
+                    }
+                        val adapter =
+                            ArrayAdapter(context!!, android.R.layout.simple_list_item_1, arrayList)
+                        listView.adapter = adapter
+
+
+                    }
                 })
+                val delimiter = " - "
+                listView.setOnItemClickListener{parent, view,position, id->
+                    if(position == 0){
+                        val id = arrayList.get(0).split(delimiter).get(1)
+                        Log.d("ID IS THAT " , id.toString())
+                    }
+
+
+                }
 
 
 
@@ -113,15 +132,35 @@ class teacherHomePage : Fragment() {
             }
         })
 
-
-
-
         createClassBtn.setOnClickListener {view : View ->
-            view.findNavController().navigate(R.id.action_teacherHomePage_to_manageClasses)
+          view.findNavController().navigate(R.id.action_teacherHomePage_to_manageClasses3)
+
         }
 
+        setHasOptionsMenu(true)
+
+        //sends user back to the log in page if he/she is logged out
+        val user = FirebaseAuth.getInstance().currentUser
+        if(user==null){
+            findNavController().navigate(R.id.mainPage)
+        }
         return binding.root
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu!!, inflater!!)
+        inflater?.inflate(R.menu.menu, menu)
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.logout -> {
+                FirebaseAuth.getInstance().signOut()
+                findNavController().navigate(R.id.mainPage)
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -174,4 +213,6 @@ class teacherHomePage : Fragment() {
                 }
             }
     }
+
+
 }

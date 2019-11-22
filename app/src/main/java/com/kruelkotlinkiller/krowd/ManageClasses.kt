@@ -7,6 +7,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
+import com.google.firebase.database.FirebaseDatabase
+import com.kruelkotlinkiller.krowd.databinding.FragmentManageClassesBinding
+import kotlinx.android.synthetic.main.fragment_manage_classes.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,7 +34,13 @@ class ManageClasses : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
-
+    private lateinit var binding : FragmentManageClassesBinding
+    private lateinit var addClass : Button
+    private lateinit var courseName : EditText
+    private lateinit var courseId : EditText
+    private lateinit var addBtn : Button
+    private var courseNameString : String?= null
+    private var courseIdString : String?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -40,7 +54,29 @@ class ManageClasses : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_manage_classes, container, false)
+        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_manage_classes, container, false )
+        addClass = binding.button4
+        courseName = binding.editText
+        courseId = binding.editText2
+        addBtn = binding.button5
+
+        addClass.setOnClickListener { form.visibility = View.VISIBLE }
+        courseNameString = courseName.text.toString()
+        courseIdString = courseId.text.toString()
+        addBtn.setOnClickListener {view : View->
+
+            val ref = FirebaseDatabase.getInstance().getReference("Course")
+            val cId = ref.push().key!!
+            val course = Course(courseName.text.toString(),courseId.text.toString().toInt())
+            ref.child(cId).setValue(course)
+            Toast.makeText(context, "add class successfully", Toast.LENGTH_LONG).show()
+
+            view.findNavController().navigate(R.id.action_manageClasses_to_teacherHomePage)
+
+        }
+
+
+        return binding.root
     }
 
     // TODO: Rename method, update argument and hook method into UI event

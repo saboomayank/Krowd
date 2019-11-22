@@ -13,9 +13,18 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.kruelkotlinkiller.krowd.databinding.FragmentMainPageBinding
 import kotlinx.android.synthetic.main.fragment_main_page.*
+import kotlinx.android.synthetic.main.fragment_teacher_home_page.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -43,6 +52,7 @@ class mainPage : Fragment() {
     lateinit var progressBar : ProgressBar
     lateinit var im : ImageView
     lateinit var afterAnimation : ConstraintLayout
+    private lateinit var model : TeacherNameCommunicator
 
     private var isCheck : Boolean? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,7 +105,7 @@ class mainPage : Fragment() {
                     view.findNavController().navigate(R.id.action_mainPage_to_teacher_login)
                 }
                 else{
-                    view.findNavController().navigate(R.id.action_mainPage_to_student_logIn)
+                    view.findNavController().navigate(R.id.action_mainPage_to_logIn)
                 }
 
         }
@@ -112,6 +122,52 @@ class mainPage : Fragment() {
             override fun onTick(millisUntilFinished: Long) {
             }
         }.start()
+
+        val user = FirebaseAuth.getInstance().currentUser
+//        val fragmentTransaction = fragmentManager?.beginTransaction()
+        if(user!=null){
+            val refStudent = FirebaseDatabase.getInstance().getReference("Student")
+            val refTeacher = FirebaseDatabase.getInstance().getReference("Teacher")
+            refStudent.orderByChild("email").equalTo(user.email).addValueEventListener(object:
+                ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {}
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    if(p0.exists()){
+                       model = ViewModelProviders.of(activity!!).get(TeacherNameCommunicator::class.java)
+                        model.setMsgCommunicator(user.email!!)
+                        val myFragment = studentHomePage()
+                        val fragmentTransaction = fragmentManager!!.beginTransaction()
+                        fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
+                        fragmentTransaction.addToBackStack(null)
+                        fragmentTransaction.commit()
+                        findNavController().navigate(R.id.studentHomePage)
+                    }
+                }
+                     })
+            refTeacher.orderByChild("email").equalTo(user.email).addValueEventListener(
+                object : ValueEventListener{
+                    override fun onCancelled(p0: DatabaseError) {}
+
+                    override fun onDataChange(p0: DataSnapshot) {
+                        if(p0.exists()){
+                            model = ViewModelProviders.of(activity!!).get(TeacherNameCommunicator::class.java)
+                            model.setMsgCommunicator(user.email!!)
+                            val myFragment = teacherHomePage()
+                            val fragmentTransaction = fragmentManager!!.beginTransaction()
+                            fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
+                            fragmentTransaction.addToBackStack(null)
+                            fragmentTransaction.commit()
+                          findNavController().navigate(R.id.teacherHomePage)
+                        }
+                    }
+                }
+            )
+
+        }else{
+
+        }
+
 
 
 
