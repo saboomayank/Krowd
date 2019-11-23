@@ -3,18 +3,29 @@ package com.kruelkotlinkiller.krowd
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.kruelkotlinkiller.krowd.databinding.FragmentManageClassesBinding
 import kotlinx.android.synthetic.main.fragment_manage_classes.*
+import android.os.Build
+
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -39,8 +50,16 @@ class ManageClasses : Fragment() {
     private lateinit var courseName : EditText
     private lateinit var courseId : EditText
     private lateinit var addBtn : Button
+    private lateinit var backBtn : Button
+    private lateinit var courseDescription : EditText
+    private lateinit var courseNameToDisplay : TextView
+    private lateinit var courseDescriptionToDisplay : TextView
+    private var courseDescriptionString : String?=null
     private var courseNameString : String?= null
     private var courseIdString : String?=null
+    private var professorName : String?=null
+    private var id : Double?=null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -59,21 +78,96 @@ class ManageClasses : Fragment() {
         courseName = binding.editText
         courseId = binding.editText2
         addBtn = binding.button5
-
-        addClass.setOnClickListener { form.visibility = View.VISIBLE }
-        courseNameString = courseName.text.toString()
-        courseIdString = courseId.text.toString()
-        addBtn.setOnClickListener {view : View->
-
-            val ref = FirebaseDatabase.getInstance().getReference("Course")
-            val cId = ref.push().key!!
-            val course = Course(courseName.text.toString(),courseId.text.toString().toInt())
-            ref.child(cId).setValue(course)
-            Toast.makeText(context, "add class successfully", Toast.LENGTH_LONG).show()
-
-            view.findNavController().navigate(R.id.action_manageClasses_to_teacherHomePage)
+        courseDescription = binding.editText6
+        backBtn = binding.button6
+        courseNameToDisplay = binding.textView9
+        courseDescriptionToDisplay = binding.textView10
+        addClass.setOnClickListener { form.visibility = View.VISIBLE
+            courseInfo.visibility = View.GONE
 
         }
+        courseNameString = courseName.text.toString()
+        courseIdString = courseId.text.toString()
+        courseDescriptionString = courseDescription.text.toString()
+        val model = ViewModelProviders.of(activity!!).get(TeacherNameCommunicator::class.java)
+
+        model.message.observe(this,object: Observer<Any> {
+            override fun onChanged(t: Any?) {
+
+                    professorName = t!!.toString()
+                    Log.d("Professor name is " , professorName)
+
+              }})
+
+        model.id.observe(this,object : Observer<Any>{
+            override fun onChanged(t: Any?) {
+
+
+                    id = t!!.toString().toDouble()
+                    Log.d("the id is is is ", id.toString())
+               if(id!=-1.0) {
+                   val ordersRef =
+                       FirebaseDatabase.getInstance().getReference("Course")
+                           .orderByChild("courseId")
+                           .equalTo(id!!)
+                   val valueEventListener = object : ValueEventListener {
+                       override fun onDataChange(p0: DataSnapshot) {
+                           for (ds in p0.children) {
+                               Log.d("loooooooool", ds.toString())
+                               val courseName = ds.child("courseName").getValue(String::class.java)
+                               val courseDescription =
+                                   ds.child("courseDescription").getValue(String::class.java)
+
+                               courseNameToDisplay.text = courseName
+                               courseDescriptionToDisplay.text = courseDescription
+                           }
+                       }
+
+                       override fun onCancelled(p0: DatabaseError) {}
+                   }
+                   ordersRef.addListenerForSingleValueEvent(valueEventListener)
+               }
+            }
+
+        }
+
+
+
+        )
+        addBtn.setOnClickListener {view : View->
+            form.visibility = View.GONE
+            courseInfo.visibility = View.VISIBLE
+            val ref = FirebaseDatabase.getInstance().getReference("Course")
+            val cId = ref.push().key!!
+            val course = Course(courseName.text.toString(),courseId.text.toString().toDouble(),courseDescription.text.toString(),professorName!!)
+            ref.child(cId).setValue(course)
+            Toast.makeText(context, "add class successfully", Toast.LENGTH_LONG).show()
+//            val ft = fragmentManager!!.beginTransaction()
+//            if (Build.VERSION.SDK_INT >= 26) {
+//                ft.setReorderingAllowed(false)
+//            }
+//            ft.detach(this).attach(this).commit()
+
+
+        }
+        backBtn.setOnClickListener { view : View ->
+            val user = FirebaseAuth.getInstance().currentUser
+            model.setMsgCommunicator(user!!.email.toString())
+            val myFragment = teacherHomePage()
+            val fragmentTransaction = fragmentManager!!.beginTransaction()
+            fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
+            view.findNavController().navigate(R.id.teacherHomePage)
+
+        }
+
+
+            Log.d("Hellooooooo",id.toString())
+
+
+
+
 
 
         return binding.root
