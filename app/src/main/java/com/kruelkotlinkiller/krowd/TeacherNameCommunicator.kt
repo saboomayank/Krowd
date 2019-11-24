@@ -9,7 +9,7 @@ class TeacherNameCommunicator : ViewModel(){
     fun setMsgCommunicator(msg:String){
         message.value = msg
     }
-    fun setIdCommunicator(id1 : Double){
+    fun setIdCommunicator(id1 : String){
         id.value = id1
     }
 }

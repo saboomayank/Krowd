@@ -36,6 +36,9 @@
     <string name="Add">Add</string>
     <string name="description_course">Course Description</string>
     <string name="BackToHome">Back To Home</string>
+    <string name="backTo">To Home</string>
+    <string name="deleteCourse">Delete Course</string>
+    <string name="startAttendance">Start Attendance</string>
 
 
 </resources>

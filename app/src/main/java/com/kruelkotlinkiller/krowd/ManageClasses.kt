@@ -51,6 +51,7 @@ class ManageClasses : Fragment() {
     private lateinit var courseId : EditText
     private lateinit var addBtn : Button
     private lateinit var backBtn : Button
+    private lateinit var deleteBtn : Button
     private lateinit var courseDescription : EditText
     private lateinit var courseNameToDisplay : TextView
     private lateinit var courseDescriptionToDisplay : TextView
@@ -58,7 +59,7 @@ class ManageClasses : Fragment() {
     private var courseNameString : String?= null
     private var courseIdString : String?=null
     private var professorName : String?=null
-    private var id : Double?=null
+    private var id : String?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,18 +77,17 @@ class ManageClasses : Fragment() {
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_manage_classes, container, false )
         addClass = binding.button4
         courseName = binding.editText
-        courseId = binding.editText2
         addBtn = binding.button5
+        deleteBtn = binding.button7
         courseDescription = binding.editText6
         backBtn = binding.button6
         courseNameToDisplay = binding.textView9
         courseDescriptionToDisplay = binding.textView10
         addClass.setOnClickListener { form.visibility = View.VISIBLE
             courseInfo.visibility = View.GONE
-
         }
         courseNameString = courseName.text.toString()
-        courseIdString = courseId.text.toString()
+//        courseIdString = courseId.text.toString()
         courseDescriptionString = courseDescription.text.toString()
         val model = ViewModelProviders.of(activity!!).get(TeacherNameCommunicator::class.java)
 
@@ -103,9 +103,9 @@ class ManageClasses : Fragment() {
             override fun onChanged(t: Any?) {
 
 
-                    id = t!!.toString().toDouble()
+                    id = t!!.toString()
                     Log.d("the id is is is ", id.toString())
-               if(id!=-1.0) {
+               if(id!="-1.0") {
                    val ordersRef =
                        FirebaseDatabase.getInstance().getReference("Course")
                            .orderByChild("courseId")
@@ -134,14 +134,43 @@ class ManageClasses : Fragment() {
 
 
         )
+
+        addBtnFun()
+        backBtnFun()
+        deleteBtnFun()
+
+        return binding.root
+    }
+    private fun deleteBtnFun(){
+        deleteBtn.setOnClickListener { view: View->
+            val refDelete = FirebaseDatabase.getInstance().getReference("Course")
+            refDelete.child(id!!).removeValue()
+            sendTeacherNameBackHome()
+            view.findNavController().navigate(R.id.teacherHomePage)
+        }
+
+    }
+    private fun sendTeacherNameBackHome(){
+        val model = ViewModelProviders.of(activity!!).get(TeacherNameCommunicator::class.java)
+        val user = FirebaseAuth.getInstance().currentUser
+        model.setMsgCommunicator(user!!.email.toString())
+        val myFragment = teacherHomePage()
+        val fragmentTransaction = fragmentManager!!.beginTransaction()
+        fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
+    }
+    private fun addBtnFun(){
         addBtn.setOnClickListener {view : View->
             form.visibility = View.GONE
             courseInfo.visibility = View.VISIBLE
             val ref = FirebaseDatabase.getInstance().getReference("Course")
             val cId = ref.push().key!!
-            val course = Course(courseName.text.toString(),courseId.text.toString().toDouble(),courseDescription.text.toString(),professorName!!)
+            val course = Course(courseName.text.toString(),cId,courseDescription.text.toString(),professorName!!)
             ref.child(cId).setValue(course)
             Toast.makeText(context, "add class successfully", Toast.LENGTH_LONG).show()
+            sendTeacherNameBackHome()
+            view.findNavController().navigate(R.id.teacherHomePage)
 //            val ft = fragmentManager!!.beginTransaction()
 //            if (Build.VERSION.SDK_INT >= 26) {
 //                ft.setReorderingAllowed(false)
@@ -150,27 +179,13 @@ class ManageClasses : Fragment() {
 
 
         }
+    }
+    private fun backBtnFun(){
         backBtn.setOnClickListener { view : View ->
-            val user = FirebaseAuth.getInstance().currentUser
-            model.setMsgCommunicator(user!!.email.toString())
-            val myFragment = teacherHomePage()
-            val fragmentTransaction = fragmentManager!!.beginTransaction()
-            fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
+            sendTeacherNameBackHome()
             view.findNavController().navigate(R.id.teacherHomePage)
 
         }
-
-
-            Log.d("Hellooooooo",id.toString())
-
-
-
-
-
-
-        return binding.root
     }
 
     // TODO: Rename method, update argument and hook method into UI event

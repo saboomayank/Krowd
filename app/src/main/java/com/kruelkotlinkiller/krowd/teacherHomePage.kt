@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.kruelkotlinkiller.krowd.databinding.FragmentTeacherHomePageBinding
@@ -38,10 +39,11 @@ class teacherHomePage : Fragment() {
     private lateinit var binding : FragmentTeacherHomePageBinding
     private lateinit var createClassBtn : Button
     private lateinit var name : TextView
-    private lateinit var listView : ListView
+   // private lateinit var listView : ListView
+    private lateinit var recyclerView: RecyclerView
     private lateinit var databaseReference : DatabaseReference
     private var temp : String?=null
-    var arrayList = ArrayList<String>()
+    var arrayList = ArrayList<Course>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +61,9 @@ class teacherHomePage : Fragment() {
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_teacher_home_page, container, false)
         createClassBtn = binding.button3
         name = binding.nameOfTeacher
-        listView = binding.listView
+        recyclerView = binding.recyclerView
+      //  binding.recyclerView.setDivider(R.drawable.recycler_view_divider)
+//        listView = binding.listView
         val model = ViewModelProviders.of(activity!!).get(TeacherNameCommunicator::class.java)
         model.message.observe(this,object: Observer<Any> {
             override fun onChanged(t: Any?) {
@@ -69,8 +73,9 @@ class teacherHomePage : Fragment() {
                 val ordersRef = FirebaseDatabase.getInstance().getReference("Teacher").orderByChild("email").equalTo(temp)
                 val valueEventListener = object : ValueEventListener{
                     override fun onDataChange(p0: DataSnapshot) {
+//                        Log.d("The p0 is", p0.toString())
                         for(ds in p0.children){
-                            Log.d("loooooooool",ds.toString())
+
                             val firstName = ds.child("firstName").getValue(String::class.java)
                             val lastName = ds.child("lastName").getValue(String::class.java)
                             val fullName = firstName + " " + lastName
@@ -83,42 +88,27 @@ class teacherHomePage : Fragment() {
                             }
 
                             override fun onDataChange(p0: DataSnapshot) {
+//                                Log.d("The child is :" , p0.toString())
                                 if(p0.exists()){
                                     arrayList.clear()
                                     for(e in p0.children){
-//                                arrayList.clear()
                                         val course = e.getValue(Course::class.java)
-                                        val courseName = course?.courseName
-                                        val courseId = course?.courseId
-                                        println(courseName.toString())
-                                        arrayList.add(courseName!! + " - " + courseId.toString())
-                                    }
-
-
-//                                Log.d("hi", courseList.size.toString())
-
+                                        arrayList.add(course!!)
+                                }
 
                                 }
-                                else{
-                                    arrayList.add("You do not have any available course.")
+                                val adapter = MyAdapter(arrayList)
+                                recyclerView.adapter = adapter
 
                                 }
-                                val adapter =
-                                    ArrayAdapter(context!!, android.R.layout.simple_list_item_1, arrayList)
-                                listView.adapter = adapter
 
 
-//                        for(i in 0..listView.adapter.count){
-//                            if("You do not have any available course."==(listView.adapter.getItem(i))){
-//                                createClassBtn.isClickable=true
-//                                createClassBtn.isEnabled=true
-//                            }else{
-//                                createClassBtn.isClickable= false
-//                                createClassBtn.isEnabled=false
-//                            }
-//                        }
-//
-                            }
+
+//                                val adapter =
+//                                    ArrayAdapter(context!!, android.R.layout.simple_list_item_1, arrayList)
+//                                listView.adapter = adapter
+
+
                         })
                     }
                     override fun onCancelled(p0: DatabaseError) {}
@@ -127,23 +117,20 @@ class teacherHomePage : Fragment() {
 
 
 
-
-                val delimiter = " - "
-                listView.setOnItemClickListener{parent:AdapterView<*>?, view:View,position:Int, id:Long->
-                    if(!arrayList.contains("You do not have any available course.")){
-                        Log.d("My id is that: ", arrayList[position].split(delimiter)[1])
-
-                        model.setMsgCommunicator( name.text.toString())
-                        model.setIdCommunicator(arrayList[position].split(delimiter)[1].toDouble())
+                binding.recyclerView.addOnItemTouchListener(RecyclerItemClickListenr(context!!, binding.recyclerView, object : RecyclerItemClickListenr.OnItemClickListener {
+                    override fun onItemClick(view: View, position: Int) {
+                        model.setMsgCommunicator(name.text.toString())
+                        // here we pass the id of the course to the manage class
+                        model.setIdCommunicator(MyAdapter(arrayList).getID(position))
+                        Log.d("I clicked ",MyAdapter(arrayList).getID(position) )
                         val myFragment = ManageClasses()
                         val fragmentTransaction = fragmentManager!!.beginTransaction()
                         fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
-                        fragmentTransaction.addToBackStack(null)
-                        fragmentTransaction.commit()
                         view.findNavController().navigate(R.id.action_teacherHomePage_to_manageClasses3)
-
                     }
-                }
+
+                    override fun onItemLongClick(view: View?, position: Int) {}
+                }))
 
 
 
@@ -151,14 +138,14 @@ class teacherHomePage : Fragment() {
 
             }
         })
-      //  showListView()
+
 
 
 
 
         createClassBtn.setOnClickListener {view : View ->
             model.setMsgCommunicator( name.text.toString())
-            model.setIdCommunicator(-1.0)
+            model.setIdCommunicator("-1.0")
             val myFragment = ManageClasses()
             val fragmentTransaction = fragmentManager!!.beginTransaction()
             fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
@@ -176,10 +163,7 @@ class teacherHomePage : Fragment() {
         }
         return binding.root
     }
-    private fun showListView(){
-        Log.d("Hey",name.text.toString())
 
-    }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
 
         super.onCreateOptionsMenu(menu!!, inflater!!)
@@ -250,3 +234,4 @@ class teacherHomePage : Fragment() {
 
 
 }
+
