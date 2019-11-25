@@ -39,8 +39,8 @@ The **Here** button will mark you as present in class if you are in the classes 
 
 It will only allow you to press the button per *Five minutes* to limit gaming the system.
 ## Contributors
-### Zac
-### Jim
-### Fadi
-### Mayank Saboo
-### Douglas Weisse
+#### Zac
+#### Jim
+#### Fadi
+#### Mayank Saboo
+#### Douglas Weisse
