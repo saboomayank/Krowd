@@ -17,14 +17,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.kruelkotlinkiller.krowd.databinding.FragmentManageClassesBinding
 import kotlinx.android.synthetic.main.fragment_manage_classes.*
 import android.os.Build
-
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -52,14 +49,17 @@ class ManageClasses : Fragment() {
     private lateinit var addBtn : Button
     private lateinit var backBtn : Button
     private lateinit var deleteBtn : Button
+    private lateinit var studentList : RecyclerView
     private lateinit var courseDescription : EditText
     private lateinit var courseNameToDisplay : TextView
     private lateinit var courseDescriptionToDisplay : TextView
+    private lateinit var databaseReference: DatabaseReference
     private var courseDescriptionString : String?=null
     private var courseNameString : String?= null
     private var courseIdString : String?=null
     private var professorName : String?=null
     private var id : String?=null
+    private var arrayList = ArrayList<Student>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,9 +82,12 @@ class ManageClasses : Fragment() {
         courseDescription = binding.editText6
         backBtn = binding.button6
         courseNameToDisplay = binding.textView9
+        studentList = binding.studentList
         courseDescriptionToDisplay = binding.textView10
-        addClass.setOnClickListener { form.visibility = View.VISIBLE
+        addClass.setOnClickListener {
+            form.visibility = View.VISIBLE
             courseInfo.visibility = View.GONE
+            studentList.visibility = View.GONE
         }
         courseNameString = courseName.text.toString()
 //        courseIdString = courseId.text.toString()
@@ -130,10 +133,26 @@ class ManageClasses : Fragment() {
             }
 
         }
-
-
-
         )
+
+        databaseReference = FirebaseDatabase.getInstance().getReference("Student")
+        databaseReference.addValueEventListener(object:ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {}
+
+            override fun onDataChange(p0: DataSnapshot) {
+                if(p0.exists()){
+                    for(e in p0.children){
+                        val student = e.getValue(Student::class.java)
+                        arrayList.add(student!!)
+                    }
+                    val adapter = StudentAdapter(arrayList)
+                    studentList.adapter = adapter
+                }
+
+            }
+
+        })
+
 
         addBtnFun()
         backBtnFun()
@@ -154,7 +173,7 @@ class ManageClasses : Fragment() {
         val model = ViewModelProviders.of(activity!!).get(TeacherNameCommunicator::class.java)
         val user = FirebaseAuth.getInstance().currentUser
         model.setMsgCommunicator(user!!.email.toString())
-        val myFragment = teacherHomePage()
+        val myFragment = TeacherHomePage()
         val fragmentTransaction = fragmentManager!!.beginTransaction()
         fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
         fragmentTransaction.addToBackStack(null)
@@ -162,6 +181,7 @@ class ManageClasses : Fragment() {
     }
     private fun addBtnFun(){
         addBtn.setOnClickListener {view : View->
+            studentList.visibility = View.VISIBLE
             form.visibility = View.GONE
             courseInfo.visibility = View.VISIBLE
             val ref = FirebaseDatabase.getInstance().getReference("Course")

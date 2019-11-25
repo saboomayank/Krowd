@@ -36,7 +36,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [signUpTeacher.newInstance] factory method to
  * create an instance of this fragment.
  */
-class signUpTeacher : Fragment() {
+class SignUpTeacher : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -199,7 +199,7 @@ class signUpTeacher : Fragment() {
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            signUpTeacher().apply {
+            SignUpTeacher().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

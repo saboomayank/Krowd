@@ -2,7 +2,6 @@ package com.kruelkotlinkiller.krowd
 
 import android.animation.Animator
 import android.content.Context
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -17,14 +16,11 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.kruelkotlinkiller.krowd.databinding.FragmentMainPageBinding
-import kotlinx.android.synthetic.main.fragment_main_page.*
-import kotlinx.android.synthetic.main.fragment_teacher_home_page.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -39,7 +35,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [mainPage.newInstance] factory method to
  * create an instance of this fragment.
  */
-class mainPage : Fragment() {
+class MainPage : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -136,7 +132,7 @@ class mainPage : Fragment() {
                     if(p0.exists()){
                        model = ViewModelProviders.of(activity!!).get(TeacherNameCommunicator::class.java)
                         model.setMsgCommunicator(user.email!!)
-                        val myFragment = studentHomePage()
+                        val myFragment = StudentHomePage()
                         val fragmentTransaction = fragmentManager!!.beginTransaction()
                         fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
                         fragmentTransaction.addToBackStack(null)
@@ -153,7 +149,7 @@ class mainPage : Fragment() {
                         if(p0.exists()){
                             model = ViewModelProviders.of(activity!!).get(TeacherNameCommunicator::class.java)
                             model.setMsgCommunicator(user.email!!)
-                            val myFragment = teacherHomePage()
+                            val myFragment = TeacherHomePage()
                             val fragmentTransaction = fragmentManager!!.beginTransaction()
                             fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
                             fragmentTransaction.addToBackStack(null)
@@ -238,7 +234,7 @@ class mainPage : Fragment() {
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            mainPage().apply {
+            MainPage().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

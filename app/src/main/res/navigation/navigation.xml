@@ -6,7 +6,7 @@
     app:startDestination="@id/mainPage">
     <fragment
         android:id="@+id/mainPage"
-        android:name="com.kruelkotlinkiller.krowd.mainPage"
+        android:name="com.kruelkotlinkiller.krowd.MainPage"
         android:label="mainPage" >
         <action
             android:id="@+id/action_mainPage_to_signUpStudent"
@@ -31,7 +31,7 @@
     </fragment>
     <fragment
         android:id="@+id/signUpStudent"
-        android:name="com.kruelkotlinkiller.krowd.signUpStudent"
+        android:name="com.kruelkotlinkiller.krowd.SignUpStudent"
         android:label="signUpStudent" >
         <action
             android:id="@+id/action_signUpStudent_to_logIn"
@@ -39,11 +39,11 @@
     </fragment>
     <fragment
         android:id="@+id/studentHomePage"
-        android:name="com.kruelkotlinkiller.krowd.studentHomePage"
+        android:name="com.kruelkotlinkiller.krowd.StudentHomePage"
         android:label="studentHomePage" />
     <fragment
         android:id="@+id/teacherHomePage"
-        android:name="com.kruelkotlinkiller.krowd.teacherHomePage"
+        android:name="com.kruelkotlinkiller.krowd.TeacherHomePage"
         android:label="teacherHomePage" >
 
         <action
@@ -52,7 +52,7 @@
     </fragment>
     <fragment
         android:id="@+id/signUpTeacher"
-        android:name="com.kruelkotlinkiller.krowd.signUpTeacher"
+        android:name="com.kruelkotlinkiller.krowd.SignUpTeacher"
         android:label="signUpTeacher" >
         <action
             android:id="@+id/action_signUpTeacher_to_teacher_login"
@@ -60,7 +60,7 @@
     </fragment>
     <fragment
         android:id="@+id/teacher_login"
-        android:name="com.kruelkotlinkiller.krowd.teacher_login"
+        android:name="com.kruelkotlinkiller.krowd.Teacher_login"
         android:label="teacher_login" >
         <action
             android:id="@+id/action_teacher_login_to_teacherHomePage"
@@ -68,7 +68,7 @@
     </fragment>
     <fragment
         android:id="@+id/logIn"
-        android:name="com.kruelkotlinkiller.krowd.logIn"
+        android:name="com.kruelkotlinkiller.krowd.Student_logIn"
         android:label="logIn" >
         <action
             android:id="@+id/action_logIn_to_studentHomePage"

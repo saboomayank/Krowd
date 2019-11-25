@@ -8,7 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class MyAdapter(val data: ArrayList<Course>): RecyclerView.Adapter<MyAdapter.ViewHolder>() {
+class CourseAdapter(val data: ArrayList<Course>): RecyclerView.Adapter<CourseAdapter.ViewHolder>() {
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -20,7 +20,7 @@ class MyAdapter(val data: ArrayList<Course>): RecyclerView.Adapter<MyAdapter.Vie
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val v = LayoutInflater.from(parent?.context).inflate(R.layout.text_item_view, parent, false)
+        val v = LayoutInflater.from(parent?.context).inflate(R.layout.course_item_view, parent, false)
         return ViewHolder(v)
     }
 

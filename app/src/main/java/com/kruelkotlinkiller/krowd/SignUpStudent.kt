@@ -36,7 +36,7 @@ private const val ARG_PARAM2 = "param2"
 
 
 
-class signUpStudent : Fragment() {
+class SignUpStudent : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -108,13 +108,12 @@ class signUpStudent : Fragment() {
         if(isEmailValid(emailA)) {
             val ref = FirebaseDatabase.getInstance().getReference("Student")
             studentId = ref.push().key!!
-            val student = Student(studentId,firstName,lastName, emailA, 0)
+            val student = Student(studentId,firstName,lastName, emailA, "")
             ref.child(studentId).setValue(student)
             mAuth.createUserWithEmailAndPassword(emailA, password)
                 .addOnCompleteListener { task: Task<AuthResult> ->
                     if (task.isSuccessful) {
                         Toast.makeText(context, "register successfully", Toast.LENGTH_LONG).show()
-                        val firebaseUser = this.mAuth.currentUser!!
                     } else {
                         Toast.makeText(context, "register unsuccessfully", Toast.LENGTH_LONG).show()
 
@@ -181,7 +180,7 @@ class signUpStudent : Fragment() {
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            signUpStudent().apply {
+            SignUpStudent().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

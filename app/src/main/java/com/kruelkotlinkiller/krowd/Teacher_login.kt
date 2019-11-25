@@ -11,17 +11,16 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import androidx.databinding.DataBindingUtil
-import com.google.firebase.auth.FirebaseAuth
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.kruelkotlinkiller.krowd.databinding.FragmentStudentLoginBinding
-
+import com.kruelkotlinkiller.krowd.databinding.FragmentTeacherLoginBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -31,17 +30,17 @@ private const val ARG_PARAM2 = "param2"
 /**
  * A simple [Fragment] subclass.
  * Activities that contain this fragment must implement the
- * [logIn.OnFragmentInteractionListener] interface
+ * [teacher_login.OnFragmentInteractionListener] interface
  * to handle interaction events.
- * Use the [logIn.newInstance] factory method to
+ * Use the [teacher_login.newInstance] factory method to
  * create an instance of this fragment.
  */
-class logIn : Fragment() {
+class Teacher_login : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
-    private lateinit var binding : FragmentStudentLoginBinding
+    private lateinit var binding : FragmentTeacherLoginBinding
     lateinit var email : EditText
     lateinit var password : EditText
     lateinit var logInBtn : Button
@@ -60,39 +59,38 @@ class logIn : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        binding =  DataBindingUtil.inflate(inflater,R.layout.fragment_student_login, container, false)
+        // Inflate the layout for this fragment
+        binding =  DataBindingUtil.inflate(inflater,R.layout.fragment_teacher_login, container, false)
         email = binding.simpleEditText
         password = binding.simpleEditText3
         logInBtn = binding.button
         model = ViewModelProviders.of(activity!!).get(TeacherNameCommunicator::class.java)
         mAuth = FirebaseAuth.getInstance()
-        logInBtn.setOnClickListener {view : View ->
+        logInBtn.setOnClickListener { view: View ->
             val emailA = email.text.toString().trim()
             val pass = password.text.toString().trim()
-            val refStudent = FirebaseDatabase.getInstance().getReference("Student")
-            if(emailA.isNotEmpty() && pass.isNotEmpty()){
-                this.mAuth.signInWithEmailAndPassword(emailA,pass)
-                    .addOnCompleteListener{
-                        task: Task<AuthResult> ->
-                        if(task.isSuccessful){
-                            refStudent.orderByChild("email").equalTo(emailA).addValueEventListener(
-                                object:ValueEventListener{
+            val refTeacher = FirebaseDatabase.getInstance().getReference("Teacher")
+            if (emailA.isNotEmpty() && pass.isNotEmpty()) {
+                this.mAuth.signInWithEmailAndPassword(emailA, pass)
+                    .addOnCompleteListener { task: Task<AuthResult> ->
+                        if (task.isSuccessful) {
+                            refTeacher.orderByChild("email").equalTo(emailA).addValueEventListener(
+                                object : ValueEventListener {
                                     override fun onDataChange(p0: DataSnapshot) {
-                                        if(p0.exists()){
+                                        if (p0.exists()) {
                                             model.setMsgCommunicator(emailA)
-                                            val myFragment = studentHomePage()
-                                            val fragmentTransaction = fragmentManager!!.beginTransaction()
-                                            fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
-                                            fragmentTransaction.addToBackStack(null)
-                                            fragmentTransaction.commit()
-                                            view.findNavController().navigate(R.id.action_logIn_to_studentHomePage)
-                                        }
-                                        else{
+                                             val myFragment = TeacherHomePage()
+                                             val fragmentTransaction = fragmentManager!!.beginTransaction()
+                                             fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
+                                             fragmentTransaction.addToBackStack(null)
+                                             fragmentTransaction.commit()
+                                            view.findNavController()
+                                                .navigate(R.id.action_teacher_login_to_teacherHomePage)
+                                        } else {
                                             val builder = AlertDialog.Builder(context)
                                             builder.setTitle("ERROR")
-                                            builder.setMessage("Student Email Not Exists")
-                                            builder.setPositiveButton("Ok"){dialog, which ->
+                                            builder.setMessage("Teacher Email Not Exists")
+                                            builder.setPositiveButton("Ok") { dialog, which ->
 
                                             }
                                             val alert = builder.create()
@@ -104,12 +102,11 @@ class logIn : Fragment() {
                                     }
                                 }
                             )
-                        }
-                        else{
+                        } else {
                             val builder = AlertDialog.Builder(context)
                             builder.setTitle("ERROR")
                             builder.setMessage("Incorrect Credentials")
-                            builder.setPositiveButton("Ok"){dialog, which ->
+                            builder.setPositiveButton("Ok") { dialog, which ->
 
                             }
                             val alert = builder.create()
@@ -117,67 +114,11 @@ class logIn : Fragment() {
                         }
                     }
             }
-
         }
 
 
 
-        // Inflate the layout for this fragment
-        return binding.root
-    }
-
-    fun checkUser(){
-//        val refStudent = FirebaseDatabase.getInstance().getReference("Student")
-//       // val refTeacher = FirebaseDatabase.getInstance().getReference("Teacher")
-//        val emailA = email.text.toString().trim()
-//        val pass = password.text.toString().trim()
-//
-//        if (emailA.isNotEmpty() && pass.isNotEmpty()) {
-//            this.mAuth.signInWithEmailAndPassword(emailA, pass).addOnCompleteListener { task: Task<AuthResult> ->
-//             if(task.isSuccessful) {
-//                 refStudent.orderByChild("email").equalTo(emailA).addValueEventListener(object:ValueEventListener{
-//                     override fun onDataChange(snapshot: DataSnapshot) {
-//                       if(snapshot.exists()){
-//                           logInBtn.setOnClickListener{ view : View ->
-//                               view.findNavController().navigate(R.id.action_logIn_to_studentHomePage)
-//                           }
-//                       }
-//                     }
-//
-//                     override fun onCancelled(error: DatabaseError) {}
-//
-//                 })
-//                 refTeacher.orderByChild("email").equalTo(emailA).addValueEventListener(object : ValueEventListener{
-//                     override fun onDataChange(p0: DataSnapshot) {
-//                         if(p0.exists()){
-//                             logInBtn.setOnClickListener{ view : View ->
-//                                 model.setMsgCommunicator(emailA)
-//                                 val myFragment = teacherHomePage()
-//                                 val fragmentTransaction = fragmentManager!!.beginTransaction()
-//                                 fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
-//                                 fragmentTransaction.addToBackStack(null)
-//                                 fragmentTransaction.commit()
-//                                 view.findNavController().navigate()
-//                             }
-//                         }
-//                     }
-//
-//                     override fun onCancelled(p0: DatabaseError) {
-//                         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-//                     }
-//
-//                 })
-//
-//             }else{
-//                 Toast.makeText(context, "Incorrect credentials", Toast.LENGTH_SHORT).show()
-//             }
-//            }
-//
-//        }else {
-//            Toast.makeText(context, "Please fill up the Credentials :|", Toast.LENGTH_SHORT).show()
-//        }
-
-
+            return binding.root
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -218,12 +159,12 @@ class logIn : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment logIn.
+         * @return A new instance of fragment teacher_login.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            logIn().apply {
+            Teacher_login().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

@@ -31,7 +31,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [teacherHomePage.newInstance] factory method to
  * create an instance of this fragment.
  */
-class teacherHomePage : Fragment() {
+class TeacherHomePage : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -97,7 +97,7 @@ class teacherHomePage : Fragment() {
                                 }
 
                                 }
-                                val adapter = MyAdapter(arrayList)
+                                val adapter = CourseAdapter(arrayList)
                                 recyclerView.adapter = adapter
 
                                 }
@@ -121,8 +121,8 @@ class teacherHomePage : Fragment() {
                     override fun onItemClick(view: View, position: Int) {
                         model.setMsgCommunicator(name.text.toString())
                         // here we pass the id of the course to the manage class
-                        model.setIdCommunicator(MyAdapter(arrayList).getID(position))
-                        Log.d("I clicked ",MyAdapter(arrayList).getID(position) )
+                        model.setIdCommunicator(CourseAdapter(arrayList).getID(position))
+                        Log.d("I clicked ",CourseAdapter(arrayList).getID(position) )
                         val myFragment = ManageClasses()
                         val fragmentTransaction = fragmentManager!!.beginTransaction()
                         fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
@@ -224,7 +224,7 @@ class teacherHomePage : Fragment() {
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            teacherHomePage().apply {
+            TeacherHomePage().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
