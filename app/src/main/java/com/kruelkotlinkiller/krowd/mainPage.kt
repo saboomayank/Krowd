@@ -1,15 +1,25 @@
 package com.kruelkotlinkiller.krowd
 
+import android.animation.Animator
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.os.CountDownTimer
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.kruelkotlinkiller.krowd.databinding.FragmentMainPageBinding
 
 // TODO: Rename parameter arguments, choose names that match
@@ -25,7 +35,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [mainPage.newInstance] factory method to
  * create an instance of this fragment.
  */
-class mainPage : Fragment() {
+class MainPage : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -33,6 +43,14 @@ class mainPage : Fragment() {
     private lateinit var binding: FragmentMainPageBinding
     lateinit var logInBtn : Button
     lateinit var signUpBtn : Button
+    lateinit var sw : Switch
+    lateinit var textBelow : TextView
+    lateinit var progressBar : ProgressBar
+    lateinit var im : ImageView
+    lateinit var afterAnimation : ConstraintLayout
+    private lateinit var model : TeacherNameCommunicator
+
+    private var isCheck : Boolean? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -49,13 +67,128 @@ class mainPage : Fragment() {
         binding =  DataBindingUtil.inflate(inflater,R.layout.fragment_main_page, container, false)
         signUpBtn = binding.button
         logInBtn = binding.button1
+        sw = binding.switch1
+
+        progressBar = binding.loadingProgressBar
+        im = binding.bookIconImageView
+        afterAnimation = binding.afterAnimation
+        sw?.setOnCheckedChangeListener({ _, isChecked ->
+            val msg = if (isChecked) "Teacher" else "Student"
+            sw.text = msg
+            if(isChecked){
+                isCheck = true
+            }
+            else{
+                isCheck = false
+            }
+        })
+
         signUpBtn.setOnClickListener{ view : View ->
-            view.findNavController().navigate(R.id.action_mainPage_to_typeOfSignUp)
+
+                if(isCheck == true){
+                    view.findNavController().navigate(R.id.action_mainPage_to_signUpTeacher)
+                }
+                else{
+                    view.findNavController().navigate(R.id.action_mainPage_to_signUpStudent)
+                }
+
+
+
         }
         logInBtn.setOnClickListener {view:View->
-            view.findNavController().navigate(R.id.action_mainPage_to_logIn)
+
+                if(isCheck == true) {
+                    view.findNavController().navigate(R.id.action_mainPage_to_teacher_login)
+                }
+                else{
+                    view.findNavController().navigate(R.id.action_mainPage_to_logIn)
+                }
+
         }
+
+        object : CountDownTimer(3000,1000){
+            override fun onFinish() {
+
+                progressBar.visibility = View.GONE
+                im.setImageResource(R.drawable.logo)
+
+                startAnimation()
+            }
+
+            override fun onTick(millisUntilFinished: Long) {
+            }
+        }.start()
+
+        val user = FirebaseAuth.getInstance().currentUser
+//        val fragmentTransaction = fragmentManager?.beginTransaction()
+        if(user!=null){
+            val refStudent = FirebaseDatabase.getInstance().getReference("Student")
+            val refTeacher = FirebaseDatabase.getInstance().getReference("Teacher")
+            refStudent.orderByChild("email").equalTo(user.email).addValueEventListener(object:
+                ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {}
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    if(p0.exists()){
+                       model = ViewModelProviders.of(activity!!).get(TeacherNameCommunicator::class.java)
+                        model.setMsgCommunicator(user.email!!)
+                        val myFragment = StudentHomePage()
+                        val fragmentTransaction = fragmentManager!!.beginTransaction()
+                        fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
+                        fragmentTransaction.addToBackStack(null)
+                        fragmentTransaction.commit()
+                        findNavController().navigate(R.id.studentHomePage)
+                    }
+                }
+                     })
+            refTeacher.orderByChild("email").equalTo(user.email).addValueEventListener(
+                object : ValueEventListener{
+                    override fun onCancelled(p0: DatabaseError) {}
+
+                    override fun onDataChange(p0: DataSnapshot) {
+                        if(p0.exists()){
+                            model = ViewModelProviders.of(activity!!).get(TeacherNameCommunicator::class.java)
+                            model.setMsgCommunicator(user.email!!)
+                            val myFragment = TeacherHomePage()
+                            val fragmentTransaction = fragmentManager!!.beginTransaction()
+                            fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
+                            fragmentTransaction.addToBackStack(null)
+                            fragmentTransaction.commit()
+                          findNavController().navigate(R.id.teacherHomePage)
+                        }
+                    }
+                }
+            )
+
+        }else{
+
+        }
+
+
+
+
         return binding.root
+    }
+
+    private fun startAnimation() {
+        im.animate().apply {
+            x(50f)
+            y(100f)
+            duration = 1000
+        }.setListener(object : Animator.AnimatorListener {
+            override fun onAnimationCancel(animation: Animator?) {
+            }
+
+            override fun onAnimationEnd(animation: Animator?) {
+                afterAnimation.visibility = View.VISIBLE
+            }
+
+            override fun onAnimationRepeat(animation: Animator?) {
+            }
+
+            override fun onAnimationStart(animation: Animator?) {
+            }
+        })
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -101,7 +234,7 @@ class mainPage : Fragment() {
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            mainPage().apply {
+            MainPage().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

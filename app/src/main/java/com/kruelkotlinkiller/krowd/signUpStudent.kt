@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.annotation.NonNull
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import com.google.android.gms.tasks.Task
@@ -20,7 +19,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.kruelkotlinkiller.krowd.databinding.FragmentSignUpStudentBinding
-import com.kruelkotlinkiller.krowd.databinding.FragmentTypeOfSignUpBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -38,7 +36,7 @@ private const val ARG_PARAM2 = "param2"
 
 
 
-class signUpStudent : Fragment() {
+class SignUpStudent : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -84,7 +82,11 @@ class signUpStudent : Fragment() {
             }else{
                 val builder = AlertDialog.Builder(context)
                 builder.setTitle("ERROR")
-                builder.setMessage("Please fill in all the fields!")
+                if(!isEmailValid(email.text.toString())){
+                    builder.setMessage("Please enter a valid email address")
+                }else {
+                    builder.setMessage("Please fill in all the fields!")
+                }
                 builder.setPositiveButton("Ok"){dialog, which ->
 
                 }
@@ -106,13 +108,12 @@ class signUpStudent : Fragment() {
         if(isEmailValid(emailA)) {
             val ref = FirebaseDatabase.getInstance().getReference("Student")
             studentId = ref.push().key!!
-            val student = Student(studentId,firstName,lastName, emailA)
+            val student = Student(studentId,firstName,lastName, emailA, "")
             ref.child(studentId).setValue(student)
             mAuth.createUserWithEmailAndPassword(emailA, password)
                 .addOnCompleteListener { task: Task<AuthResult> ->
                     if (task.isSuccessful) {
                         Toast.makeText(context, "register successfully", Toast.LENGTH_LONG).show()
-                        val firebaseUser = this.mAuth.currentUser!!
                     } else {
                         Toast.makeText(context, "register unsuccessfully", Toast.LENGTH_LONG).show()
 
@@ -179,7 +180,7 @@ class signUpStudent : Fragment() {
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            signUpStudent().apply {
+            SignUpStudent().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

@@ -5,8 +5,13 @@ class Student(
     val id: String,
     val firstName: String,
     val lastName: String,
-    val email : String
+    val email : String,
+    val courseId : String
    ){
+
+    constructor():this("","","","",""){
+
+    }
 
 //    @Exclude
 //    fun toMap(): Map<String, Any?> {

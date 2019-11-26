@@ -4,6 +4,8 @@ import android.app.AlertDialog
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.text.TextUtils
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.kruelkotlinkiller.krowd.databinding.FragmentSignUpTeacherBinding
+import java.util.regex.Pattern
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -33,7 +36,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [signUpTeacher.newInstance] factory method to
  * create an instance of this fragment.
  */
-class signUpTeacher : Fragment() {
+class SignUpTeacher : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -48,6 +51,7 @@ class signUpTeacher : Fragment() {
     lateinit var database : FirebaseDatabase
     lateinit var mAuth : FirebaseAuth
     lateinit var teacherId : String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -68,18 +72,29 @@ class signUpTeacher : Fragment() {
         password = binding.simpleEditText7
         databaseReference = FirebaseDatabase.getInstance().reference
         mAuth = FirebaseAuth.getInstance()
+
+
+
+
         submitBtn.setOnClickListener{ view : View ->
             if(fname.text.toString().isNotEmpty()
                 && lname.text.toString().isNotEmpty()
                 && email.text.toString().isNotEmpty()
                 && password.text.toString().isNotEmpty()
                 && isEmailValid(email.text.toString())) {
+
                 saveTeacher()
-                view.findNavController().navigate(R.id.action_signUpTeacher_to_logIn)
-            }else{
+                view.findNavController().navigate(R.id.action_signUpTeacher_to_teacher_login)
+
+            }
+            else{
                 val builder = AlertDialog.Builder(context)
                 builder.setTitle("ERROR")
-                builder.setMessage("Please fill in all the fields!")
+                if(!isEmailValid(email.text.toString())){
+                    builder.setMessage("Please enter a valid email address")
+                }else {
+                    builder.setMessage("Please fill in all the fields!")
+                }
                 builder.setPositiveButton("Ok"){dialog, which ->
 
                 }
@@ -87,7 +102,8 @@ class signUpTeacher : Fragment() {
                 alert.show()
 
             }
-        }
+
+            }
         // Inflate the layout for this fragment
 
 
@@ -96,20 +112,25 @@ class signUpTeacher : Fragment() {
     private fun saveTeacher() {
         val firstName = fname.text.toString().trim()
         val lastName = lname.text.toString().trim()
-        val pass = password.text.toString().trim()
         val emailA = email.text.toString().trim()
+        val pass = password.text.toString().trim()
+
 
         if(isEmailValid(emailA)) {
-            val ref = FirebaseDatabase.getInstance().getReference("Teacher")
-            teacherId = ref.push().key!!
-            val teacher = Teacher(teacherId,firstName,lastName, emailA)
-            ref.child(teacherId).setValue(teacher)
+
+
             mAuth.createUserWithEmailAndPassword(emailA, pass)
                 .addOnCompleteListener { task: Task<AuthResult> ->
                     if (task.isSuccessful) {
+                        val ref = FirebaseDatabase.getInstance().getReference("Teacher")
+                        teacherId = ref.push().key!!
+                        val teacher = Teacher(0,firstName,lastName, emailA)
+                        ref.child(teacherId).setValue(teacher)
                         Toast.makeText(context, "register successfully", Toast.LENGTH_LONG).show()
 
+
                     } else {
+
                         Toast.makeText(context, "register unsuccessfully", Toast.LENGTH_LONG).show()
 
                     }
@@ -128,6 +149,8 @@ class signUpTeacher : Fragment() {
         }
 
     }
+
+
     val EMAIL_REGEX = "^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})"
     fun isEmailValid(email: String): Boolean {
         return EMAIL_REGEX.toRegex().matches(email)
@@ -176,7 +199,7 @@ class signUpTeacher : Fragment() {
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            signUpTeacher().apply {
+            SignUpTeacher().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
