@@ -108,7 +108,7 @@ class SignUpStudent : Fragment() {
         if(isEmailValid(emailA)) {
             val ref = FirebaseDatabase.getInstance().getReference("Student")
             studentId = ref.push().key!!
-            val student = Student(studentId,firstName,lastName, emailA, "")
+            val student = Student(studentId,firstName,lastName, emailA, HashMap())
             ref.child(studentId).setValue(student)
             mAuth.createUserWithEmailAndPassword(emailA, password)
                 .addOnCompleteListener { task: Task<AuthResult> ->

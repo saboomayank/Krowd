@@ -137,7 +137,7 @@ class MainPage : Fragment() {
                         fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
                         fragmentTransaction.addToBackStack(null)
                         fragmentTransaction.commit()
-                        findNavController().navigate(R.id.studentHomePage)
+                        findNavController().navigate(R.id.action_mainPage_to_studentHomePage)
                     }
                 }
                      })
@@ -154,7 +154,7 @@ class MainPage : Fragment() {
                             fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
                             fragmentTransaction.addToBackStack(null)
                             fragmentTransaction.commit()
-                          findNavController().navigate(R.id.teacherHomePage)
+                          findNavController().navigate(R.id.action_mainPage_to_teacherHomePage)
                         }
                     }
                 }

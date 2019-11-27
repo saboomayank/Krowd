@@ -20,6 +20,12 @@
         <action
             android:id="@+id/action_mainPage_to_teacher_login"
             app:destination="@id/teacher_login" />
+        <action
+            android:id="@+id/action_mainPage_to_studentHomePage"
+            app:destination="@id/studentHomePage" />
+        <action
+            android:id="@+id/action_mainPage_to_teacherHomePage"
+            app:destination="@id/teacherHomePage" />
     </fragment>
     <fragment
         android:id="@+id/manageClasses"
@@ -40,7 +46,11 @@
     <fragment
         android:id="@+id/studentHomePage"
         android:name="com.kruelkotlinkiller.krowd.StudentHomePage"
-        android:label="studentHomePage" />
+        android:label="studentHomePage" >
+        <action
+            android:id="@+id/action_studentHomePage_to_studentEnroll"
+            app:destination="@id/studentEnroll" />
+    </fragment>
     <fragment
         android:id="@+id/teacherHomePage"
         android:name="com.kruelkotlinkiller.krowd.TeacherHomePage"
@@ -72,6 +82,15 @@
         android:label="logIn" >
         <action
             android:id="@+id/action_logIn_to_studentHomePage"
+            app:destination="@id/studentHomePage" />
+    </fragment>
+    <fragment
+        android:id="@+id/studentEnroll"
+        android:name="com.kruelkotlinkiller.krowd.StudentEnroll"
+        android:label="fragment_student_enroll"
+        tools:layout="@layout/fragment_student_enroll" >
+        <action
+            android:id="@+id/action_studentEnroll_to_studentHomePage"
             app:destination="@id/studentHomePage" />
     </fragment>
 </navigation>

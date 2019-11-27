@@ -22,6 +22,7 @@ import kotlinx.android.synthetic.main.fragment_manage_classes.*
 import android.os.Build
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
+import kotlinx.android.synthetic.main.fragment_teacher_home_page.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -60,6 +61,7 @@ class ManageClasses : Fragment() {
     private var professorName : String?=null
     private var id : String?=null
     private var arrayList = ArrayList<Student>()
+    private var keyList = ArrayList<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,7 +100,7 @@ class ManageClasses : Fragment() {
             override fun onChanged(t: Any?) {
 
                     professorName = t!!.toString()
-                    Log.d("Professor name is " , professorName)
+                    Log.d("Professor name is " , professorName!!)
 
               }})
 
@@ -108,6 +110,7 @@ class ManageClasses : Fragment() {
 
                     id = t!!.toString()
                     Log.d("the id is is is ", id.toString())
+
                if(id!="-1.0") {
                    val ordersRef =
                        FirebaseDatabase.getInstance().getReference("Course")
@@ -129,36 +132,85 @@ class ManageClasses : Fragment() {
                        override fun onCancelled(p0: DatabaseError) {}
                    }
                    ordersRef.addListenerForSingleValueEvent(valueEventListener)
+
+
                }
+                getkey(id!!)
             }
 
         }
         )
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("Student")
-        databaseReference.addValueEventListener(object:ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {}
 
-            override fun onDataChange(p0: DataSnapshot) {
-                if(p0.exists()){
-                    for(e in p0.children){
-                        val student = e.getValue(Student::class.java)
-                        arrayList.add(student!!)
-                    }
-                    val adapter = StudentAdapter(arrayList)
-                    studentList.adapter = adapter
-                }
-
-            }
-
-        })
 
 
         addBtnFun()
         backBtnFun()
         deleteBtnFun()
 
+
+
         return binding.root
+    }
+    private fun getkey(id : String){
+        databaseReference = FirebaseDatabase.getInstance().getReference("Student")
+        databaseReference.addValueEventListener(object :ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {}
+            override fun onDataChange(p0: DataSnapshot) {
+
+                for(e in p0.children){
+                    Log.d("FIRST level key ", e.key!!)
+
+                    databaseReference.child(e.key!!).child("courseId").addListenerForSingleValueEvent(object:ValueEventListener{
+                        override fun onDataChange(p1: DataSnapshot) {
+                            for(e1 in p1.children) {
+                                Log.d("second level key ", e1.key!!)
+                                val query = databaseReference.orderByChild("courseId/" + e1.key).equalTo(id)
+                                   query.addListenerForSingleValueEvent(
+                                    object :ValueEventListener{
+                                        override fun onDataChange(p2: DataSnapshot) {
+
+                                            if(p2.exists()){
+//                                                arrayList.clear()
+                                                for(e2 in p2.children){
+                                                    Log.d("helloooo", e2.getValue().toString())
+                                                    val student = e2.getValue(Student::class.java)
+                                                    arrayList.add(student!!)
+
+                                                }
+                                                for(i in arrayList) {
+                                                    Log.d("The array is ", i.firstName)
+                                                }
+                                                val adapter = StudentAdapter(arrayList)
+                                                studentList.adapter = adapter
+                                            }
+                                        }
+
+                                        override fun onCancelled(p2: DatabaseError) {
+                                        }
+                                    }
+                                )
+
+                            }
+                        }
+
+                        override fun onCancelled(p0: DatabaseError) {
+                        }
+
+
+
+                    })
+
+                }
+            }
+
+
+        })
+//                   val keys = databaseReference.child("courseId").child(id!!).orderByChild(id!!).equalTo(id!!)
+//                   Log.d("key",keys.toString())
+
+
+
     }
     private fun deleteBtnFun(){
         deleteBtn.setOnClickListener { view: View->

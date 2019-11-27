@@ -8,16 +8,16 @@ import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.kruelkotlinkiller.krowd.databinding.FragmentStudentHomePageBinding
 
 // TODO: Rename parameter arguments, choose names that match
@@ -42,6 +42,9 @@ class StudentHomePage : Fragment() {
     private lateinit var addClassBtn : Button
     private lateinit var name : TextView
     private var temp : String?= null
+    private lateinit var courseList : RecyclerView
+    //private lateinit var databaseReference : DatabaseReference
+    private var arrayList = ArrayList<Course>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,20 +60,101 @@ class StudentHomePage : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_student_home_page,container,false)
-        addClassBtn = binding.button2
         name = binding.nameOfStudent
+        addClassBtn = binding.button3
+        courseList = binding.courseList
         val model = ViewModelProviders.of(activity!!).get(TeacherNameCommunicator::class.java)
         model.message.observe(this,object: Observer<Any> {
             override fun onChanged(t: Any?) {
                 temp = t!!.toString()
+                var key = ""
                 val ref = FirebaseDatabase.getInstance().reference
                 val ordersRef = ref.child("Student").orderByChild("email").equalTo(temp)
                 val valueEventListener = object : ValueEventListener {
                     override fun onDataChange(p0: DataSnapshot) {
-                        for(ds in p0.children){
-                            val nameTemp = ds.child("firstName").getValue(String::class.java) + " " + ds.child("lastName").getValue(String::class.java)
-                            name.text = nameTemp
-                        }
+                        if(p0.exists()) {
+                            for (ds in p0.children) {
+                                val nameTemp =
+                                    ds.child("firstName").getValue(String::class.java) + " " + ds.child(
+                                        "lastName"
+                                    ).getValue(String::class.java)
+
+                                key = ds.key!!
+                                //  Log.d("zaccccc",key)
+                                name.text = nameTemp
+                            }
+                            sendKeyToEnrollment(key)
+
+
+                            val courseRef = FirebaseDatabase.getInstance().getReference("Course")
+                            val databaseReference = FirebaseDatabase.getInstance().getReference("Student")
+                            ordersRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                                override fun onCancelled(p0: DatabaseError) {}
+                                override fun onDataChange(p0: DataSnapshot) {
+                                    for (e in p0.children) {
+                                        Log.d("jimmm", e.key)
+
+
+                                                            databaseReference.child(e.key!!)
+                                                                .child("courseId")
+                                                                .addValueEventListener(
+                                                                    object : ValueEventListener {
+                                                                        override fun onDataChange(p2: DataSnapshot) {
+                                                                            for (e2 in p2.children) {
+                                                                                Log.d("e2",e2.getValue().toString())
+                                                                                courseRef.orderByChild(
+                                                                                    "courseId"
+                                                                                ).equalTo(
+                                                                                    e2.getValue(
+                                                                                        String::class.java)
+                                                                                )
+                                                                                    .addListenerForSingleValueEvent(
+                                                                                        object :
+                                                                                            ValueEventListener {
+                                                                                            override fun onCancelled(
+                                                                                                p3: DatabaseError
+                                                                                            ) {
+                                                                                            }
+
+                                                                                            override fun onDataChange(
+                                                                                                p3: DataSnapshot
+                                                                                            ) {
+                                                                                                for (e3 in p3.children) {
+                                                                                                    val course =
+                                                                                                        e3.getValue(
+                                                                                                            Course::class.java
+                                                                                                        )
+                                                                                                    arrayList.add(
+                                                                                                        course!!
+                                                                                                    )
+                                                                                                }
+
+                                                                                                val adapter =
+                                                                                                    CourseAdapter(
+                                                                                                        arrayList
+                                                                                                    )
+                                                                                                courseList.adapter =
+                                                                                                    adapter
+                                                                                            }
+
+                                                                                        })
+
+                                                                            }
+                                                                        }
+
+                                                                        override fun onCancelled(p2: DatabaseError) {}
+                                                                    }
+                                                                )
+                                                        }
+                                                    }
+
+
+
+
+                                })
+                            }
+
+
                     }
                     override fun onCancelled(p0: DatabaseError) {
                     }
@@ -81,7 +165,10 @@ class StudentHomePage : Fragment() {
         })
 
 
+
+
         setHasOptionsMenu(true)
+
 
         //sends user back to the log in page if he/she is logged out
         val user = FirebaseAuth.getInstance().currentUser
@@ -91,6 +178,19 @@ class StudentHomePage : Fragment() {
 
         return binding.root
     }
+    private fun sendKeyToEnrollment(str : String){
+        addClassBtn.setOnClickListener {view:View->
+            val model = ViewModelProviders.of(activity!!).get(TeacherNameCommunicator::class.java)
+            model.setMsgCommunicator(str)
+            val myFragment = StudentEnroll()
+            val fragmentTransaction = fragmentManager!!.beginTransaction()
+            fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
+            view.findNavController().navigate(R.id.action_studentHomePage_to_studentEnroll)
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu!!, inflater!!)
         inflater?.inflate(R.menu.menu, menu)
