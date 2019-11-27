@@ -1,6 +1,5 @@
 package com.kruelkotlinkiller.krowd
 
-import android.app.AlertDialog
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
@@ -8,7 +7,6 @@ import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -63,7 +61,7 @@ class StudentHomePage : Fragment() {
         name = binding.nameOfStudent
         addClassBtn = binding.button3
         courseList = binding.courseList
-        val model = ViewModelProviders.of(activity!!).get(TeacherNameCommunicator::class.java)
+        val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
         model.message.observe(this,object: Observer<Any> {
             override fun onChanged(t: Any?) {
                 temp = t!!.toString()
@@ -100,6 +98,7 @@ class StudentHomePage : Fragment() {
                                                                 .addValueEventListener(
                                                                     object : ValueEventListener {
                                                                         override fun onDataChange(p2: DataSnapshot) {
+                                                                            arrayList.clear()
                                                                             for (e2 in p2.children) {
                                                                                 Log.d("e2",e2.getValue().toString())
                                                                                 courseRef.orderByChild(
@@ -119,7 +118,9 @@ class StudentHomePage : Fragment() {
                                                                                             override fun onDataChange(
                                                                                                 p3: DataSnapshot
                                                                                             ) {
+
                                                                                                 for (e3 in p3.children) {
+
                                                                                                     val course =
                                                                                                         e3.getValue(
                                                                                                             Course::class.java
@@ -164,10 +165,25 @@ class StudentHomePage : Fragment() {
             }
         })
 
+        courseList.addOnItemTouchListener(RecyclerItemClickListenr(context!!, courseList, object : RecyclerItemClickListenr.OnItemClickListener {
+            override fun onItemClick(view: View, position: Int) {
+
+                model.setIdCommunicator(CourseAdapter(arrayList).getID(position))
+                Log.d("I clicked ",CourseAdapter(arrayList).getID(position) )
+                model.setNameCommunicator(name.text.toString())
+                val myFragment = AttendancePage()
+                val fragmentTransaction = fragmentManager!!.beginTransaction()
+                fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
+                view.findNavController().navigate(R.id.action_studentHomePage_to_attendancePage)
+            }
+            override fun onItemLongClick(view: View?, position: Int) {}
+        }))
 
 
 
-        setHasOptionsMenu(true)
+
+
+            setHasOptionsMenu(true)
 
 
         //sends user back to the log in page if he/she is logged out
@@ -180,7 +196,7 @@ class StudentHomePage : Fragment() {
     }
     private fun sendKeyToEnrollment(str : String){
         addClassBtn.setOnClickListener {view:View->
-            val model = ViewModelProviders.of(activity!!).get(TeacherNameCommunicator::class.java)
+            val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
             model.setMsgCommunicator(str)
             val myFragment = StudentEnroll()
             val fragmentTransaction = fragmentManager!!.beginTransaction()

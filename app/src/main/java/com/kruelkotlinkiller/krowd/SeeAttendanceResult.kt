@@ -7,17 +7,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.Adapter
+import android.widget.ArrayAdapter
+import android.widget.ListView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import com.google.firebase.auth.FirebaseAuth
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.kruelkotlinkiller.krowd.databinding.FragmentStudentEnrollBinding
+import com.google.firebase.database.ValueEventListener
+import com.kruelkotlinkiller.krowd.databinding.FragmentSeeAttendanceResultBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,20 +28,19 @@ private const val ARG_PARAM2 = "param2"
 /**
  * A simple [Fragment] subclass.
  * Activities that contain this fragment must implement the
- * [StudentEnroll.OnFragmentInteractionListener] interface
+ * [SeeAttendanceResult.OnFragmentInteractionListener] interface
  * to handle interaction events.
- * Use the [StudentEnroll.newInstance] factory method to
+ * Use the [SeeAttendanceResult.newInstance] factory method to
  * create an instance of this fragment.
  */
-class StudentEnroll : Fragment() {
+class SeeAttendanceResult : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
-    private lateinit var binding : FragmentStudentEnrollBinding
-    private lateinit var addCourseBtn : Button
-    private lateinit var courseInput : EditText
-    private var temp : String?=null
+    private lateinit var binding : FragmentSeeAttendanceResultBinding
+    private lateinit var attendedStudentList : ListView
+    private var arrayList = ArrayList<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,39 +54,37 @@ class StudentEnroll : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_student_enroll,container,false)
-        addCourseBtn = binding.addClassBtn
-        courseInput = binding.courseInput
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_see_attendance_result,container,false)
+        attendedStudentList = binding.attendanceListView
         val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
-        model.message.observe(this,object: Observer<Any> {
+        model.id.observe(this, object : Observer<Any>{
             override fun onChanged(t: Any?) {
-                temp = t!!.toString()
-                        addClassFun(temp!!)
+                val courseId = t.toString()!!
+                val attendanceResultRef = FirebaseDatabase.getInstance().getReference("AttendanceResult")
+                attendanceResultRef.orderByChild("courseId").equalTo(courseId).addValueEventListener(
+                    object : ValueEventListener{
+                        override fun onCancelled(p0: DatabaseError) {}
+                        override fun onDataChange(p0: DataSnapshot) {
+                            arrayList.clear()
+                            for(e in p0.children){
+                                val result = e.getValue(AttendanceResult::class.java)
+                                arrayList.add(result?.name!!)
+                            }
+                            val adapter = ArrayAdapter(context!!,android.R.layout.simple_list_item_1,arrayList)
+                            attendedStudentList.adapter = adapter
+                        }
+
                     }
-                })
+                )
+            }
+        })
+
+
 
 
 
 
         return binding.root
-    }
-    private fun addClassFun(key:String){
-        addCourseBtn.setOnClickListener {view:View->
-            if(findNavController().currentDestination?.id==R.id.studentEnroll) {
-                val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
-                val user = FirebaseAuth.getInstance().currentUser
-                model.setMsgCommunicator(user?.email!!)
-                val databaseReference = FirebaseDatabase.getInstance().reference
-                databaseReference.child("Student").child(key).child("courseId").push()
-                    .setValue(courseInput.text.toString())
-                Toast.makeText(context, "Sucessfully add class", Toast.LENGTH_LONG).show()
-                val myFragment = StudentHomePage()
-                val fragmentTransaction = fragmentManager!!.beginTransaction()
-                fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
-                view.findNavController().navigate(R.id.action_studentEnroll_to_studentHomePage)
-            }
-        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -127,12 +125,12 @@ class StudentEnroll : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment StudentEnroll.
+         * @return A new instance of fragment SeeAttendanceResult.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            StudentEnroll().apply {
+            SeeAttendanceResult().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

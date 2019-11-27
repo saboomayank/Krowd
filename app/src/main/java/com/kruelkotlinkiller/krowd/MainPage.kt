@@ -48,7 +48,7 @@ class MainPage : Fragment() {
     lateinit var progressBar : ProgressBar
     lateinit var im : ImageView
     lateinit var afterAnimation : ConstraintLayout
-    private lateinit var model : TeacherNameCommunicator
+    private lateinit var model : GeneralCommunicator
 
     private var isCheck : Boolean? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -130,15 +130,16 @@ class MainPage : Fragment() {
 
                 override fun onDataChange(p0: DataSnapshot) {
                     if(p0.exists()){
-                       model = ViewModelProviders.of(activity!!).get(TeacherNameCommunicator::class.java)
-                        model.setMsgCommunicator(user.email!!)
-                        val myFragment = StudentHomePage()
-                        val fragmentTransaction = fragmentManager!!.beginTransaction()
-                        fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
-                        fragmentTransaction.addToBackStack(null)
-                        fragmentTransaction.commit()
-                        findNavController().navigate(R.id.action_mainPage_to_studentHomePage)
-                    }
+                        if(findNavController().currentDestination?.id == R.id.mainPage){
+                           model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
+                            model.setMsgCommunicator(user.email!!)
+                            val myFragment = StudentHomePage()
+                            val fragmentTransaction = fragmentManager!!.beginTransaction()
+                            fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
+                            fragmentTransaction.addToBackStack(null)
+                            fragmentTransaction.commit()
+                            findNavController().navigate(R.id.action_mainPage_to_studentHomePage)
+                    }}
                 }
                      })
             refTeacher.orderByChild("email").equalTo(user.email).addValueEventListener(
@@ -146,15 +147,18 @@ class MainPage : Fragment() {
                     override fun onCancelled(p0: DatabaseError) {}
 
                     override fun onDataChange(p0: DataSnapshot) {
-                        if(p0.exists()){
-                            model = ViewModelProviders.of(activity!!).get(TeacherNameCommunicator::class.java)
-                            model.setMsgCommunicator(user.email!!)
-                            val myFragment = TeacherHomePage()
-                            val fragmentTransaction = fragmentManager!!.beginTransaction()
-                            fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
-                            fragmentTransaction.addToBackStack(null)
-                            fragmentTransaction.commit()
-                          findNavController().navigate(R.id.action_mainPage_to_teacherHomePage)
+                        if(p0.exists()) {
+                            if (findNavController().currentDestination?.id == R.id.mainPage) {
+                                model = ViewModelProviders.of(activity!!)
+                                    .get(GeneralCommunicator::class.java)
+                                model.setMsgCommunicator(user.email!!)
+                                val myFragment = TeacherHomePage()
+                                val fragmentTransaction = fragmentManager!!.beginTransaction()
+                                fragmentTransaction.replace(R.id.myNavHostFragment, myFragment)
+                                fragmentTransaction.addToBackStack(null)
+                                fragmentTransaction.commit()
+                                findNavController().navigate(R.id.action_mainPage_to_teacherHomePage)
+                            }
                         }
                     }
                 }

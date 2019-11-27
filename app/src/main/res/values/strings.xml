@@ -39,6 +39,9 @@
     <string name="backTo">To Home</string>
     <string name="deleteCourse">Delete Course</string>
     <string name="startAttendance">Start Attendance</string>
+    <string name="attendance">Take Attendance</string>
+    <string name="back">Back To Home</string>
+    <string name="seeResult">See Attendance Result</string>
 
 
 </resources>

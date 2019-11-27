@@ -64,7 +64,7 @@ class TeacherHomePage : Fragment() {
         recyclerView = binding.recyclerView
       //  binding.recyclerView.setDivider(R.drawable.recycler_view_divider)
 //        listView = binding.listView
-        val model = ViewModelProviders.of(activity!!).get(TeacherNameCommunicator::class.java)
+        val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
         model.message.observe(this,object: Observer<Any> {
             override fun onChanged(t: Any?) {
                 temp = t!!.toString()

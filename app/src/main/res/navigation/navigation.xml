@@ -34,6 +34,9 @@
         <action
             android:id="@+id/action_manageClasses_to_teacherHomePage"
             app:destination="@id/teacherHomePage" />
+        <action
+            android:id="@+id/action_manageClasses_to_seeAttendanceResult"
+            app:destination="@id/seeAttendanceResult" />
     </fragment>
     <fragment
         android:id="@+id/signUpStudent"
@@ -50,6 +53,9 @@
         <action
             android:id="@+id/action_studentHomePage_to_studentEnroll"
             app:destination="@id/studentEnroll" />
+        <action
+            android:id="@+id/action_studentHomePage_to_attendancePage"
+            app:destination="@id/attendancePage" />
     </fragment>
     <fragment
         android:id="@+id/teacherHomePage"
@@ -93,4 +99,18 @@
             android:id="@+id/action_studentEnroll_to_studentHomePage"
             app:destination="@id/studentHomePage" />
     </fragment>
+    <fragment
+        android:id="@+id/attendancePage"
+        android:name="com.kruelkotlinkiller.krowd.AttendancePage"
+        android:label="fragment_attendance_page"
+        tools:layout="@layout/fragment_attendance_page" >
+        <action
+            android:id="@+id/action_attendancePage_to_studentHomePage"
+            app:destination="@id/studentHomePage" />
+    </fragment>
+    <fragment
+        android:id="@+id/seeAttendanceResult"
+        android:name="com.kruelkotlinkiller.krowd.SeeAttendanceResult"
+        android:label="fragment_see_attendance_result"
+        tools:layout="@layout/fragment_see_attendance_result" />
 </navigation>

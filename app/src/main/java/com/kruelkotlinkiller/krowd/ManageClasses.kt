@@ -19,10 +19,10 @@ import androidx.navigation.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.kruelkotlinkiller.krowd.databinding.FragmentManageClassesBinding
 import kotlinx.android.synthetic.main.fragment_manage_classes.*
-import android.os.Build
+import android.os.CountDownTimer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
-import kotlinx.android.synthetic.main.fragment_teacher_home_page.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -46,10 +46,10 @@ class ManageClasses : Fragment() {
     private lateinit var binding : FragmentManageClassesBinding
     private lateinit var addClass : Button
     private lateinit var courseName : EditText
-    private lateinit var courseId : EditText
     private lateinit var addBtn : Button
     private lateinit var backBtn : Button
     private lateinit var deleteBtn : Button
+    private lateinit var seeResulBtn : Button
     private lateinit var studentList : RecyclerView
     private lateinit var courseDescription : EditText
     private lateinit var courseNameToDisplay : TextView
@@ -57,11 +57,11 @@ class ManageClasses : Fragment() {
     private lateinit var databaseReference: DatabaseReference
     private var courseDescriptionString : String?=null
     private var courseNameString : String?= null
-    private var courseIdString : String?=null
+    private lateinit var timer : TextView
     private var professorName : String?=null
     private var id : String?=null
     private var arrayList = ArrayList<Student>()
-    private var keyList = ArrayList<String>()
+    private lateinit var startAttendance : Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,6 +86,10 @@ class ManageClasses : Fragment() {
         courseNameToDisplay = binding.textView9
         studentList = binding.studentList
         courseDescriptionToDisplay = binding.textView10
+        startAttendance = binding.attendance
+        seeResulBtn = binding.seeResult
+        timer = binding.timer
+        seeResulBtn.visibility = View.GONE
         addClass.setOnClickListener {
             form.visibility = View.VISIBLE
             courseInfo.visibility = View.GONE
@@ -94,7 +98,7 @@ class ManageClasses : Fragment() {
         courseNameString = courseName.text.toString()
 //        courseIdString = courseId.text.toString()
         courseDescriptionString = courseDescription.text.toString()
-        val model = ViewModelProviders.of(activity!!).get(TeacherNameCommunicator::class.java)
+        val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
 
         model.message.observe(this,object: Observer<Any> {
             override fun onChanged(t: Any?) {
@@ -132,18 +136,14 @@ class ManageClasses : Fragment() {
                        override fun onCancelled(p0: DatabaseError) {}
                    }
                    ordersRef.addListenerForSingleValueEvent(valueEventListener)
-
-
                }
                 getkey(id!!)
+                startAttendanceFun(id!!)
+                seeResult(id!!)
             }
 
         }
         )
-
-
-
-
         addBtnFun()
         backBtnFun()
         deleteBtnFun()
@@ -151,6 +151,73 @@ class ManageClasses : Fragment() {
 
 
         return binding.root
+    }
+    private fun seeResult(courseId: String){
+        seeResulBtn.setOnClickListener { view: View->
+            if(findNavController().currentDestination?.id == R.id.manageClasses){
+                val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
+                model.setIdCommunicator(courseId)
+                val myFragment = SeeAttendanceResult()
+                val fragmentTransaction = fragmentManager!!.beginTransaction()
+                fragmentTransaction.replace(R.id.myNavHostFragment, myFragment)
+                fragmentTransaction.addToBackStack(null)
+                fragmentTransaction.commit()
+                view.findNavController().navigate(R.id.action_manageClasses_to_seeAttendanceResult)
+            }
+        }
+    }
+    private fun closeAttendanceFun(courseId: String){
+        val attendanceIndicatorRef = FirebaseDatabase.getInstance().getReference("AttendanceIndicator")
+        attendanceIndicatorRef.orderByChild("courseId").equalTo(courseId).addListenerForSingleValueEvent(
+            object : ValueEventListener{
+                override fun onCancelled(p0: DatabaseError) {}
+                override fun onDataChange(p0: DataSnapshot) {
+                    if(p0.exists()){
+                        for(e in p0.children){
+                            Log.d("first key",e.key!!)
+                            attendanceIndicatorRef.child(e.key!!).child("status").setValue(false)
+
+                        }
+                    }
+                }
+
+            }
+        )
+
+    }
+    private fun startAttendanceFun(courseId : String){
+        startAttendance.setOnClickListener {
+            studentList.visibility = View.GONE
+            val attendanceIndicatorRef = FirebaseDatabase.getInstance().getReference("AttendanceIndicator")
+            attendanceIndicatorRef.orderByChild("courseId").equalTo(courseId).addListenerForSingleValueEvent(
+                object : ValueEventListener{
+                    override fun onCancelled(p0: DatabaseError) {}
+                    override fun onDataChange(p0: DataSnapshot) {
+                        if(p0.exists()){
+                            for(e in p0.children){
+                                Log.d("first key",e.key!!)
+                                attendanceIndicatorRef.child(e.key!!).child("status").setValue(true)
+
+                            }
+                        }
+                    }
+
+                }
+            )
+            val timer = object: CountDownTimer(10000,1000){
+                override fun onTick(millisUntilFinished: Long) {
+                    timer.text = "seconds remaining: " + millisUntilFinished/1000
+                }
+
+                override fun onFinish() {
+                    closeAttendanceFun(courseId)
+                    timer.visibility = View.GONE
+                    seeResulBtn.visibility = View.VISIBLE
+                }
+            }
+            timer.start()
+        }
+
     }
     private fun getkey(id : String){
         databaseReference = FirebaseDatabase.getInstance().getReference("Student")
@@ -216,14 +283,18 @@ class ManageClasses : Fragment() {
         deleteBtn.setOnClickListener { view: View->
             val refDelete = FirebaseDatabase.getInstance().getReference("Course")
             refDelete.child(id!!).removeValue()
-            sendTeacherNameBackHome()
-            view.findNavController().navigate(R.id.teacherHomePage)
+            if(findNavController().currentDestination?.id == R.id.manageClasses) {
+                sendTeacherNameBackHome()
+                view.findNavController().navigate(R.id.teacherHomePage)
+            }
         }
 
     }
     private fun sendTeacherNameBackHome(){
-        val model = ViewModelProviders.of(activity!!).get(TeacherNameCommunicator::class.java)
+
+        val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
         val user = FirebaseAuth.getInstance().currentUser
+        Log.d("auth user current", user?.email)
         model.setMsgCommunicator(user!!.email.toString())
         val myFragment = TeacherHomePage()
         val fragmentTransaction = fragmentManager!!.beginTransaction()
@@ -237,12 +308,19 @@ class ManageClasses : Fragment() {
             form.visibility = View.GONE
             courseInfo.visibility = View.VISIBLE
             val ref = FirebaseDatabase.getInstance().getReference("Course")
+            val attendanceIndicatorRef = FirebaseDatabase.getInstance()
+                .getReference("AttendanceIndicator")
+            val key = attendanceIndicatorRef.push().key
             val cId = ref.push().key!!
+            val attendanceIndicatorObject = AttendanceIndicator(cId, false)
+            attendanceIndicatorRef.child(key!!).setValue(attendanceIndicatorObject)
             val course = Course(courseName.text.toString(),cId,courseDescription.text.toString(),professorName!!)
             ref.child(cId).setValue(course)
             Toast.makeText(context, "add class successfully", Toast.LENGTH_LONG).show()
-            sendTeacherNameBackHome()
-            view.findNavController().navigate(R.id.teacherHomePage)
+            if(findNavController().currentDestination?.id == R.id.manageClasses) {
+                sendTeacherNameBackHome()
+                view.findNavController().navigate(R.id.teacherHomePage)
+            }
 //            val ft = fragmentManager!!.beginTransaction()
 //            if (Build.VERSION.SDK_INT >= 26) {
 //                ft.setReorderingAllowed(false)
@@ -254,8 +332,10 @@ class ManageClasses : Fragment() {
     }
     private fun backBtnFun(){
         backBtn.setOnClickListener { view : View ->
-            sendTeacherNameBackHome()
-            view.findNavController().navigate(R.id.teacherHomePage)
+            if(findNavController().currentDestination?.id == R.id.manageClasses) {
+                sendTeacherNameBackHome()
+                view.findNavController().navigate(R.id.teacherHomePage)
+            }
 
         }
     }
