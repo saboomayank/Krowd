@@ -2,11 +2,11 @@
 
 ### A location based attendance app
 
-This attendance app allows teachers to mark attendance on present students only. It also allow students to prove their presence in the classroom over time.
+Being present in the class is essential as you learn new things interact with professor(s) & classmate(s). The app allows you professors to know who is currently in the class and if they are actually in the class.
 
 ## Getting started
 
-### Sign Up
+### Signing Up
 First select *Teacher* or *Student* and then press **Sign Up**.
 
 <img src="https://i.imgur.com/UEVelqT.png" class="screenshot">
@@ -22,7 +22,7 @@ Here you can view and select your classes to begin taking attendance or view the
 ### Taking Attendance
 This will start taking attendance for the day. There is a *Five minute* time limit for the students to mark themselves as present. 
 
-Attendance requires the student's presance and so the app does too. It will only allow a student to mark themselves as present if they are physically in class.
+Attendance requires the student's presence and so the app does too. It will only allow a student to mark themselves as present if they are physically in class.
 ### Manage Courses
 To add or delete classes press the **Manage Courses** button.
 
@@ -45,6 +45,7 @@ This will allow you to join the class list of an insturctor's class. It only req
 <img src="https://i.imgur.com/2MEQZO0.png" class="screenshot">
 
 ### Taking Attendance
+Select a class that you want to mark yourself present.
 #### *VERY Temp Image*
 <img src="https://i.imgur.com/UQqHR97.png" class="screenshot">
 
