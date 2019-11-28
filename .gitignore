@@ -2,7 +2,7 @@
 *.iml
 .gradle
 /local.properties
-.idea
+.idea/
 /.idea/codeStyles/
 /.idea/caches
 /.idea/libraries
