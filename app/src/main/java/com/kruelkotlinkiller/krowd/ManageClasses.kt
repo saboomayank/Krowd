@@ -50,6 +50,7 @@ class ManageClasses : Fragment() {
     private lateinit var backBtn : Button
     private lateinit var deleteBtn : Button
     private lateinit var seeResulBtn : Button
+    private lateinit var courseID : TextView
     private lateinit var studentList : RecyclerView
     private lateinit var courseDescription : EditText
     private lateinit var courseNameToDisplay : TextView
@@ -89,6 +90,7 @@ class ManageClasses : Fragment() {
         startAttendance = binding.attendance
         seeResulBtn = binding.seeResult
         timer = binding.timer
+        courseID = binding.courseID
         seeResulBtn.visibility = View.GONE
         addClass.setOnClickListener {
             form.visibility = View.VISIBLE
@@ -127,9 +129,10 @@ class ManageClasses : Fragment() {
                                val courseName = ds.child("courseName").getValue(String::class.java)
                                val courseDescription =
                                    ds.child("courseDescription").getValue(String::class.java)
-
+                               val courseIDS = ds.child("courseId").getValue(String::class.java)
+                               courseID.text = "Course ID:  " + courseIDS
                                courseNameToDisplay.text = courseName
-                               courseDescriptionToDisplay.text = courseDescription
+                               courseDescriptionToDisplay.text = "Description:  " + courseDescription
                            }
                        }
 
@@ -230,6 +233,7 @@ class ManageClasses : Fragment() {
 
                     databaseReference.child(e.key!!).child("courseId").addListenerForSingleValueEvent(object:ValueEventListener{
                         override fun onDataChange(p1: DataSnapshot) {
+                            arrayList.clear()
                             for(e1 in p1.children) {
                                 Log.d("second level key ", e1.key!!)
                                 val query = databaseReference.orderByChild("courseId/" + e1.key).equalTo(id)
@@ -238,7 +242,7 @@ class ManageClasses : Fragment() {
                                         override fun onDataChange(p2: DataSnapshot) {
 
                                             if(p2.exists()){
-//                                                arrayList.clear()
+
                                                 for(e2 in p2.children){
                                                     Log.d("helloooo", e2.getValue().toString())
                                                     val student = e2.getValue(Student::class.java)

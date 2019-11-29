@@ -42,6 +42,7 @@
     <string name="attendance">Take Attendance</string>
     <string name="back">Back To Home</string>
     <string name="seeResult">See Attendance Result</string>
+    <string name="share">Share Result</string>
 
 
 </resources>

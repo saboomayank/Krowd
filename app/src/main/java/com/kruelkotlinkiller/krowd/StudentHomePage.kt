@@ -91,8 +91,6 @@ class StudentHomePage : Fragment() {
                                 override fun onDataChange(p0: DataSnapshot) {
                                     for (e in p0.children) {
                                         Log.d("jimmm", e.key)
-
-
                                                             databaseReference.child(e.key!!)
                                                                 .child("courseId")
                                                                 .addValueEventListener(
@@ -148,10 +146,6 @@ class StudentHomePage : Fragment() {
                                                                 )
                                                         }
                                                     }
-
-
-
-
                                 })
                             }
 
