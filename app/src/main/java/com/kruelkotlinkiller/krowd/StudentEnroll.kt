@@ -39,6 +39,7 @@ class StudentEnroll : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
     private lateinit var binding : FragmentStudentEnrollBinding
     private lateinit var addCourseBtn : Button
+    private lateinit var backBtn : Button
     private lateinit var courseInput : EditText
     private var temp : String?=null
 
@@ -58,6 +59,7 @@ class StudentEnroll : Fragment() {
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_student_enroll,container,false)
         addCourseBtn = binding.addClassBtn
         courseInput = binding.courseInput
+        backBtn = binding.backButton
         val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
         model.message.observe(this,object: Observer<Any> {
             override fun onChanged(t: Any?) {
@@ -65,6 +67,19 @@ class StudentEnroll : Fragment() {
                         addClassFun(temp!!)
                     }
                 })
+        backBtn.setOnClickListener {view: View->
+            if(findNavController().currentDestination?.id == R.id.studentEnroll){
+                val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
+                val user = FirebaseAuth.getInstance().currentUser
+                model.setMsgCommunicator(user?.email!!)
+                val myFragment = StudentHomePage()
+                val fragmentTransaction = fragmentManager!!.beginTransaction()
+                fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
+                fragmentTransaction.commit()
+                view.findNavController().navigate(R.id.action_studentEnroll_to_studentHomePage)
+            }
+
+        }
 
 
 

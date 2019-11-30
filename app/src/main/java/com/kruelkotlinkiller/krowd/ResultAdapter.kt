@@ -40,17 +40,25 @@ class ResultAdapter(val data: ArrayList<Student>, val id : String): RecyclerView
                                 attendedList.add(e.getValue(AttendanceResult::class.java)?.name!!)
                             }
 
-                            }
-                        nameList.removeAll(attendedList)
-                       for(i in nameList){
-                           holder?.studentName?.text = i
-                           holder?.status?.text = "Absent"
-                           holder?.studentName?.setTextColor(Color.WHITE)
-                           holder?.status?.setTextColor(Color.WHITE)
-                           holder?.img?.setImageResource(R.drawable.absent)
-                           holder?.row?.setBackgroundColor(Color.RED)
+                            nameList.removeAll(attendedList)
+                            for(i in nameList){
+                                holder?.studentName?.text = i
+                                holder?.status?.text = "Absent"
+                                holder?.studentName?.setTextColor(Color.WHITE)
+                                holder?.status?.setTextColor(Color.WHITE)
+                                holder?.img?.setImageResource(R.drawable.absent)
+                                holder?.row?.setBackgroundColor(Color.RED)
 
-                       }
+                            }
+                            }
+                        else{
+                            holder?.studentName?.setTextColor(Color.WHITE)
+                            holder?.status?.setTextColor(Color.WHITE)
+                            holder?.img?.setImageResource(R.drawable.absent)
+                            holder?.status?.text = "Absent"
+                            holder?.row.setBackgroundColor(Color.RED)
+                        }
+
                     }
 
 

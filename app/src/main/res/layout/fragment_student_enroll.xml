@@ -48,7 +48,6 @@
                 android:layout_width="287dp"
                 android:layout_height="80dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
                 android:fontFamily="casual"
                 android:hint="Please enter course's ID here"
                 android:inputType="text"
@@ -73,13 +72,29 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/courseInput"
+                app:layout_constraintVertical_bias="0.0"
                 tools:text="enroll" />
+
+            <Button
+                android:id="@+id/backButton"
+                android:layout_width="266dp"
+                android:layout_height="39dp"
+                android:layout_marginTop="9dp"
+                android:alpha="0.65"
+                android:background="#03A9F4"
+                android:text="@string/BackToHome"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/addClassBtn"
+                app:layout_constraintVertical_bias="0.111"
+                tools:text="@string/BackToHome" />
 
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="56dp"
                 android:src="@drawable/studenticon"
                 android:visibility="visible"

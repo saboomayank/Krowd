@@ -1,5 +1,6 @@
 package com.kruelkotlinkiller.krowd
 
+import android.app.AlertDialog
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
@@ -23,6 +24,7 @@ import android.os.CountDownTimer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
+import kotlinx.android.synthetic.main.fragment_attendance_page.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -55,6 +57,7 @@ class ManageClasses : Fragment() {
     private lateinit var courseDescription : EditText
     private lateinit var courseNameToDisplay : TextView
     private lateinit var courseDescriptionToDisplay : TextView
+    private lateinit var showAttendance : Button
     private lateinit var databaseReference: DatabaseReference
     private var courseDescriptionString : String?=null
     private var courseNameString : String?= null
@@ -89,6 +92,7 @@ class ManageClasses : Fragment() {
         courseDescriptionToDisplay = binding.textView10
         startAttendance = binding.attendance
         seeResulBtn = binding.seeResult
+        showAttendance = binding.button2
         timer = binding.timer
         courseID = binding.courseID
         seeResulBtn.visibility = View.GONE
@@ -138,11 +142,12 @@ class ManageClasses : Fragment() {
 
                        override fun onCancelled(p0: DatabaseError) {}
                    }
-                   ordersRef.addListenerForSingleValueEvent(valueEventListener)
+                   ordersRef.addValueEventListener(valueEventListener)
                }
                 getkey(id!!)
                 startAttendanceFun(id!!)
                 seeResult(id!!)
+                showAttendance(id!!)
             }
 
         }
@@ -151,22 +156,61 @@ class ManageClasses : Fragment() {
         backBtnFun()
         deleteBtnFun()
 
+        val builder = AlertDialog.Builder(context)
+
+
+        studentList.addOnItemTouchListener(RecyclerItemClickListenr(context!!, studentList, object : RecyclerItemClickListenr.OnItemClickListener {
+            override fun onItemClick(view: View, position: Int) {
+                val studentRef = FirebaseDatabase.getInstance().getReference("Student")
+                studentRef.orderByChild("id").equalTo(StudentAdapter(arrayList).getCIN(position)).addValueEventListener(
+                    object : ValueEventListener{
+                        override fun onCancelled(p0: DatabaseError) {}
+                        override fun onDataChange(p0: DataSnapshot) {
+                            for(e in p0.children){
+
+                                val student = e.getValue(Student::class.java)
+                                val fullName = student?.firstName + " " + student?.lastName
+                                builder.setTitle(student?.firstName + "' information")
+                                builder.setMessage("Name: " + fullName + "\nCIN: " + student?.id)
+//                                builder.setPositiveButton("Ok"){dialog, which ->
+//
+//                                }
+                                val alert = builder.create()
+                                alert.setIcon(R.drawable.studenticon)
+                                alert.show()
+                            }
+                        }
+                    }
+                )
+
+            }
+            override fun onItemLongClick(view: View?, position: Int) {}
+        }))
 
 
         return binding.root
     }
+    private fun showAttendance(courseId: String){
+        showAttendance.setOnClickListener {
+            sendCourseId(courseId)
+
+        }
+    }
     private fun seeResult(courseId: String){
         seeResulBtn.setOnClickListener { view: View->
-            if(findNavController().currentDestination?.id == R.id.manageClasses){
-                val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
-                model.setIdCommunicator(courseId)
-                val myFragment = SeeAttendanceResult()
-                val fragmentTransaction = fragmentManager!!.beginTransaction()
-                fragmentTransaction.replace(R.id.myNavHostFragment, myFragment)
-                fragmentTransaction.addToBackStack(null)
-                fragmentTransaction.commit()
-                view.findNavController().navigate(R.id.action_manageClasses_to_seeAttendanceResult)
-            }
+           sendCourseId(courseId)
+        }
+    }
+    private fun sendCourseId(courseId: String){
+        if(findNavController().currentDestination?.id == R.id.manageClasses){
+            val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
+            model.setIdCommunicator(courseId)
+            val myFragment = SeeAttendanceResult()
+            val fragmentTransaction = fragmentManager!!.beginTransaction()
+            fragmentTransaction.replace(R.id.myNavHostFragment, myFragment)
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
+            view!!.findNavController().navigate(R.id.action_manageClasses_to_seeAttendanceResult)
         }
     }
     private fun closeAttendanceFun(courseId: String){
@@ -190,6 +234,22 @@ class ManageClasses : Fragment() {
     }
     private fun startAttendanceFun(courseId : String){
         startAttendance.setOnClickListener {
+            val resultRef = FirebaseDatabase.getInstance().getReference("AttendanceResult")
+            resultRef.addListenerForSingleValueEvent(
+                object:ValueEventListener{
+                    override fun onCancelled(p0: DatabaseError) {}
+                    override fun onDataChange(p0: DataSnapshot) {
+                        for(e in p0.children){
+                            Log.d("e key key is ", e.key)
+
+                            if(e.getValue(AttendanceResult::class.java)?.courseId==courseId){
+                                resultRef.child(e.key!!).removeValue()
+                            }
+                        }
+                    }
+                }
+            )
+            showAttendance.visibility = View.GONE
             studentList.visibility = View.GONE
             val attendanceIndicatorRef = FirebaseDatabase.getInstance().getReference("AttendanceIndicator")
             attendanceIndicatorRef.orderByChild("courseId").equalTo(courseId).addListenerForSingleValueEvent(

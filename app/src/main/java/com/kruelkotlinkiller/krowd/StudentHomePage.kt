@@ -90,13 +90,14 @@ class StudentHomePage : Fragment() {
                                 override fun onCancelled(p0: DatabaseError) {}
                                 override fun onDataChange(p0: DataSnapshot) {
                                     for (e in p0.children) {
+                                        arrayList.clear()
                                         Log.d("jimmm", e.key)
                                                             databaseReference.child(e.key!!)
                                                                 .child("courseId")
                                                                 .addValueEventListener(
                                                                     object : ValueEventListener {
                                                                         override fun onDataChange(p2: DataSnapshot) {
-                                                                            arrayList.clear()
+
                                                                             for (e2 in p2.children) {
                                                                                 Log.d("e2",e2.getValue().toString())
                                                                                 courseRef.orderByChild(
@@ -168,6 +169,7 @@ class StudentHomePage : Fragment() {
                 val myFragment = AttendancePage()
                 val fragmentTransaction = fragmentManager!!.beginTransaction()
                 fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
+                fragmentTransaction.commit()
                 view.findNavController().navigate(R.id.action_studentHomePage_to_attendancePage)
             }
             override fun onItemLongClick(view: View?, position: Int) {}

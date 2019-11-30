@@ -36,24 +36,44 @@
 
         <Button
             android:id="@+id/attendance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="155dp"
+            android:layout_height="46dp"
+            android:background="#03A9F4"
+            android:alpha="0.65"
             android:text="@string/attendance"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/courseDescrp" />
+            app:layout_constraintTop_toBottomOf="@+id/courseDescrp"
+            app:layout_constraintVertical_bias="0.522" />
+
+        <Button
+            android:id="@+id/dropClass"
+            android:layout_width="155dp"
+            android:layout_height="46dp"
+            android:layout_marginTop="8dp"
+            android:background="#03A9F4"
+            android:alpha="0.65"
+            android:text="@string/drop"
+            app:layout_constraintBottom_toTopOf="@+id/backToHome"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/attendance"
+            app:layout_constraintVertical_bias="0.354" />
 
         <Button
             android:id="@+id/backToHome"
             android:layout_width="155dp"
             android:layout_height="46dp"
+            android:background="#03A9F4"
+            android:alpha="0.65"
             android:text="@string/back"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/attendance"
-            app:layout_constraintVertical_bias="0.191" />
+            app:layout_constraintVertical_bias="0.41" />
 
         <TextView
             android:id="@+id/professorName"

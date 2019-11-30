@@ -236,18 +236,21 @@ class SeeAttendanceResult : Fragment() {
                                                                   mIntent.putExtra(Intent.EXTRA_EMAIL,arrayOf(user?.email!!))
                                                                   mIntent.putExtra(Intent.EXTRA_SUBJECT,"Absent Student for " + courseName + " on " + final.toString())
 
-                                                                  for(i in list) {
-                                                                      mIntent.putExtra(Intent.EXTRA_TEXT,i)
+                                                                  val sb = StringBuilder()
+                                                                  for (s in list) {
+                                                                      sb.append(s)
+                                                                      sb.append("\n")
                                                                   }
+                                                                      mIntent.putExtra(Intent.EXTRA_TEXT,sb.toString())
+
                                                                   try {
                                                                       //start email intent
                                                                       startActivity(Intent.createChooser(mIntent, "Choose Email Client..."))
                                                                   }
                                                                   catch (e: Exception){
-                                                                      //if any thing goes wrong for example no email client application or any exception
-                                                                      //get and show exception message
-                                                                      Toast.makeText(context!!, e.message, Toast.LENGTH_LONG).show()
+
                                                                   }
+
 
 
                                                               }
@@ -279,6 +282,8 @@ class SeeAttendanceResult : Fragment() {
 
 
       })
+
+
 
 
 
