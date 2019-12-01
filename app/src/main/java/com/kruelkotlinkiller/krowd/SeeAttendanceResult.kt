@@ -1,24 +1,48 @@
 package com.kruelkotlinkiller.krowd
 
 import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
+import android.util.Log
+import android.util.LruCache
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Adapter
-import android.widget.ArrayAdapter
-import android.widget.ListView
+import android.widget.*
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import co.metalab.asyncawait.async
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.kruelkotlinkiller.krowd.databinding.FragmentSeeAttendanceResultBinding
+import kotlinx.android.synthetic.main.fragment_attendance_page.*
+import kotlinx.android.synthetic.main.fragment_attendance_page.view.*
+import java.io.File
+import java.io.FileOutputStream
+import java.lang.Exception
+import java.lang.System.out
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
+import kotlin.collections.ArrayList
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -39,8 +63,10 @@ class SeeAttendanceResult : Fragment() {
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
     private lateinit var binding : FragmentSeeAttendanceResultBinding
-    private lateinit var attendedStudentList : ListView
-    private var arrayList = ArrayList<String>()
+    private lateinit var attendedStudentList : RecyclerView
+    private lateinit var back : Button
+    private lateinit var share : Button
+    private var arrayList = ArrayList<Student>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,36 +82,247 @@ class SeeAttendanceResult : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_see_attendance_result,container,false)
         attendedStudentList = binding.attendanceListView
+        back = binding.backToHom
+        share = binding.Export
         val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
+
         model.id.observe(this, object : Observer<Any>{
             override fun onChanged(t: Any?) {
                 val courseId = t.toString()!!
-                val attendanceResultRef = FirebaseDatabase.getInstance().getReference("AttendanceResult")
-                attendanceResultRef.orderByChild("courseId").equalTo(courseId).addValueEventListener(
-                    object : ValueEventListener{
-                        override fun onCancelled(p0: DatabaseError) {}
-                        override fun onDataChange(p0: DataSnapshot) {
-                            arrayList.clear()
-                            for(e in p0.children){
-                                val result = e.getValue(AttendanceResult::class.java)
-                                arrayList.add(result?.name!!)
-                            }
-                            val adapter = ArrayAdapter(context!!,android.R.layout.simple_list_item_1,arrayList)
-                            attendedStudentList.adapter = adapter
+                shareFun(courseId)
+                val databaseReference = FirebaseDatabase.getInstance().getReference("Student")
+                databaseReference.addValueEventListener(object : ValueEventListener {
+                    override fun onCancelled(p0: DatabaseError) {}
+                    override fun onDataChange(p0: DataSnapshot) {
+
+                        for (e in p0.children) {
+                            Log.d("FIRST level key ", e.key!!)
+
+                            databaseReference.child(e.key!!).child("courseId")
+                                .addListenerForSingleValueEvent(object : ValueEventListener {
+                                    override fun onDataChange(p1: DataSnapshot) {
+                                        arrayList.clear()
+                                        for (e1 in p1.children) {
+                                            Log.d("second level key ", e1.key!!)
+                                            val query =
+                                                databaseReference.orderByChild("courseId/" + e1.key)
+                                                    .equalTo(courseId)
+                                            query.addListenerForSingleValueEvent(
+                                                object : ValueEventListener {
+                                                    override fun onDataChange(p2: DataSnapshot) {
+
+                                                        if (p2.exists()) {
+
+                                                            for (e2 in p2.children) {
+                                                                Log.d(
+                                                                    "helloooo",
+                                                                    e2.getValue().toString()
+                                                                )
+                                                                val student =
+                                                                    e2.getValue(Student::class.java)
+                                                                arrayList.add(student!!)
+
+                                                            }
+                                                            for (i in arrayList) {
+                                                                Log.d("The array is ", i.firstName)
+                                                            }
+                                                            val adapter = ResultAdapter(arrayList,courseId)
+                                                            attendedStudentList.adapter = adapter
+                                                        }
+                                                    }
+
+                                                    override fun onCancelled(p2: DatabaseError) {
+                                                    }
+                                                }
+                                            )
+
+                                        }
+                                    }
+
+                                    override fun onCancelled(p0: DatabaseError) {
+                                    }
+
+
+                                })
+
                         }
-
                     }
+
+
+                })
+            }})
+
+
+
+        back.setOnClickListener {view: View->
+            if(findNavController().currentDestination?.id == R.id.seeAttendanceResult) {
+                val user = FirebaseAuth.getInstance().currentUser
+                model.setMsgCommunicator(user?.email!!)
+                val myFragment = TeacherHomePage()
+                val fragmentTransaction =
+                    fragmentManager!!.beginTransaction()
+                fragmentTransaction.replace(
+                    R.id.myNavHostFragment,
+                    myFragment
                 )
+                fragmentTransaction.addToBackStack(null)
+                fragmentTransaction.commit()
+                view.findNavController().navigate(R.id.teacherHomePage)
             }
-        })
+        }
 
 
 
 
-
-
-        return binding.root
+                return binding.root
     }
+
+  fun findAbsences(courseId: String, courseName: String){
+      val list = ArrayList<String>()
+      val list2 = ArrayList<String>()
+      val databaseReference = FirebaseDatabase.getInstance().getReference("Student")
+      databaseReference.addValueEventListener(object : ValueEventListener {
+          override fun onCancelled(p0: DatabaseError) {}
+          override fun onDataChange(p0: DataSnapshot) {
+
+              for (e in p0.children) {
+                  Log.d("FIRST level key ", e.key!!)
+
+                  databaseReference.child(e.key!!).child("courseId")
+                      .addListenerForSingleValueEvent(object : ValueEventListener {
+                          override fun onDataChange(p1: DataSnapshot) {
+                              arrayList.clear()
+                              for (e1 in p1.children) {
+                                  Log.d("second level key ", e1.key!!)
+                                  val query =
+                                      databaseReference.orderByChild("courseId/" + e1.key)
+                                          .equalTo(courseId)
+                                  query.addListenerForSingleValueEvent(
+                                      object : ValueEventListener {
+                                          override fun onDataChange(p2: DataSnapshot) {
+
+                                              if (p2.exists()) {
+
+                                                  for (e2 in p2.children) {
+                                                      Log.d(
+                                                          "helloooo",
+                                                          e2.getValue().toString()
+                                                      )
+                                                      val student =
+                                                          e2.getValue(Student::class.java)
+                                                     list.add("Name: "+student?.firstName + " " + student?.lastName + "\n CIN: " + student?.id)
+
+                                                      val attendanceRef = FirebaseDatabase.getInstance().getReference("AttendanceResult")
+                                                      attendanceRef.orderByChild("courseId").equalTo(courseId).addValueEventListener(
+                                                          object : ValueEventListener{
+                                                              override fun onCancelled(p3: DatabaseError) {}
+                                                              override fun onDataChange(p3: DataSnapshot) {
+                                                                  if(p3.exists()){
+                                                                      for(e3 in p3.children) {
+                                                                          val attendanted = e3.getValue(AttendanceResult::class.java)
+                                                                          list2.add("Name: "+attendanted!!.name + "\n CIN: " + student?.id)
+                                                                      }
+
+                                                                  }
+                                                                  list.removeAll(list2)
+                                                                  val current = Date()
+                                                                  val formatter = SimpleDateFormat("yyyy-MM-dd")
+                                                                  val final = formatter.format(current)
+                                                                  val user = FirebaseAuth.getInstance().currentUser
+                                                                  val mIntent = Intent(Intent.ACTION_SEND)
+                                                                  mIntent.data = Uri.parse("mailto:")
+                                                                  mIntent.type = "text/plain"
+                                                                  Log.d("The userr email iss ", user?.email!!)
+                                                                  mIntent.putExtra(Intent.EXTRA_EMAIL,arrayOf(user?.email!!))
+                                                                  mIntent.putExtra(Intent.EXTRA_SUBJECT,"Absent Student for " + courseName + " on " + final.toString())
+
+                                                                  val sb = StringBuilder()
+                                                                  for (s in list) {
+                                                                      sb.append(s)
+                                                                      sb.append("\n")
+                                                                  }
+                                                                      mIntent.putExtra(Intent.EXTRA_TEXT,sb.toString())
+
+                                                                  try {
+                                                                      //start email intent
+                                                                      startActivity(Intent.createChooser(mIntent, "Choose Email Client..."))
+                                                                  }
+                                                                  catch (e: Exception){
+
+                                                                  }
+
+
+
+                                                              }
+
+
+                                                          })
+
+                                                  }
+
+                                              }
+                                          }
+
+                                          override fun onCancelled(p2: DatabaseError) {
+                                          }
+                                      }
+                                  )
+
+                              }
+                          }
+
+                          override fun onCancelled(p0: DatabaseError) {
+                          }
+
+
+                      })
+
+              }
+          }
+
+
+      })
+
+
+
+
+
+
+  }
+   fun shareFun(courseId : String){
+       val array = ArrayList<String>()
+
+       share.setOnClickListener {
+           val attendanceRef = FirebaseDatabase.getInstance().getReference("AttendanceResult")
+           attendanceRef.orderByChild("courseId").equalTo(courseId).addValueEventListener(
+               object:ValueEventListener{
+                   override fun onCancelled(p0: DatabaseError) {}
+                   override fun onDataChange(p0: DataSnapshot) {
+                       for(e in p0.children){
+                           val result = e.getValue(AttendanceResult::class.java)
+                           val courseRef = FirebaseDatabase.getInstance().getReference("Course")
+                           courseRef.orderByChild("courseId").equalTo(courseId).addValueEventListener(
+                               object: ValueEventListener{
+                                   override fun onCancelled(p1: DatabaseError) {}
+                                   override fun onDataChange(p1: DataSnapshot) {
+
+                                       for(e1 in p1.children){
+                                           val course = e1.getValue(Course::class.java)!!
+                                           findAbsences(courseId,course?.courseName)
+
+                                       }
+
+                                   }
+                               }
+                           )
+
+
+                       }
+                   }
+               }
+           )
+       }
+   }
 
     // TODO: Rename method, update argument and hook method into UI event
     fun onButtonPressed(uri: Uri) {

@@ -119,14 +119,17 @@ class TeacherHomePage : Fragment() {
 
                 binding.recyclerView.addOnItemTouchListener(RecyclerItemClickListenr(context!!, binding.recyclerView, object : RecyclerItemClickListenr.OnItemClickListener {
                     override fun onItemClick(view: View, position: Int) {
-                        model.setMsgCommunicator(name.text.toString())
-                        // here we pass the id of the course to the manage class
-                        model.setIdCommunicator(CourseAdapter(arrayList).getID(position))
-                        Log.d("I clicked ",CourseAdapter(arrayList).getID(position) )
-                        val myFragment = ManageClasses()
-                        val fragmentTransaction = fragmentManager!!.beginTransaction()
-                        fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
-                        view.findNavController().navigate(R.id.action_teacherHomePage_to_manageClasses3)
+                        if(findNavController().currentDestination?.id == R.id.teacherHomePage) {
+                            model.setMsgCommunicator(name.text.toString())
+                            // here we pass the id of the course to the manage class
+                            model.setIdCommunicator(CourseAdapter(arrayList).getID(position))
+                            Log.d("I clicked ", CourseAdapter(arrayList).getID(position))
+                            val myFragment = ManageClasses()
+                            val fragmentTransaction = fragmentManager!!.beginTransaction()
+                            fragmentTransaction.replace(R.id.myNavHostFragment, myFragment)
+                            view.findNavController()
+                                .navigate(R.id.action_teacherHomePage_to_manageClasses3)
+                        }
                     }
 
                     override fun onItemLongClick(view: View?, position: Int) {}

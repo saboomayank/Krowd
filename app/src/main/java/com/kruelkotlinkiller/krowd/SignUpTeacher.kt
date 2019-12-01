@@ -88,7 +88,6 @@ class SignUpTeacher : Fragment() {
                 if(findNavController().currentDestination?.id == R.id.signUpTeacher) {
                     view.findNavController().navigate(R.id.action_signUpTeacher_to_teacher_login)
                 }
-
             }
             else{
                 val builder = AlertDialog.Builder(context)

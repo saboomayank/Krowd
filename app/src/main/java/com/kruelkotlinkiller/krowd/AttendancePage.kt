@@ -1,5 +1,6 @@
 package com.kruelkotlinkiller.krowd
 
+import android.app.AlertDialog
 import android.content.Context
 import android.net.Uri
 import android.os.Build
@@ -15,6 +16,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -45,6 +47,7 @@ class AttendancePage : Fragment() {
     private lateinit var courseDesc : TextView
     private lateinit var professorName : TextView
     private lateinit var attendanceBtn : Button
+    private lateinit var dropBtn : Button
     private lateinit var back : Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,6 +68,7 @@ class AttendancePage : Fragment() {
         courseDesc = binding.courseDescrp
         attendanceBtn = binding.attendance
         professorName = binding.professorName
+        dropBtn = binding.dropClass
         back = binding.backToHome
 
         val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
@@ -86,6 +90,7 @@ class AttendancePage : Fragment() {
 
                 })
                 detectAttendanceFun(id!!)
+                dropClass(id!!)
                 attendanceBtn.setOnClickListener {takeAttendance(id!!)}
             }
         })
@@ -114,6 +119,15 @@ class AttendancePage : Fragment() {
                }
            })
            attendanceBtn.isEnabled = false
+           val builder = AlertDialog.Builder(context)
+           builder.setTitle("Success")
+           builder.setMessage("Your attendance is recorded!")
+           builder.setPositiveButton("Ok"){dialog, which ->
+
+           }
+           val alert = builder.create()
+           alert.show()
+
 
 
 
@@ -144,18 +158,74 @@ class AttendancePage : Fragment() {
            }
        )
    }
+   private fun dropClass(courseId: String){
+       dropBtn.setOnClickListener {
+           val studentRef = FirebaseDatabase.getInstance().getReference("Student")
+           studentRef.addValueEventListener(
+               object:ValueEventListener{
+                   override fun onCancelled(p0: DatabaseError) {}
+                   override fun onDataChange(p0: DataSnapshot) {
+                       for(e in p0.children){
+                           Log.d("e.child is ", e.getValue().toString())
+                           studentRef.child(e.key!!).child("courseId").addValueEventListener(
+                               object : ValueEventListener{
+                                   override fun onDataChange(p1: DataSnapshot) {
+                                       for(e1 in p1.children) {
+                                           Log.d("e1.child is ", e1.key)
+                                           studentRef.child(e.key!!).
+                                               orderByChild(e1.key!!).equalTo(courseId).addValueEventListener(
+                                               object : ValueEventListener{
+                                                   override fun onDataChange(p2: DataSnapshot) {
+                                                       Log.d("p2.child is ", p2.toString())
+                                                       if(p2.exists()){
+                                                           studentRef.child(e.key!!).child("courseId").child(e1.key!!).removeValue()
+                                                       }
+                                                   }
+                                                   override fun onCancelled(p2: DatabaseError) {}
+                                               }
+                                           )
+                                       }
+                                   }
+
+                                   override fun onCancelled(p1: DatabaseError) {}
+                               }
+                           )
+                       }
+                   }
+               }
+           )
+           val builder = AlertDialog.Builder(context)
+           builder.setTitle("Dropped")
+           builder.setMessage("This course is successfully dropped!")
+           builder.setIcon(R.drawable.sad)
+           builder.setPositiveButton("Ok"){dialog, which ->
+               val user = FirebaseAuth.getInstance().currentUser
+               val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
+               model.setMsgCommunicator(user?.email!!)
+               val myFragment = StudentHomePage()
+               val fragmentTransaction = fragmentManager!!.beginTransaction()
+               fragmentTransaction.replace(R.id.myNavHostFragment, myFragment)
+               fragmentTransaction.addToBackStack(null)
+               fragmentTransaction.commit()
+           }
+           val alert = builder.create()
+           alert.show()
+       }
+
+   }
    private fun backFun(){
       back.setOnClickListener {view:View->
-          val user = FirebaseAuth.getInstance().currentUser
-          val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
-          model.setMsgCommunicator(user?.email!!)
-          val myFragment = StudentHomePage()
-          val fragmentTransaction = fragmentManager!!.beginTransaction()
-          fragmentTransaction.replace(R.id.myNavHostFragment, myFragment)
-          fragmentTransaction.addToBackStack(null)
-          fragmentTransaction.commit()
-          view.findNavController().navigate(R.id.action_attendancePage_to_studentHomePage)
-
+          if(findNavController().currentDestination?.id == R.id.attendancePage) {
+              val user = FirebaseAuth.getInstance().currentUser
+              val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
+              model.setMsgCommunicator(user?.email!!)
+              val myFragment = StudentHomePage()
+              val fragmentTransaction = fragmentManager!!.beginTransaction()
+              fragmentTransaction.replace(R.id.myNavHostFragment, myFragment)
+              fragmentTransaction.addToBackStack(null)
+              fragmentTransaction.commit()
+              view.findNavController().navigate(R.id.action_attendancePage_to_studentHomePage)
+          }
       }
    }
     // TODO: Rename method, update argument and hook method into UI event

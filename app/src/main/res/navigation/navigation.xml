@@ -93,8 +93,8 @@
     <fragment
         android:id="@+id/studentEnroll"
         android:name="com.kruelkotlinkiller.krowd.StudentEnroll"
-        android:label="fragment_student_enroll"
-        tools:layout="@layout/fragment_student_enroll" >
+        android:label="Enroll Classes"
+        tools:layout="@layout/fragment_student_enroll">
         <action
             android:id="@+id/action_studentEnroll_to_studentHomePage"
             app:destination="@id/studentHomePage" />
@@ -102,8 +102,8 @@
     <fragment
         android:id="@+id/attendancePage"
         android:name="com.kruelkotlinkiller.krowd.AttendancePage"
-        android:label="fragment_attendance_page"
-        tools:layout="@layout/fragment_attendance_page" >
+        android:label="Attendance Page"
+        tools:layout="@layout/fragment_attendance_page">
         <action
             android:id="@+id/action_attendancePage_to_studentHomePage"
             app:destination="@id/studentHomePage" />
@@ -111,6 +111,6 @@
     <fragment
         android:id="@+id/seeAttendanceResult"
         android:name="com.kruelkotlinkiller.krowd.SeeAttendanceResult"
-        android:label="fragment_see_attendance_result"
+        android:label="See Attendance"
         tools:layout="@layout/fragment_see_attendance_result" />
 </navigation>
