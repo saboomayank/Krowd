@@ -14,6 +14,7 @@ import androidx.databinding.DataBindingUtil
 import com.google.firebase.auth.FirebaseAuth
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.database.DataSnapshot
@@ -46,7 +47,7 @@ class Student_logIn : Fragment() {
     lateinit var password : EditText
     lateinit var logInBtn : Button
     lateinit var mAuth : FirebaseAuth
-    lateinit var model : TeacherNameCommunicator
+    lateinit var model : GeneralCommunicator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +66,7 @@ class Student_logIn : Fragment() {
         email = binding.simpleEditText
         password = binding.simpleEditText3
         logInBtn = binding.button
-        model = ViewModelProviders.of(activity!!).get(TeacherNameCommunicator::class.java)
+        model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
         mAuth = FirebaseAuth.getInstance()
         logInBtn.setOnClickListener {view : View ->
             val emailA = email.text.toString().trim()
@@ -80,14 +81,21 @@ class Student_logIn : Fragment() {
                                 object:ValueEventListener{
                                     override fun onDataChange(p0: DataSnapshot) {
                                         if(p0.exists()){
-                                            model.setMsgCommunicator(emailA)
-                                            val myFragment = StudentHomePage()
-                                            val fragmentTransaction = fragmentManager!!.beginTransaction()
-                                            fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
-                                            fragmentTransaction.addToBackStack(null)
-                                            fragmentTransaction.commit()
-                                            view.findNavController().navigate(R.id.action_logIn_to_studentHomePage)
-                                        }
+                                            if(findNavController().currentDestination?.id == R.id.logIn) {
+                                                model.setMsgCommunicator(emailA)
+                                                val myFragment = StudentHomePage()
+                                                val fragmentTransaction =
+                                                    fragmentManager!!.beginTransaction()
+                                                fragmentTransaction.replace(
+                                                    R.id.myNavHostFragment,
+                                                    myFragment
+                                                )
+                                                fragmentTransaction.addToBackStack(null)
+                                                fragmentTransaction.commit()
+                                                view.findNavController()
+                                                    .navigate(R.id.action_logIn_to_studentHomePage)
+                                            }
+                                            }
                                         else{
                                             val builder = AlertDialog.Builder(context)
                                             builder.setTitle("ERROR")

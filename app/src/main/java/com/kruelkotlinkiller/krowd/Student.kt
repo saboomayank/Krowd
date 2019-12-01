@@ -6,10 +6,10 @@ class Student(
     val firstName: String,
     val lastName: String,
     val email : String,
-    val courseId : String
+    val courseId : HashMap<String,String>
    ){
 
-    constructor():this("","","","",""){
+    constructor():this("","","","",HashMap()){
 
     }
 

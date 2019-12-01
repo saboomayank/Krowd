@@ -64,7 +64,7 @@ class TeacherHomePage : Fragment() {
         recyclerView = binding.recyclerView
       //  binding.recyclerView.setDivider(R.drawable.recycler_view_divider)
 //        listView = binding.listView
-        val model = ViewModelProviders.of(activity!!).get(TeacherNameCommunicator::class.java)
+        val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
         model.message.observe(this,object: Observer<Any> {
             override fun onChanged(t: Any?) {
                 temp = t!!.toString()
@@ -92,6 +92,7 @@ class TeacherHomePage : Fragment() {
                                 if(p0.exists()){
                                     arrayList.clear()
                                     for(e in p0.children){
+                                        Log.d("The course is ", e.getValue().toString())
                                         val course = e.getValue(Course::class.java)
                                         arrayList.add(course!!)
                                 }
@@ -119,14 +120,17 @@ class TeacherHomePage : Fragment() {
 
                 binding.recyclerView.addOnItemTouchListener(RecyclerItemClickListenr(context!!, binding.recyclerView, object : RecyclerItemClickListenr.OnItemClickListener {
                     override fun onItemClick(view: View, position: Int) {
-                        model.setMsgCommunicator(name.text.toString())
-                        // here we pass the id of the course to the manage class
-                        model.setIdCommunicator(CourseAdapter(arrayList).getID(position))
-                        Log.d("I clicked ",CourseAdapter(arrayList).getID(position) )
-                        val myFragment = ManageClasses()
-                        val fragmentTransaction = fragmentManager!!.beginTransaction()
-                        fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
-                        view.findNavController().navigate(R.id.action_teacherHomePage_to_manageClasses3)
+                        if(findNavController().currentDestination?.id == R.id.teacherHomePage) {
+                            model.setMsgCommunicator(name.text.toString())
+                            // here we pass the id of the course to the manage class
+                            model.setIdCommunicator(CourseAdapter(arrayList).getID(position))
+                            Log.d("I clicked ", CourseAdapter(arrayList).getID(position))
+                            val myFragment = ManageClasses()
+                            val fragmentTransaction = fragmentManager!!.beginTransaction()
+                            fragmentTransaction.replace(R.id.myNavHostFragment, myFragment)
+                            view.findNavController()
+                                .navigate(R.id.action_teacherHomePage_to_manageClasses3)
+                        }
                     }
 
                     override fun onItemLongClick(view: View?, position: Int) {}

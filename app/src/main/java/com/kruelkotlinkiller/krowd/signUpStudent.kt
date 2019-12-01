@@ -13,6 +13,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -78,7 +79,9 @@ class SignUpStudent : Fragment() {
                 && pWord.text.toString().isNotEmpty()
                 && isEmailValid(email.text.toString())) {
                 saveStudent()
-                view.findNavController().navigate(R.id.action_signUpStudent_to_logIn)
+                if(findNavController().currentDestination?.id == R.id.signUpStudent) {
+                    view.findNavController().navigate(R.id.action_signUpStudent_to_logIn)
+                }
             }else{
                 val builder = AlertDialog.Builder(context)
                 builder.setTitle("ERROR")
@@ -108,7 +111,7 @@ class SignUpStudent : Fragment() {
         if(isEmailValid(emailA)) {
             val ref = FirebaseDatabase.getInstance().getReference("Student")
             studentId = ref.push().key!!
-            val student = Student(studentId,firstName,lastName, emailA, "")
+            val student = Student(studentId,firstName,lastName, emailA, HashMap())
             ref.child(studentId).setValue(student)
             mAuth.createUserWithEmailAndPassword(emailA, password)
                 .addOnCompleteListener { task: Task<AuthResult> ->

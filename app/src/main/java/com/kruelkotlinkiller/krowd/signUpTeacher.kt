@@ -15,6 +15,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -84,8 +85,9 @@ class SignUpTeacher : Fragment() {
                 && isEmailValid(email.text.toString())) {
 
                 saveTeacher()
-                view.findNavController().navigate(R.id.action_signUpTeacher_to_teacher_login)
-
+                if(findNavController().currentDestination?.id == R.id.signUpTeacher) {
+                    view.findNavController().navigate(R.id.action_signUpTeacher_to_teacher_login)
+                }
             }
             else{
                 val builder = AlertDialog.Builder(context)

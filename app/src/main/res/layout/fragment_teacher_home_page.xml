@@ -5,7 +5,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/teacher"
+        android:background="#ffffff"
         android:id="@+id/teacherHome"
         tools:context=".MainActivity">
 
@@ -17,14 +17,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="160dp"
-            android:layout_marginTop="44dp"
+            android:layout_marginTop="85dp"
             android:layout_marginEnd="19dp"
-            android:layout_marginBottom="108dp"
-            android:text="Welcome, Professor Mark"
-            android:textColor="#2196F3"
+            android:textColor="#474747"
             android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/textView5"
+            android:textStyle="bold|italic"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.482"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -33,31 +32,31 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="79dp"
-            android:layout_marginTop="52dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="79dp"
-            android:text="Please select a course"
+            android:text="Currently Teaching:"
             android:textAlignment="center"
             android:textColor="#3A3636"
             android:textSize="25sp"
-            android:textStyle="bold"
+            android:textStyle="normal|italic"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nameOfTeacher" />
+            app:layout_constraintTop_toBottomOf="@+id/imageView7" />
 
         <Button
             android:id="@+id/button3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="266dp"
+            android:layout_height="39dp"
             android:layout_marginStart="120dp"
             android:layout_marginEnd="119dp"
-            android:layout_marginBottom="156dp"
+            android:layout_marginBottom="52dp"
+            android:background="#045FE7"
             android:text="Manage my courses"
-            android:textColor="#03A9F4"
+            android:textColor="#F6F7F8"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.51"
             app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -66,13 +65,24 @@
             android:layout_height="238dp"
             android:layout_marginTop="44dp"
             android:background="#D9ffffff"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/button3"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.509"
+            app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView5"
-            app:layout_constraintVertical_bias="0.125"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="114dp"
+            android:layout_height="110dp"
+            android:layout_marginTop="44dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nameOfTeacher"
+            app:srcCompat="@drawable/teachericon1" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     </layout>

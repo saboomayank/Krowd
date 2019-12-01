@@ -18,7 +18,7 @@
                 android:id="@+id/studentName"
                 android:layout_width="273dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="68dp"
                 android:text="Name"
                 android:textSize="15dp"
                 app:layout_constraintBottom_toBottomOf="parent"

@@ -16,6 +16,8 @@ class StudentAdapter(val data: ArrayList<Student>): RecyclerView.Adapter<Student
 
     }
     fun getID(position: Int) = data[position].courseId
+    fun getName(position: Int) = data[position].firstName
+    fun getCIN(position: Int) = data[position].id
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
