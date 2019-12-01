@@ -13,78 +13,95 @@
        >
 
 
-        <TextView
-            android:id="@+id/courseName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="72dp"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/courseDescrp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.501"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/professorName" />
-
         <Button
-            android:id="@+id/attendance"
-            android:layout_width="155dp"
-            android:layout_height="46dp"
-            android:background="#03A9F4"
-            android:alpha="0.65"
-            android:text="@string/attendance"
+            android:id="@+id/backToHome"
+            android:layout_width="266dp"
+            android:layout_height="39dp"
+            android:alpha="1"
+            android:background="#045FE7"
+            android:text="@string/back"
+            android:textColor="#F8F5F5"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/courseDescrp"
-            app:layout_constraintVertical_bias="0.522" />
+            app:layout_constraintTop_toBottomOf="@+id/attendance"
+            app:layout_constraintVertical_bias="0.608" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout4"
+            android:layout_width="400dp"
+            android:layout_height="233dp"
+            android:layout_marginTop="76dp"
+            android:background="#ededed"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.454"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/courseName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="48dp"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.501"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/professorName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.501"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/courseName" />
+
+            <TextView
+                android:id="@+id/courseDescrp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.501"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/professorName"
+                app:layout_constraintVertical_bias="0.26" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
             android:id="@+id/dropClass"
-            android:layout_width="155dp"
-            android:layout_height="46dp"
-            android:layout_marginTop="8dp"
-            android:background="#03A9F4"
-            android:alpha="0.65"
+            android:layout_width="266dp"
+            android:layout_height="39dp"
+            android:alpha="1"
+            android:background="#F5F6F7"
             android:text="@string/drop"
+            android:textColor="#045FE7"
             app:layout_constraintBottom_toTopOf="@+id/backToHome"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.503"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/attendance"
-            app:layout_constraintVertical_bias="0.354" />
+            app:layout_constraintVertical_bias="0.844" />
 
         <Button
-            android:id="@+id/backToHome"
-            android:layout_width="155dp"
-            android:layout_height="46dp"
-            android:background="#03A9F4"
-            android:alpha="0.65"
-            android:text="@string/back"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/attendance"
+            android:layout_width="266dp"
+            android:layout_height="39dp"
+            android:layout_marginTop="164dp"
+            android:alpha="1"
+            android:background="#045FE7"
+            android:text="@string/attendance"
+            android:textColor="#F7F2F2"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.544"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/attendance"
-            app:layout_constraintVertical_bias="0.41" />
-
-        <TextView
-            android:id="@+id/professorName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toTopOf="@+id/courseDescrp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/courseName" />
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout4" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

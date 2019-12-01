@@ -70,7 +70,7 @@ class MainPage : Fragment() {
         sw = binding.switch1
 
         progressBar = binding.loadingProgressBar
-        im = binding.bookIconImageView
+
         afterAnimation = binding.afterAnimation
         sw?.setOnCheckedChangeListener({ _, isChecked ->
             val msg = if (isChecked) "Teacher" else "Student"
@@ -106,18 +106,7 @@ class MainPage : Fragment() {
 
         }
 
-        object : CountDownTimer(3000,1000){
-            override fun onFinish() {
 
-                progressBar.visibility = View.GONE
-                im.setImageResource(R.drawable.logo)
-
-                startAnimation()
-            }
-
-            override fun onTick(millisUntilFinished: Long) {
-            }
-        }.start()
 
         val user = FirebaseAuth.getInstance().currentUser
 //        val fragmentTransaction = fragmentManager?.beginTransaction()
@@ -174,26 +163,7 @@ class MainPage : Fragment() {
         return binding.root
     }
 
-    private fun startAnimation() {
-        im.animate().apply {
-            x(50f)
-            y(100f)
-            duration = 1000
-        }.setListener(object : Animator.AnimatorListener {
-            override fun onAnimationCancel(animation: Animator?) {
-            }
 
-            override fun onAnimationEnd(animation: Animator?) {
-                afterAnimation.visibility = View.VISIBLE
-            }
-
-            override fun onAnimationRepeat(animation: Animator?) {
-            }
-
-            override fun onAnimationStart(animation: Animator?) {
-            }
-        })
-    }
 
     // TODO: Rename method, update argument and hook method into UI event
     fun onButtonPressed(uri: Uri) {

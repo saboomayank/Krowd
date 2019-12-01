@@ -6,9 +6,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -21,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.kruelkotlinkiller.krowd.databinding.FragmentManageClassesBinding
 import kotlinx.android.synthetic.main.fragment_manage_classes.*
 import android.os.CountDownTimer
+import android.view.*
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
@@ -96,11 +94,9 @@ class ManageClasses : Fragment() {
         timer = binding.timer
         courseID = binding.courseID
         seeResulBtn.visibility = View.GONE
-        addClass.setOnClickListener {
-            form.visibility = View.VISIBLE
-            courseInfo.visibility = View.GONE
-            studentList.visibility = View.GONE
-        }
+//        addClass.setOnClickListener {
+//
+//        }
         courseNameString = courseName.text.toString()
 //        courseIdString = courseId.text.toString()
         courseDescriptionString = courseDescription.text.toString()
@@ -154,7 +150,7 @@ class ManageClasses : Fragment() {
         )
         addBtnFun()
         backBtnFun()
-        deleteBtnFun()
+       // deleteBtnFun()
 
         val builder = AlertDialog.Builder(context)
 
@@ -187,8 +183,30 @@ class ManageClasses : Fragment() {
             override fun onItemLongClick(view: View?, position: Int) {}
         }))
 
-
+        setHasOptionsMenu(true)
         return binding.root
+    }
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+
+        super.onCreateOptionsMenu(menu!!, inflater!!)
+        inflater?.inflate(R.menu.hiding, menu)
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.addC -> {
+                form.visibility = View.VISIBLE
+                courseInfo.visibility = View.GONE
+                studentList.visibility = View.GONE
+                showAttendance.visibility = View.GONE
+                startAttendance.visibility = View.GONE
+            }
+            R.id.dropC -> {
+                deleteBtnFun()
+            }
+
+
+        }
+        return super.onOptionsItemSelected(item)
     }
     private fun showAttendance(courseId: String){
         showAttendance.setOnClickListener {
@@ -197,7 +215,7 @@ class ManageClasses : Fragment() {
         }
     }
     private fun seeResult(courseId: String){
-        seeResulBtn.setOnClickListener { view: View->
+        seeResulBtn.setOnClickListener {
            sendCourseId(courseId)
         }
     }
@@ -240,7 +258,7 @@ class ManageClasses : Fragment() {
                     override fun onCancelled(p0: DatabaseError) {}
                     override fun onDataChange(p0: DataSnapshot) {
                         for(e in p0.children){
-                            Log.d("e key key is ", e.key)
+                            Log.d("e key key is ", e.key!!)
 
                             if(e.getValue(AttendanceResult::class.java)?.courseId==courseId){
                                 resultRef.child(e.key!!).removeValue()
@@ -358,8 +376,8 @@ class ManageClasses : Fragment() {
 
         val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
         val user = FirebaseAuth.getInstance().currentUser
-        Log.d("auth user current", user?.email)
-        model.setMsgCommunicator(user!!.email.toString())
+        Log.d("auth user current", user?.email!!)
+        model.setMsgCommunicator(user.email.toString())
         val myFragment = TeacherHomePage()
         val fragmentTransaction = fragmentManager!!.beginTransaction()
         fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)

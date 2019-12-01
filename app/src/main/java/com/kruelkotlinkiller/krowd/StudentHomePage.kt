@@ -79,7 +79,7 @@ class StudentHomePage : Fragment() {
 
                                 key = ds.key!!
                                 //  Log.d("zaccccc",key)
-                                name.text = nameTemp
+                                name.text = "Welcome, " + nameTemp
                             }
                             sendKeyToEnrollment(key)
 

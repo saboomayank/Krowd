@@ -1,15 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    android:layout_height="wrap_content"
-    android:layout_width="wrap_content">
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="#ffffff"/>
-
-            <!--            <stroke-->
-            <!--                android:width="2dp"-->
-            <!--                android:color="#949494"-->
-            <!--                />-->
+            <solid android:color="#ededed"/>
+            <corners android:radius="10dp" />
+            <stroke
+                android:width="0dp"
+                android:color="#00000000"
+                />
         </shape>
     </item>
 </selector>

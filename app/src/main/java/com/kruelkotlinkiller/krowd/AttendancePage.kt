@@ -118,6 +118,7 @@ class AttendancePage : Fragment() {
                    attendanceResult.child(key!!).setValue(attendance)
                }
            })
+           attendanceBtn.alpha = 0.5f
            attendanceBtn.isEnabled = false
            val builder = AlertDialog.Builder(context)
            builder.setTitle("Success")
@@ -145,9 +146,11 @@ class AttendancePage : Fragment() {
                           val status = e.getValue(AttendanceIndicator::class.java)
                            if(status?.status == true){
                                Log.d("status is ", status?.status.toString())
+                               attendanceBtn.setAlpha(1.0f)
                                attendanceBtn.isEnabled = true
                            }else{
                                Log.d("status is ", status?.status.toString())
+                               attendanceBtn.setAlpha(.5f)
                                attendanceBtn.isEnabled = false
                            }
 

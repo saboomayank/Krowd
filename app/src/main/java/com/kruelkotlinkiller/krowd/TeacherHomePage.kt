@@ -92,6 +92,7 @@ class TeacherHomePage : Fragment() {
                                 if(p0.exists()){
                                     arrayList.clear()
                                     for(e in p0.children){
+                                        Log.d("The course is ", e.getValue().toString())
                                         val course = e.getValue(Course::class.java)
                                         arrayList.add(course!!)
                                 }
