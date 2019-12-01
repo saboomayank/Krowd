@@ -93,13 +93,13 @@
             android:id="@+id/attendance"
             android:layout_width="266dp"
             android:layout_height="39dp"
-            android:layout_marginTop="164dp"
+            android:layout_marginTop="64dp"
             android:alpha="1"
             android:background="#045FE7"
             android:text="@string/attendance"
             android:textColor="#F7F2F2"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.544"
+            app:layout_constraintHorizontal_bias="0.503"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout4" />
 

@@ -150,7 +150,7 @@ class ManageClasses : Fragment() {
         )
         addBtnFun()
         backBtnFun()
-       // deleteBtnFun()
+
 
         val builder = AlertDialog.Builder(context)
 
@@ -201,7 +201,27 @@ class ManageClasses : Fragment() {
                 startAttendance.visibility = View.GONE
             }
             R.id.dropC -> {
-                deleteBtnFun()
+                val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
+                model.id.observe(this, object:Observer<Any> {
+                    override fun onChanged(t: Any?) {
+                        val id = t.toString()!!
+                        val builder = AlertDialog.Builder(context)
+                        builder.setTitle("Deleted")
+                        builder.setMessage("This course is successfully deleted!")
+                        builder.setIcon(R.drawable.sad)
+                        builder.setPositiveButton("Ok"){dialog, which ->
+                        val refDelete = FirebaseDatabase.getInstance().getReference("Course")
+                        refDelete.child(id).removeValue()
+                        if(findNavController().currentDestination?.id == R.id.manageClasses) {
+                            sendTeacherNameBackHome()
+                            findNavController().navigate(R.id.teacherHomePage)
+                        }
+                        }
+                        val alert = builder.create()
+                        alert.show()
+                    }
+                })
+
             }
 
 
@@ -361,17 +381,7 @@ class ManageClasses : Fragment() {
 
 
     }
-    private fun deleteBtnFun(){
-        deleteBtn.setOnClickListener { view: View->
-            val refDelete = FirebaseDatabase.getInstance().getReference("Course")
-            refDelete.child(id!!).removeValue()
-            if(findNavController().currentDestination?.id == R.id.manageClasses) {
-                sendTeacherNameBackHome()
-                view.findNavController().navigate(R.id.teacherHomePage)
-            }
-        }
 
-    }
     private fun sendTeacherNameBackHome(){
 
         val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)

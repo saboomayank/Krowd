@@ -64,9 +64,9 @@ class StudentEnroll : Fragment() {
         model.message.observe(this,object: Observer<Any> {
             override fun onChanged(t: Any?) {
                 temp = t!!.toString()
-                        addClassFun(temp!!)
-                    }
-                })
+                addClassFun(temp!!)
+            }
+        })
         backBtn.setOnClickListener {view: View->
             if(findNavController().currentDestination?.id == R.id.studentEnroll){
                 val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)

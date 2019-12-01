@@ -10,53 +10,54 @@
 
         <!-- TODO: Update blank fragment layout -->
 
-<!--        <Button-->
-<!--            android:id="@+id/button2"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Add Classes"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
+        <!--        <Button-->
+        <!--            android:id="@+id/button2"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="Add Classes"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent" />-->
 
 
-<!--        <TextView-->
-<!--            android:id="@+id/nameOfStudent"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="TextView"-->
-<!--            app:layout_constraintBottom_toTopOf="@+id/courseIdInput"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
+        <!--        <TextView-->
+        <!--            android:id="@+id/nameOfStudent"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="TextView"-->
+        <!--            app:layout_constraintBottom_toTopOf="@+id/courseIdInput"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent" />-->
 
-<!--        <EditText-->
-<!--            android:id="@+id/courseIdInput"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginBottom="96dp"-->
-<!--            android:ems="10"-->
-<!--            android:hint="Enter Course ID"-->
-<!--            android:inputType="textPersonName"-->
-<!--            app:layout_constraintBottom_toTopOf="@+id/button2"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent" />-->
+        <!--        <EditText-->
+        <!--            android:id="@+id/courseIdInput"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginBottom="96dp"-->
+        <!--            android:ems="10"-->
+        <!--            android:hint="Enter Course ID"-->
+        <!--            android:inputType="textPersonName"-->
+        <!--            app:layout_constraintBottom_toTopOf="@+id/button2"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent" />-->
 
-<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
-<!--</layout>-->
+        <!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+        <!--</layout>-->
 
         <TextView
             android:id="@+id/nameOfStudent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="160dp"
-            android:layout_marginTop="136dp"
+            android:layout_marginTop="88dp"
             android:layout_marginEnd="19dp"
             android:textColor="#474747"
             android:textSize="20sp"
+            android:textStyle="bold|italic"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.525"
+            app:layout_constraintHorizontal_bias="0.538"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -64,22 +65,21 @@
             android:id="@+id/textView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="56dp"
+            android:layout_marginTop="32dp"
             android:text="Courses Enrolled:"
             android:textAlignment="center"
             android:textColor="#060707"
             android:textSize="25sp"
-            android:textStyle="normal"
+            android:textStyle="normal|italic"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nameOfStudent" />
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
         <Button
             android:id="@+id/button3"
             android:layout_width="266dp"
             android:layout_height="39dp"
-            android:layout_marginBottom="120dp"
+            android:layout_marginBottom="64dp"
             android:background="#045FE7"
             android:text="Enroll Courses"
             android:textColor="#ffffff"
@@ -95,14 +95,25 @@
             android:layout_height="238dp"
             android:layout_marginTop="44dp"
             android:background="#D9ffffff"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/button3"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.509"
+            app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView5"
-            app:layout_constraintVertical_bias="0.125"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="137dp"
+            android:layout_height="115dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="136dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nameOfStudent"
+            app:srcCompat="@drawable/studenticon1" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
-
