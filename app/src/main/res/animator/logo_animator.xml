@@ -3,7 +3,7 @@
     android:ordering="sequentially">
 
     <set
-        android:duration="@android:integer/config_mediumAnimTime"
+        android:duration="@android:integer/config_longAnimTime"
         android:ordering="together">
         <objectAnimator
             android:propertyName="scaleX"
@@ -19,7 +19,7 @@
     </set>
 
     <set
-        android:duration="@android:integer/config_mediumAnimTime"
+        android:duration="@android:integer/config_longAnimTime"
         android:ordering="together">
         <objectAnimator
             android:propertyName="scaleX"
