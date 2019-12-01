@@ -1,14 +1,16 @@
+# Android Studio project, class, gradel files
 *.iml
 .gradle
 /local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
+*.idea
 /build
 /captures
 .externalNativeBuild
 .cxx
+.project
+.settings
+.classpath
+
+# MAC OS
+
+.DS_Store
