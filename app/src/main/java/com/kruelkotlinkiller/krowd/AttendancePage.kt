@@ -213,6 +213,9 @@ class AttendancePage : Fragment() {
            }
            val alert = builder.create()
            alert.show()
+
+
+
        }
 
    }

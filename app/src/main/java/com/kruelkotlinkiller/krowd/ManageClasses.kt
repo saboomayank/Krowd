@@ -211,11 +211,27 @@ class ManageClasses : Fragment() {
                         builder.setIcon(R.drawable.sad)
                         builder.setPositiveButton("Ok"){dialog, which ->
                         val refDelete = FirebaseDatabase.getInstance().getReference("Course")
-                        refDelete.child(id).removeValue()
-                        if(findNavController().currentDestination?.id == R.id.manageClasses) {
-                            sendTeacherNameBackHome()
-                            findNavController().navigate(R.id.teacherHomePage)
-                        }
+                            refDelete.child(id).removeValue()
+                            if(findNavController().currentDestination?.id == R.id.manageClasses) {
+                                sendTeacherNameBackHome()
+                                findNavController().navigate(R.id.teacherHomePage)
+                            }
+                            val resultRef = FirebaseDatabase.getInstance().getReference("AttendanceResult")
+                            resultRef.addListenerForSingleValueEvent(
+                                object:ValueEventListener{
+                                    override fun onCancelled(p0: DatabaseError) {}
+                                    override fun onDataChange(p0: DataSnapshot) {
+                                        for(e in p0.children){
+                                            Log.d("e key key is ", e.key!!)
+
+                                            if(e.getValue(AttendanceResult::class.java)?.courseId==id){
+                                                resultRef.child(e.key!!).removeValue()
+                                            }
+                                        }
+                                    }
+                                }
+                            )
+
                         }
                         val alert = builder.create()
                         alert.show()
