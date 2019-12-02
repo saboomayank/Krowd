@@ -56,11 +56,13 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.54">
 
-
-                <Switch
-                    android:id="@+id/switch1"
+                <androidx.appcompat.widget.SwitchCompat
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:checked="false"
+                    android:theme="@style/SCBSwitch"
+                    android:id="@+id/switch1"
                     android:layout_marginBottom="36dp"
                     android:text="Student"
                     android:textColor="#090001"
@@ -69,7 +71,25 @@
                     app:layout_constraintHorizontal_bias="0.858"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.809" />
+                    app:layout_constraintVertical_bias="0.809"
+
+
+
+
+                    />
+<!--                <Switch-->
+<!--                    android:id="@+id/switch1"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginBottom="36dp"-->
+<!--                    android:text="Student"-->
+<!--                    android:textColor="#090001"-->
+<!--                    app:layout_constraintBottom_toTopOf="@+id/button1"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintHorizontal_bias="0.858"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    app:layout_constraintVertical_bias="0.809" />-->
 
                 <Button
                     android:id="@+id/button"

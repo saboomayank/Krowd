@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.widget.SwitchCompat
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
@@ -43,7 +44,7 @@ class MainPage : Fragment() {
     private lateinit var binding: FragmentMainPageBinding
     lateinit var logInBtn : Button
     lateinit var signUpBtn : Button
-    lateinit var sw : Switch
+    lateinit var sw : SwitchCompat
     lateinit var textBelow : TextView
     lateinit var progressBar : ProgressBar
     lateinit var im : ImageView
