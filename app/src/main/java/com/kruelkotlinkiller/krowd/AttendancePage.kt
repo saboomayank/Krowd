@@ -138,21 +138,19 @@ class AttendancePage : Fragment() {
                                 loc1.longitude = tLongtitude
                                 loc2.latitude = location.latitude
                                 loc2.longitude = location.longitude
-                                val distanceBtnLoc1And2 = loc1.distanceTo(loc2)
-                                if(distanceBtnLoc1And2 < 3){
+
+                                val arr = FloatArray(1)
+                                val distanceBtnLoc1And2 = Location.distanceBetween(tLatitude,tLongtitude, location.latitude,location.longitude,arr)
+
+
+                                Log.d("The distanceBtnLoc1and2", distanceBtnLoc1And2.toString())
+                                Log.d("The arr", arr[0].toString())
+
+                                if(arr[0] < 3.0){
                                     takeAttendance(courseId)
                                 }
-                                else{
-                                    val builder = AlertDialog.Builder(context)
-                                    builder.setTitle("ERROR")
-                                    builder.setMessage("YOU ARE NOT IN CLASS")
-                                    builder.setPositiveButton("Ok"){dialog, which ->
-                                        attendanceBtn.alpha = 0.5f
-                                        attendanceBtn.isEnabled = false
-                                    }
-                                    val alert = builder.create()
-                                    alert.show()
-                                }
+
+
                             }
                         })
 

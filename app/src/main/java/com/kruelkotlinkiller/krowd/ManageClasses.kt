@@ -330,7 +330,6 @@ class ManageClasses : Fragment() {
 
     private fun startAttendanceFun(courseId : String){
         startAttendance.setOnClickListener {
-            deleteLocationForNextUse(courseId)
             getLocation()
             val resultRef = FirebaseDatabase.getInstance().getReference("AttendanceResult")
             resultRef.addListenerForSingleValueEvent(
