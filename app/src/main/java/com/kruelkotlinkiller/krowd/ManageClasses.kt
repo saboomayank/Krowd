@@ -1,7 +1,9 @@
 package com.kruelkotlinkiller.krowd
 
+
 import android.app.AlertDialog
 import android.content.Context
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -21,8 +23,10 @@ import android.os.CountDownTimer
 import android.view.*
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.location.*
+import com.google.android.gms.location.LocationServices.getFusedLocationProviderClient
 import com.google.firebase.database.*
-import kotlinx.android.synthetic.main.fragment_attendance_page.*
+
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -64,6 +68,8 @@ class ManageClasses : Fragment() {
     private var id : String?=null
     private var arrayList = ArrayList<Student>()
     private lateinit var startAttendance : Button
+    private lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -112,8 +118,6 @@ class ManageClasses : Fragment() {
 
         model.id.observe(this,object : Observer<Any>{
             override fun onChanged(t: Any?) {
-
-
                     id = t!!.toString()
                     Log.d("the id is is is ", id.toString())
 
@@ -184,7 +188,27 @@ class ManageClasses : Fragment() {
         }))
 
         setHasOptionsMenu(true)
+
         return binding.root
+    }
+
+    private fun getLocation(){
+        mFusedLocationProviderClient = getFusedLocationProviderClient(activity!!.applicationContext)
+        mFusedLocationProviderClient.lastLocation
+            .addOnSuccessListener { location: Location? ->
+                if(location!= null){
+                    val teacherLocation = TeacherLocation(arguments?.getString("courseId")!!,location?.longitude!!,location?.latitude!! )
+                    val teacherLocationRef = FirebaseDatabase.getInstance().getReference("TeacherLocation")
+                    val key = teacherLocationRef.push().key!!
+                    teacherLocationRef.child(key).setValue(teacherLocation)
+                }
+                else{
+                    Toast.makeText(context!!,"Hey location is null",Toast.LENGTH_LONG).show()
+                }
+
+
+            }
+
     }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
 
@@ -244,6 +268,7 @@ class ManageClasses : Fragment() {
         }
         return super.onOptionsItemSelected(item)
     }
+
     private fun showAttendance(courseId: String){
         showAttendance.setOnClickListener {
             sendCourseId(courseId)
@@ -286,8 +311,27 @@ class ManageClasses : Fragment() {
         )
 
     }
+    private fun deleteLocationForNextUse(courseId: String){
+        val ref = FirebaseDatabase.getInstance().getReference("TeacherLocation")
+        ref.addListenerForSingleValueEvent(
+            object : ValueEventListener{
+                override fun onDataChange(p0: DataSnapshot) {
+                    for(e in p0.children){
+                        if(e.getValue(TeacherLocation::class.java)?.courseId==courseId){
+                            ref.child(e.key!!).removeValue()
+                        }
+                    }
+                }
+
+                override fun onCancelled(p0: DatabaseError) {}
+            }
+        )
+    }
+
     private fun startAttendanceFun(courseId : String){
         startAttendance.setOnClickListener {
+            deleteLocationForNextUse(courseId)
+            getLocation()
             val resultRef = FirebaseDatabase.getInstance().getReference("AttendanceResult")
             resultRef.addListenerForSingleValueEvent(
                 object:ValueEventListener{
@@ -452,28 +496,15 @@ class ManageClasses : Fragment() {
     fun onButtonPressed(uri: Uri) {
         listener?.onFragmentInteraction(uri)
     }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
-
     }
-
     override fun onDetach() {
         super.onDetach()
         listener = null
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments]
-     * (http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
-     */
+
     interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         fun onFragmentInteraction(uri: Uri)

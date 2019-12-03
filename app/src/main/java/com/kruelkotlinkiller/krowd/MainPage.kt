@@ -70,7 +70,7 @@ class MainPage : Fragment() {
         logInBtn = binding.button1
         sw = binding.switch1
 
-        progressBar = binding.loadingProgressBar
+
 
         afterAnimation = binding.afterAnimation
         sw?.setOnCheckedChangeListener({ _, isChecked ->

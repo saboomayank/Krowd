@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
@@ -22,6 +24,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.kruelkotlinkiller.krowd.databinding.FragmentTeacherLoginBinding
+import kotlinx.android.synthetic.main.fragment_teacher_login.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -47,6 +50,7 @@ class Teacher_login : Fragment() {
     lateinit var logInBtn : Button
     lateinit var mAuth : FirebaseAuth
     lateinit var model : GeneralCommunicator
+    lateinit var forgetPass : TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,9 +69,11 @@ class Teacher_login : Fragment() {
         email = binding.simpleEditText
         password = binding.simpleEditText3
         logInBtn = binding.button
+        forgetPass = binding.forgetPass
         model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
         mAuth = FirebaseAuth.getInstance()
         logInBtn.setOnClickListener { view: View ->
+            loadingpanel1.visibility = View.VISIBLE
             val emailA = email.text.toString().trim()
             val pass = password.text.toString().trim()
             val refTeacher = FirebaseDatabase.getInstance().getReference("Teacher")
@@ -75,6 +81,7 @@ class Teacher_login : Fragment() {
                 this.mAuth.signInWithEmailAndPassword(emailA, pass)
                     .addOnCompleteListener { task: Task<AuthResult> ->
                         if (task.isSuccessful) {
+                            loadingpanel1.visibility = View.VISIBLE
                             refTeacher.orderByChild("email").equalTo(emailA).addValueEventListener(
                                 object : ValueEventListener {
                                     override fun onDataChange(p0: DataSnapshot) {
@@ -123,10 +130,14 @@ class Teacher_login : Fragment() {
             }
         }
 
-
+            forgetPass.setOnClickListener{view : View->
+                var bundle: Bundle = bundleOf("Type" to "Teacher")
+                view.findNavController().navigate(R.id.action_teacher_login_to_resetPassword, bundle)
+            }
 
             return binding.root
     }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     fun onButtonPressed(uri: Uri) {

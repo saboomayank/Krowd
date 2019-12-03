@@ -10,11 +10,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import com.google.firebase.auth.FirebaseAuth
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.tasks.OnCanceledListener
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.database.DataSnapshot
@@ -22,6 +26,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.kruelkotlinkiller.krowd.databinding.FragmentStudentLoginBinding
+import kotlinx.android.synthetic.main.fragment_student_login.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -44,6 +49,7 @@ class Student_logIn : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
     private lateinit var binding : FragmentStudentLoginBinding
     lateinit var email : EditText
+    lateinit var forgetPassword : TextView
     lateinit var password : EditText
     lateinit var logInBtn : Button
     lateinit var mAuth : FirebaseAuth
@@ -66,9 +72,11 @@ class Student_logIn : Fragment() {
         email = binding.simpleEditText
         password = binding.simpleEditText3
         logInBtn = binding.button
+        forgetPassword = binding.forgetPass1
         model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
         mAuth = FirebaseAuth.getInstance()
         logInBtn.setOnClickListener {view : View ->
+            loadingpanel.visibility = View.VISIBLE
             val emailA = email.text.toString().trim()
             val pass = password.text.toString().trim()
             val refStudent = FirebaseDatabase.getInstance().getReference("Student")
@@ -77,6 +85,7 @@ class Student_logIn : Fragment() {
                     .addOnCompleteListener{
                         task: Task<AuthResult> ->
                         if(task.isSuccessful){
+                            loadingpanel.visibility = View.VISIBLE
                             refStudent.orderByChild("email").equalTo(emailA).addValueEventListener(
                                 object:ValueEventListener{
                                     override fun onDataChange(p0: DataSnapshot) {
@@ -128,11 +137,15 @@ class Student_logIn : Fragment() {
 
         }
 
-
+        forgetPassword.setOnClickListener{view : View ->
+            var bundle: Bundle = bundleOf("Type" to "Student")
+            view.findNavController().navigate(R.id.action_logIn_to_resetPassword, bundle)
+        }
 
         // Inflate the layout for this fragment
         return binding.root
     }
+
 
     fun checkUser(){
 //        val refStudent = FirebaseDatabase.getInstance().getReference("Student")

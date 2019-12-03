@@ -15,21 +15,6 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_begin="20dp" />
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="309dp"
-            android:layout_height="49dp"
-
-            android:fontFamily="sans-serif"
-            android:text="Courses Enrollment"
-            android:textAlignment="center"
-            android:textColor="#FD0A0A0A"
-            android:textSize="20sp"
-            android:textStyle="normal"
-            app:layout_constraintBottom_toTopOf="@+id/courseInput"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
         <EditText
             android:id="@+id/courseInput"
             android:layout_width="287dp"
@@ -42,7 +27,7 @@
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintTop_toBottomOf="@+id/hey" />
 
         <Button
             android:id="@+id/addClassBtn"
@@ -78,8 +63,8 @@
             android:id="@+id/hey"
             android:layout_width="413dp"
             android:layout_height="209dp"
-            android:background="#d3d3d3"
-            app:layout_constraintBottom_toTopOf="@+id/textView"
+            android:background="#ededed"
+            app:layout_constraintBottom_toTopOf="@+id/courseInput"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -92,10 +77,28 @@
                 android:src="@drawable/smallericon"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.307"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.096"
                 tools:srcCompat="@drawable/smallericon" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="309dp"
+                android:layout_height="49dp"
+
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/aclonica"
+                android:text="Courses Enrollment"
+                android:textAlignment="center"
+                android:textColor="#FD746C6C"
+                android:textSize="24sp"
+                android:textStyle="normal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView3"
+                app:layout_constraintVertical_bias="0.0" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

@@ -3,6 +3,7 @@ package com.kruelkotlinkiller.krowd
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -67,6 +68,11 @@ class StudentEnroll : Fragment() {
                 addClassFun(temp!!)
             }
         })
+
+        if(arguments?.size() != 0){
+            Log.i("misael", arguments?.getString("name").toString())
+        }
+
         backBtn.setOnClickListener {view: View->
             if(findNavController().currentDestination?.id == R.id.studentEnroll){
                 val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)

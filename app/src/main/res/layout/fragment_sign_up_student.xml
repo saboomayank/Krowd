@@ -187,7 +187,7 @@
             android:id="@+id/button"
             android:layout_width="266dp"
             android:layout_height="39dp"
-            android:background="#045FE7"
+            android:background="@drawable/btn_rounded"
             android:text="@string/SignUp"
             android:textColor="#FCF8F8"
             app:layout_constraintBottom_toBottomOf="parent"

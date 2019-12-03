@@ -8,6 +8,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -196,6 +197,7 @@ class StudentHomePage : Fragment() {
             model.setMsgCommunicator(str)
             val myFragment = StudentEnroll()
             val fragmentTransaction = fragmentManager!!.beginTransaction()
+//            var bundle: Bundle = bundleOf("name" to "Misael", "price" to "asdad")
             fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
             fragmentTransaction.addToBackStack(null)
             fragmentTransaction.commit()

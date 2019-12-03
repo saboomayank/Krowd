@@ -50,7 +50,7 @@
             android:layout_marginStart="120dp"
             android:layout_marginEnd="119dp"
             android:layout_marginBottom="52dp"
-            android:background="#045FE7"
+            android:background="@drawable/btn_rounded"
             android:text="Manage my courses"
             android:textColor="#F6F7F8"
             android:textSize="14sp"

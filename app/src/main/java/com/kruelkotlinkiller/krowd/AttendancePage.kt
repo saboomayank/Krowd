@@ -2,6 +2,7 @@ package com.kruelkotlinkiller.krowd
 
 import android.app.AlertDialog
 import android.content.Context
+import android.location.Location
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -12,11 +13,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.location.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -49,6 +52,9 @@ class AttendancePage : Fragment() {
     private lateinit var attendanceBtn : Button
     private lateinit var dropBtn : Button
     private lateinit var back : Button
+    private lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +76,7 @@ class AttendancePage : Fragment() {
         professorName = binding.professorName
         dropBtn = binding.dropClass
         back = binding.backToHome
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context!!)
 
         val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
         model.id.observe(this,object: Observer<Any> {
@@ -91,7 +98,8 @@ class AttendancePage : Fragment() {
                 })
                 detectAttendanceFun(id!!)
                 dropClass(id!!)
-                attendanceBtn.setOnClickListener {takeAttendance(id!!)}
+
+                attendanceBtn.setOnClickListener {getLocation(id!!)}
             }
         })
 
@@ -102,8 +110,62 @@ class AttendancePage : Fragment() {
         ft.detach(this).attach(this)
 
         backFun()
+
         return binding.root
     }
+    private fun getLocation(courseId: String){
+        mFusedLocationProviderClient =
+            LocationServices.getFusedLocationProviderClient(activity!!.applicationContext)
+        mFusedLocationProviderClient.lastLocation
+            .addOnSuccessListener { location: Location? ->
+                if(location!= null){
+                    var tLatitude = 0.0
+                    var tLongtitude = 0.0
+                    var loc1 = Location("")
+                    var loc2 = Location("")
+
+                    val ref = FirebaseDatabase.getInstance().getReference("TeacherLocation")
+                    ref.orderByChild("courseId").equalTo(courseId)
+                        .addValueEventListener(object : ValueEventListener{
+                            override fun onCancelled(p0: DatabaseError) {}
+                            override fun onDataChange(p0: DataSnapshot) {
+                                for(e in p0.children){
+                                    val tLocation = e.getValue(TeacherLocation::class.java)
+                                    tLatitude = tLocation?.latitude!!
+                                    tLongtitude = tLocation?.longtitude!!
+                                }
+                                loc1.latitude = tLatitude
+                                loc1.longitude = tLongtitude
+                                loc2.latitude = location.latitude
+                                loc2.longitude = location.longitude
+                                val distanceBtnLoc1And2 = loc1.distanceTo(loc2)
+                                if(distanceBtnLoc1And2 < 3){
+                                    takeAttendance(courseId)
+                                }
+                                else{
+                                    val builder = AlertDialog.Builder(context)
+                                    builder.setTitle("ERROR")
+                                    builder.setMessage("YOU ARE NOT IN CLASS")
+                                    builder.setPositiveButton("Ok"){dialog, which ->
+                                        attendanceBtn.alpha = 0.5f
+                                        attendanceBtn.isEnabled = false
+                                    }
+                                    val alert = builder.create()
+                                    alert.show()
+                                }
+                            }
+                        })
+
+                }
+                else{
+                    Toast.makeText(context!!,"Hey location is null", Toast.LENGTH_LONG).show()
+                }
+
+
+            }
+
+    }
+
    private fun takeAttendance(courseId: String){
 
            val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
@@ -128,10 +190,6 @@ class AttendancePage : Fragment() {
            }
            val alert = builder.create()
            alert.show()
-
-
-
-
 
    }
    private fun detectAttendanceFun(courseId : String){
