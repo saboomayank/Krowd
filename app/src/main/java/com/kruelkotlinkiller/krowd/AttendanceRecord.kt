@@ -81,6 +81,7 @@ class AttendanceRecord : Fragment() {
                 object : ValueEventListener{
                     override fun onCancelled(p0: DatabaseError) {}
                     override fun onDataChange(p0: DataSnapshot) {
+                        arr.clear()
                         for(e in p0.children){
                             Log.d("record is ", e.getValue().toString())
                             val record = e.getValue(Record :: class.java)
