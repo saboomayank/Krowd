@@ -37,6 +37,9 @@
         <action
             android:id="@+id/action_manageClasses_to_seeAttendanceResult"
             app:destination="@id/seeAttendanceResult" />
+        <action
+            android:id="@+id/action_manageClasses_to_attendanceRecord"
+            app:destination="@id/attendanceRecord" />
     </fragment>
     <fragment
         android:id="@+id/signUpStudent"
@@ -130,5 +133,14 @@
         <action
             android:id="@+id/action_resetPassword_to_teacher_login"
             app:destination="@id/teacher_login" />
+    </fragment>
+    <fragment
+        android:id="@+id/attendanceRecord"
+        android:name="com.kruelkotlinkiller.krowd.AttendanceRecord"
+        android:label="fragment_attendance_record"
+        tools:layout="@layout/fragment_attendance_record" >
+        <action
+            android:id="@+id/action_attendanceRecord_to_manageClasses"
+            app:destination="@id/manageClasses" />
     </fragment>
 </navigation>

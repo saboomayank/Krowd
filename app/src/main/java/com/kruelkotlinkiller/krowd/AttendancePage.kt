@@ -26,6 +26,9 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.kruelkotlinkiller.krowd.databinding.FragmentAttendancePageBinding
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -53,6 +56,7 @@ class AttendancePage : Fragment() {
     private lateinit var dropBtn : Button
     private lateinit var back : Button
     private lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
+    private val arr = ArrayList<String>()
 
 
 
@@ -99,7 +103,7 @@ class AttendancePage : Fragment() {
                 detectAttendanceFun(id!!)
                 dropClass(id!!)
 
-                attendanceBtn.setOnClickListener {getLocation(id!!)}
+                getLocation(id!!)
             }
         })
 
@@ -110,6 +114,10 @@ class AttendancePage : Fragment() {
         ft.detach(this).attach(this)
 
         backFun()
+//        val arr = FloatArray(1)
+//        val distanceBtnLoc1And2 = Location.distanceBetween(34.07921,-117.9635383, 34.0793078,-117.9635858,arr)
+//
+//        Log.d("The arr", arr[0].toString())
 
         return binding.root
     }
@@ -121,8 +129,6 @@ class AttendancePage : Fragment() {
                 if(location!= null){
                     var tLatitude = 0.0
                     var tLongtitude = 0.0
-                    var loc1 = Location("")
-                    var loc2 = Location("")
 
                     val ref = FirebaseDatabase.getInstance().getReference("TeacherLocation")
                     ref.orderByChild("courseId").equalTo(courseId)
@@ -134,20 +140,26 @@ class AttendancePage : Fragment() {
                                     tLatitude = tLocation?.latitude!!
                                     tLongtitude = tLocation?.longtitude!!
                                 }
-                                loc1.latitude = tLatitude
-                                loc1.longitude = tLongtitude
-                                loc2.latitude = location.latitude
-                                loc2.longitude = location.longitude
+
 
                                 val arr = FloatArray(1)
                                 val distanceBtnLoc1And2 = Location.distanceBetween(tLatitude,tLongtitude, location.latitude,location.longitude,arr)
 
-
-                                Log.d("The distanceBtnLoc1and2", distanceBtnLoc1And2.toString())
+                                Log.d("The student locaion is " , location.latitude.toString() + " - " + location.longitude.toString())
                                 Log.d("The arr", arr[0].toString())
 
-                                if(arr[0] < 3.0){
-                                    takeAttendance(courseId)
+                                
+                                if(arr[0] < 100.0){
+                                    attendanceBtn.setOnClickListener { takeAttendance(courseId)}
+                                }else{
+                                    attendanceBtn.setOnClickListener {
+                                        val builder = AlertDialog.Builder(context)
+                                        builder.setTitle("FATAL")
+                                        builder.setMessage("YOU ARE NOT IN CLASSROOM!!")
+                                        val alert = builder.create()
+                                        alert.setIcon(R.drawable.angry)
+                                        alert.show()
+                                    }
                                 }
 
 
@@ -167,27 +179,42 @@ class AttendancePage : Fragment() {
    private fun takeAttendance(courseId: String){
 
            val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
+
            model.name.observe(this, object : Observer<Any> {
                override fun onChanged(t: Any?) {
                    val name = t.toString()!!
+
+                   arr.add(name)
                    Log.d("name is ", name)
                    val attendanceResult =
                        FirebaseDatabase.getInstance().getReference("AttendanceResult")
                    val key = attendanceResult.push().key
                    val attendance = AttendanceResult(courseId, name)
                    attendanceResult.child(key!!).setValue(attendance)
+
+                   val sdf = SimpleDateFormat("MM/dd/yyyy hh:mm:ss")
+                   val currentDate = sdf.format(Date())
+                   val record = Record(
+                       courseId,
+                       currentDate, arr
+                   )
+                   val ref1 = FirebaseDatabase.getInstance().getReference("Record")
+                   val keys = ref1.push().key!!
+                   ref1.child(keys).setValue(record)
                }
            })
+
            attendanceBtn.alpha = 0.5f
            attendanceBtn.isEnabled = false
            val builder = AlertDialog.Builder(context)
            builder.setTitle("Success")
            builder.setMessage("Your attendance is recorded!")
-           builder.setPositiveButton("Ok"){dialog, which ->
+           builder.setPositiveButton("Ok") { dialog, which ->
 
            }
            val alert = builder.create()
            alert.show()
+
 
    }
    private fun detectAttendanceFun(courseId : String){

@@ -21,12 +21,13 @@ import com.kruelkotlinkiller.krowd.databinding.FragmentManageClassesBinding
 import kotlinx.android.synthetic.main.fragment_manage_classes.*
 import android.os.CountDownTimer
 import android.view.*
+import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.*
 import com.google.android.gms.location.LocationServices.getFusedLocationProviderClient
 import com.google.firebase.database.*
-
+import kotlinx.android.synthetic.main.fragment_attendance_page.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -270,14 +271,17 @@ class ManageClasses : Fragment() {
     }
 
     private fun showAttendance(courseId: String){
-        showAttendance.setOnClickListener {
-            sendCourseId(courseId)
+        showAttendance.setOnClickListener {view:View->
 
+            if(findNavController().currentDestination?.id == R.id.manageClasses){
+                val bundle : Bundle = bundleOf("courseId" to courseId, "professorName" to professorName)
+                view.findNavController().navigate(R.id.action_manageClasses_to_attendanceRecord,bundle)
+            }
         }
     }
     private fun seeResult(courseId: String){
-        seeResulBtn.setOnClickListener {
-           sendCourseId(courseId)
+        seeResulBtn.setOnClickListener {view : View->
+            sendCourseId(courseId)
         }
     }
     private fun sendCourseId(courseId: String){
@@ -311,26 +315,27 @@ class ManageClasses : Fragment() {
         )
 
     }
-    private fun deleteLocationForNextUse(courseId: String){
-        val ref = FirebaseDatabase.getInstance().getReference("TeacherLocation")
-        ref.addListenerForSingleValueEvent(
-            object : ValueEventListener{
-                override fun onDataChange(p0: DataSnapshot) {
-                    for(e in p0.children){
-                        if(e.getValue(TeacherLocation::class.java)?.courseId==courseId){
-                            ref.child(e.key!!).removeValue()
-                        }
-                    }
-                }
 
-                override fun onCancelled(p0: DatabaseError) {}
-            }
-        )
-    }
 
     private fun startAttendanceFun(courseId : String){
         startAttendance.setOnClickListener {
-            getLocation()
+            val ref = FirebaseDatabase.getInstance().getReference("TeacherLocation")
+            ref.orderByChild("courseId").equalTo(courseId).addListenerForSingleValueEvent(
+                object : ValueEventListener{
+                    override fun onDataChange(p0: DataSnapshot) {
+                        if(p0.exists()){
+                            ref.removeValue()
+                            getLocation()
+                        }
+                        else{
+                            getLocation()
+                        }
+                    }
+
+                    override fun onCancelled(p0: DatabaseError) {}
+                }
+            )
+
             val resultRef = FirebaseDatabase.getInstance().getReference("AttendanceResult")
             resultRef.addListenerForSingleValueEvent(
                 object:ValueEventListener{
