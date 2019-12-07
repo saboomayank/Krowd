@@ -32,7 +32,7 @@
             android:id="@+id/constraintLayout4"
             android:layout_width="400dp"
             android:layout_height="233dp"
-            android:layout_marginTop="76dp"
+            android:layout_marginTop="52dp"
             android:background="#ededed"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.454"

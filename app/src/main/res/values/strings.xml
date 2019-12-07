@@ -45,6 +45,25 @@
     <string name="share">Share Result</string>
     <string name="showresult">Show Attendance</string>
     <string name="drop">Drop This Course</string>
+    <string name="aboutPage">Krowd is an attendance app that can be used by teachers to record the daily
+        attendance based on location. If student is not within certain ranges of distance, they will not be able to take the attendance.
+    </string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 
 
 </resources>

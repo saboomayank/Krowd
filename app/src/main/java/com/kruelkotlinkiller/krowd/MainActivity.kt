@@ -1,19 +1,32 @@
 package com.kruelkotlinkiller.krowd
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
+import android.widget.TextView
+import android.widget.Toolbar
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
+import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
 import com.kruelkotlinkiller.krowd.databinding.ActivityMainBinding
+import kotlinx.android.synthetic.main.activity_main.*
+import android.content.Intent
+
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var drawerLayout: DrawerLayout
+    lateinit var email : TextView
     private var MY_PERMISSIONS_REQUEST_READ_LOCATION = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,9 +56,26 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        val navigationView = binding.navView
+        val drawer = binding.drawerLayout
+        val hView = navigationView.getHeaderView(0)
+        val text = hView.findViewById<TextView>(R.id.textView20)
 
+            text.text = "Welcome User"
 
+        navigationView.setNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.about ->{
+                    val i = Intent(this, AboutActivty::class.java)
+                    drawer.closeDrawers()
+                    startActivity(i)
+                }
+            }
+            false
+        }
     }
+
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = this.findNavController(R.id.myNavHostFragment)

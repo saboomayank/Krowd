@@ -1,6 +1,7 @@
 package com.kruelkotlinkiller.krowd
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -17,7 +18,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.kruelkotlinkiller.krowd.databinding.ActivityMainBinding
 import com.kruelkotlinkiller.krowd.databinding.FragmentStudentHomePageBinding
+import android.os.Build
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.navigation.NavigationView
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -187,6 +193,33 @@ class StudentHomePage : Fragment() {
         val user = FirebaseAuth.getInstance().currentUser
         if(user==null){
             findNavController().navigate(R.id.mainPage)
+        }
+
+
+        val text = activity!!.findViewById<TextView>(R.id.textView20)
+        val au = FirebaseAuth.getInstance().currentUser
+        text.text = au!!.email
+        val navigationView = activity!!.findViewById<NavigationView>(R.id.navView)
+        val drawer = activity!!.findViewById<DrawerLayout>(R.id.drawerLayout)
+
+        navigationView.setNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.logout -> {
+                    FirebaseAuth.getInstance().signOut()
+                    text.text = "Welcome User"
+                    findNavController().navigate(R.id.mainPage)
+                    drawer.closeDrawers()
+                }
+                R.id.about ->{
+                    val i = Intent(activity, AboutActivty::class.java)
+                    drawer.closeDrawers()
+                    startActivity(i)
+                }
+
+
+
+            }
+            false
         }
 
         return binding.root
