@@ -43,21 +43,21 @@ Selecting a course will remove the class from your list.
 
 ## Students
 Here you can view and select your classes to begin taking attendance for a class
-<img src="https://i.imgur.com/pplj7iW.png" class="screenshot">
+<img src="https://i.imgur.com/EBxEofy.gif" class="screenshot">
 
-### Adding Classes
+### Adding & Dropping Classes
 This will allow you to join the class list of an insturctor's class. It only requires the specific course id provided by your instructor.
 
-<img src="https://i.imgur.com/2MEQZO0.png" class="screenshot">
+<img src="https://i.imgur.com/Q3wHRCW.gif" class="screenshot">
 
 ### Taking Attendance
 Select a class that you want to mark yourself present.
-#### *VERY Temp Image*
-<img src="https://i.imgur.com/UQqHR97.png" class="screenshot">
+#### *Without professor opening attandance*
+<img src="https://i.imgur.com/3VlLnZP.gif" class="screenshot">
 
-The **Take Attendance** button will mark you as present in class if you are in the classes location and do so within *Five minutes* of the teacher opening up attendance.
+The **Take Attendance** button will mark you as present in class if you are in the classes location and do so within limit of time of the teacher opening up attendance.
 
-It will only allow you to press the button per *Five minutes* to limit gaming the system.
+It will only allow you to press the button per *Limite of time* to limit gaming the system.
 ## Contributors
 #### Zac
 #### Jim
