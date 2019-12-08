@@ -22,7 +22,7 @@ Enter your information and **Sign Up** and that's that. You're in.
 <img src="https://i.imgur.com/Q4auFtS.gif" class="screenshot">
 Enter the correcet credential at teacher login page will lead you to teacher home page.
 
-<img src="https://i.imgur.com/6rAh8Q6.png" class="screenshot">
+<img src="https://i.imgur.com/HMmT9F2.png" class="screenshot">
 Here you can view and select your classes to begin taking attendance or view the overall attendance record of the students that have added that class.
 
 ### Taking Attendance
