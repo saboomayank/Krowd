@@ -2,32 +2,38 @@
 
 ### A location based attendance app
 
-Being present in the class is essential as you learn new things interact with professor(s) & classmate(s). The app allows you professors to know who is currently in the class and if they are actually in the class.
+Being present in the class is essential as you learn new things interact with professor(s) & classmate(s). This app allows students to take attandance through the phone when they are in class, base on their location. It allow the professors to know who is currently in the class in an efficient way.
 
 ## Getting started
+
+### Splash Page
+<img src="https://i.imgur.com/5peW7Mg.gif" class="screenshot">
 
 ### Signing Up
 First select *Teacher* or *Student* and then press **Sign Up**.
 
-<img src="https://i.imgur.com/UEVelqT.png" class="screenshot">
+<img src="https://i.imgur.com/5DCS7oG.gif" class="screenshot">
 Enter your information and **Sign Up** and that's that. You're in.
 
-<img src="https://i.imgur.com/FZoAEBP.png" class="screenshot">
+<img src="https://i.imgur.com/kw1kPsu.gif" class="screenshot">
 
 ## Teachers
-#### *Temp Image*
-<img src="https://i.imgur.com/CaY5SUj.png" class="screenshot">
+#### Teacher Login
+<img src="https://i.imgur.com/Q4auFtS.gif" class="screenshot">
+Enter the correcet credential at teacher login page will lead you to teacher home page.
+
+<img src="https://i.imgur.com/6rAh8Q6.png" class="screenshot">
 Here you can view and select your classes to begin taking attendance or view the overall attendance record of the students that have added that class.
 
 ### Taking Attendance
-This will start taking attendance for the day. There is a *Five minute* time limit for the students to mark themselves as present. 
+This will start taking attendance for the day. There is a time limit for the students to mark themselves as present.
+<img src="https://i.imgur.com/nhVtdpO.gif" class="screenshot">
 
 Attendance requires the student's presence and so the app does too. It will only allow a student to mark themselves as present if they are physically in class.
 ### Manage Courses
-To add or delete classes press the **Manage Courses** button.
-
-#### *VERY Temp Image*
-<img src="https://i.imgur.com/ywtgq2C.png" class="screenshot">
+To **Add** classes press the **Manage Courses** button.
+To **Delete**, select a course and press delete at right top corner.
+<img src="https://i.imgur.com/aimnCNA.gif" class="screenshot">
 
 ### Adding Classes
 This requires the class name and course description. It will then add the class to your list.
