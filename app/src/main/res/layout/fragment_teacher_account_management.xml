@@ -81,14 +81,15 @@
 
         <EditText
             android:id="@+id/editText2"
-            android:layout_width="300dp"
-            android:layout_height="42dp"
+            android:layout_width="345dp"
+            android:layout_height="37dp"
             android:layout_marginTop="76dp"
+            android:background="@drawable/rect_textedit"
             android:ems="10"
             android:gravity="center"
             android:hint="Current password"
-            android:background="@drawable/rect_textedit"
             android:inputType="textPersonName"
+            android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@+id/editText3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -124,14 +125,15 @@
 
         <EditText
             android:id="@+id/editText3"
-            android:layout_width="300dp"
-            android:layout_height="42dp"
+            android:layout_width="345dp"
+            android:layout_height="37dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/rect_textedit"
             android:ems="10"
             android:gravity="center"
             android:hint="Enter New password"
             android:inputType="textPersonName"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.504"
             app:layout_constraintStart_toStartOf="parent"
@@ -139,19 +141,20 @@
 
         <EditText
             android:id="@+id/editText4"
-            android:layout_width="300dp"
-            android:layout_height="42dp"
+            android:layout_width="345dp"
+            android:layout_height="37dp"
             android:background="@drawable/rect_textedit"
             android:ems="10"
             android:gravity="center"
             android:hint="Confirm password"
             android:inputType="textPersonName"
+            android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@+id/button2"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.495"
+            app:layout_constraintHorizontal_bias="0.515"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editText3"
-            app:layout_constraintVertical_bias="0.1" />
+            app:layout_constraintVertical_bias="0.076" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,16 +21,17 @@
 
         <TextView
             android:id="@+id/textView19"
-            android:layout_width="379dp"
-            android:layout_height="60dp"
+            android:layout_width="378dp"
+            android:layout_height="69dp"
             android:layout_marginBottom="200dp"
             android:fontFamily="sans-serif"
             android:text="@string/aboutPage"
-            android:textSize="12sp"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.843"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintHorizontal_bias="0.818"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
         <TextView
             android:id="@+id/textView22"
@@ -49,7 +50,7 @@
             android:layout_width="376dp"
             android:layout_height="54dp"
             android:layout_marginTop="23dp"
-            android:text="The Krowd was created by current CSULA students who are taking Android Development taught by a great professor Mark Sargent."
+            android:text="Krowd was created by current CSULA students who are taking Android Development taught by a great professor Mark Sargent."
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.771"
             app:layout_constraintStart_toStartOf="parent"

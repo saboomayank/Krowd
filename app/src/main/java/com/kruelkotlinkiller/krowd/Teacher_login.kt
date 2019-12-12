@@ -76,6 +76,8 @@ class Teacher_login : Fragment() {
         model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
         mAuth = FirebaseAuth.getInstance()
         logInBtn.setOnClickListener { view: View ->
+            if(email.text.toString().isNotEmpty()&&
+                    password.text.toString().isNotEmpty()){
             loadingpanel1.visibility = View.VISIBLE
             val emailA = email.text.toString().trim()
             val pass = password.text.toString().trim()
@@ -88,7 +90,7 @@ class Teacher_login : Fragment() {
                                 object : ValueEventListener {
                                     override fun onDataChange(p0: DataSnapshot) {
                                         if (p0.exists()) {
-                                            if(findNavController().currentDestination?.id == R.id.teacher_login) {
+                                            if (findNavController().currentDestination?.id == R.id.teacher_login) {
                                                 model.setMsgCommunicator(emailA)
                                                 val myFragment = TeacherHomePage()
                                                 val fragmentTransaction =
@@ -135,6 +137,10 @@ class Teacher_login : Fragment() {
                             password.setError("Incorrect Credentials")
                         }
                     }
+            }
+            }else{
+                email.setError("Please enter teacher email")
+                password.setError("Please enter teacher password")
             }
         }
 

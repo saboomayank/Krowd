@@ -78,22 +78,25 @@ class Student_logIn : Fragment() {
         nav = binding.nav1
         model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
         mAuth = FirebaseAuth.getInstance()
-        logInBtn.setOnClickListener {view : View ->
+        logInBtn.setOnClickListener { view: View ->
+            if (email.text.toString().isNotEmpty() &&
+                password.text.toString().isNotEmpty()
+            ) {
+
             loadingpanel.visibility = View.VISIBLE
             val emailA = email.text.toString().trim()
             val pass = password.text.toString().trim()
             val refStudent = FirebaseDatabase.getInstance().getReference("Student")
-            if(emailA.isNotEmpty() && pass.isNotEmpty()){
-                this.mAuth.signInWithEmailAndPassword(emailA,pass)
-                    .addOnCompleteListener{
-                        task: Task<AuthResult> ->
-                        if(task.isSuccessful){
+            if (emailA.isNotEmpty() && pass.isNotEmpty()) {
+                this.mAuth.signInWithEmailAndPassword(emailA, pass)
+                    .addOnCompleteListener { task: Task<AuthResult> ->
+                        if (task.isSuccessful) {
                             loadingpanel.visibility = View.VISIBLE
                             refStudent.orderByChild("email").equalTo(emailA).addValueEventListener(
-                                object:ValueEventListener{
+                                object : ValueEventListener {
                                     override fun onDataChange(p0: DataSnapshot) {
-                                        if(p0.exists()){
-                                            if(findNavController().currentDestination?.id == R.id.logIn) {
+                                        if (p0.exists()) {
+                                            if (findNavController().currentDestination?.id == R.id.logIn) {
                                                 model.setMsgCommunicator(emailA)
                                                 val myFragment = StudentHomePage()
                                                 val fragmentTransaction =
@@ -107,8 +110,7 @@ class Student_logIn : Fragment() {
                                                 view.findNavController()
                                                     .navigate(R.id.action_logIn_to_studentHomePage)
                                             }
-                                            }
-                                        else{
+                                        } else {
                                             loadingpanel.visibility = View.GONE
                                             email.setError("Student Email Not Exists")
                                             password.setError("Student Email Not Exists")
@@ -127,8 +129,7 @@ class Student_logIn : Fragment() {
                                     }
                                 }
                             )
-                        }
-                        else{
+                        } else {
                             loadingpanel.visibility = View.GONE
                             email.setError("Incorrect Credential")
                             password.setError("Incorrect Credential")
@@ -144,6 +145,10 @@ class Student_logIn : Fragment() {
 
 
                     }
+            }
+        }else{
+                email.setError("Please enter student email")
+                password.setError("Please enter student password")
             }
 
         }
