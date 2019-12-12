@@ -110,14 +110,16 @@ class Student_logIn : Fragment() {
                                             }
                                         else{
                                             loadingpanel.visibility = View.GONE
-                                            val builder = AlertDialog.Builder(context)
-                                            builder.setTitle("ERROR")
-                                            builder.setMessage("Student Email Not Exists")
-                                            builder.setPositiveButton("Ok"){dialog, which ->
-
-                                            }
-                                            val alert = builder.create()
-                                            alert.show()
+                                            email.setError("Student Email Not Exists")
+                                            password.setError("Student Email Not Exists")
+//                                            val builder = AlertDialog.Builder(context)
+//                                            builder.setTitle("ERROR")
+//                                            builder.setMessage("Student Email Not Exists")
+//                                            builder.setPositiveButton("Ok"){dialog, which ->
+//
+//                                            }
+//                                            val alert = builder.create()
+//                                            alert.show()
                                         }
                                     }
 
@@ -128,15 +130,19 @@ class Student_logIn : Fragment() {
                         }
                         else{
                             loadingpanel.visibility = View.GONE
-                            val builder = AlertDialog.Builder(context)
-                            builder.setTitle("ERROR")
-                            builder.setMessage("Incorrect Credentials")
-                            builder.setPositiveButton("Ok"){dialog, which ->
-
-                            }
-                            val alert = builder.create()
-                            alert.show()
+                            email.setError("Incorrect Credential")
+                            password.setError("Incorrect Credential")
+//                            val builder = AlertDialog.Builder(context)
+//                            builder.setTitle("ERROR")
+//                            builder.setMessage("Incorrect Credentials")
+//                            builder.setPositiveButton("Ok"){dialog, which ->
+//
+//                            }
+//                            val alert = builder.create()
+//                            alert.show()
                         }
+
+
                     }
             }
 

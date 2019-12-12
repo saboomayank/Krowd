@@ -85,7 +85,7 @@ class AttendancePage : Fragment() {
         model.id.observe(this,object: Observer<Any> {
             override fun onChanged(t: Any?) {
                 val id = t.toString()!!
-                Log.d("Hey the id " , id)
+               // Log.d("Hey the id " , id)
                 val courseRef = FirebaseDatabase.getInstance().getReference("Course")
                 courseRef.orderByChild("courseId").equalTo(id!!).addListenerForSingleValueEvent(object:ValueEventListener{
                     override fun onCancelled(p0: DatabaseError) {}
@@ -159,7 +159,7 @@ class AttendancePage : Fragment() {
                                 Log.d("The arr", arr[0].toString())
 
                                 
-                                if(arr[0] < 100.0){
+                                if(arr[0] < 80.0){
                                     attendanceBtn.setOnClickListener { takeAttendance(courseId)}
                                 }else{
                                     attendanceBtn.setOnClickListener {

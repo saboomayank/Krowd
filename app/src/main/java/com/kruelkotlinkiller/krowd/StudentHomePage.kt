@@ -195,7 +195,9 @@ class StudentHomePage : Fragment() {
         //sends user back to the log in page if he/she is logged out
         val user = FirebaseAuth.getInstance().currentUser
         if(user==null){
-            findNavController().navigate(R.id.mainPage)
+            if(findNavController().currentDestination?.id == R.id.studentHomePage) {
+                findNavController().navigate(R.id.mainPage)
+            }
         }
 
 
@@ -240,6 +242,11 @@ class StudentHomePage : Fragment() {
                             R.id.action_studentHomePage_to_studentEnroll,
                             bundle
                         )
+                    }
+                }
+                R.id.manageAccount ->{
+                    if(findNavController().currentDestination?.id == R.id.studentHomePage){
+                        findNavController().navigate(R.id.action_studentHomePage_to_studentAccountManagement2)
                     }
                 }
             }

@@ -167,6 +167,11 @@ class TeacherHomePage : Fragment() {
                         findNavController().navigate(R.id.action_teacherHomePage_to_manageClasses3)
                     }
                 }
+                R.id.manageAccount->{
+                    if(findNavController().currentDestination?.id == R.id.teacherHomePage){
+                        findNavController().navigate(R.id.action_teacherHomePage_to_teacherAccountManagement)
+                    }
+                }
             }
         }
 
@@ -176,7 +181,9 @@ class TeacherHomePage : Fragment() {
         //sends user back to the log in page if he/she is logged out
         val user = FirebaseAuth.getInstance().currentUser
         if(user==null){
-            findNavController().navigate(R.id.mainPage)
+            if(findNavController().currentDestination?.id == R.id.teacherHomePage) {
+                findNavController().navigate(R.id.mainPage)
+            }
         }
 
         val text = activity!!.findViewById<TextView>(R.id.textView20)
@@ -206,20 +213,20 @@ class TeacherHomePage : Fragment() {
         return binding.root
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-
-        super.onCreateOptionsMenu(menu!!, inflater!!)
-        inflater?.inflate(R.menu.menu, menu)
-    }
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.logout -> {
-                FirebaseAuth.getInstance().signOut()
-                findNavController().navigate(R.id.mainPage)
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
+//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//
+//        super.onCreateOptionsMenu(menu!!, inflater!!)
+//        inflater?.inflate(R.menu.menu, menu)
+//    }
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        when(item.itemId){
+//            R.id.logout -> {
+//                FirebaseAuth.getInstance().signOut()
+//                findNavController().navigate(R.id.mainPage)
+//            }
+//        }
+//        return super.onOptionsItemSelected(item)
+//    }
 
 
 
