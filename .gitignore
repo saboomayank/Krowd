@@ -17,7 +17,7 @@
 .project
 .settings
 .classpath
-
+.vscode
 # MAC OS
 
 .DS_Store
