@@ -21,13 +21,14 @@ import com.google.firebase.auth.FirebaseAuth
 import com.kruelkotlinkiller.krowd.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
 import android.content.Intent
-
+import android.os.Build
+import android.util.Log
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var drawerLayout: DrawerLayout
     lateinit var email : TextView
-    private var MY_PERMISSIONS_REQUEST_READ_LOCATION = 0
+    private var MY_PERMISSIONS_REQUEST_READ_LOCATION = 1
     lateinit var tool : androidx.appcompat.widget.Toolbar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,6 +86,26 @@ class MainActivity : AppCompatActivity() {
         val navController = this.findNavController(R.id.myNavHostFragment)
         return NavigationUI.navigateUp(navController, drawerLayout)
     }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when(requestCode){
+            1 -> {
+                if(grantResults.isNotEmpty() && grantResults[0]==PackageManager.PERMISSION_GRANTED)
+                {
+                    Log.d("Hey", "I am nottt empty")
+                }
+                else{
+                    this.finishAffinity()
+                }
+            }
+        }
+    }
+
 }
 
 

@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.kruelkotlinkiller.krowd.databinding.FragmentResetPasswordBinding
 
@@ -38,6 +39,7 @@ class ResetPassword : Fragment() {
     private lateinit var binding : FragmentResetPasswordBinding
     private lateinit var email : EditText
     private lateinit var sendBtn : Button
+    private lateinit var nav : BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,8 +56,21 @@ class ResetPassword : Fragment() {
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_reset_password,container, false)
         email = binding.enteredEmail
         sendBtn = binding.submit
+        nav = binding.nav6
         Log.d("argmument is ", arguments?.getString("Type").toString())
         sendBtn.setOnClickListener {  reset() }
+        nav.setOnNavigationItemReselectedListener { item->
+            when(item.itemId){
+                R.id.backHome->{
+                    if(arguments?.getString("Type").toString() == "Student") {
+                        findNavController().navigate(R.id.action_resetPassword_to_logIn)
+                    }
+                    if(arguments?.getString("Type").toString() == "Teacher"){
+                        findNavController().navigate(R.id.action_resetPassword_to_teacher_login)
+                    }
+                }
+            }
+        }
         return binding.root
     }
 
