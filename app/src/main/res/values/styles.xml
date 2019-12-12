@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -11,14 +11,10 @@
     </style>
 
 
-    <style name="Divider">
-        <item name="android:background">#9A9C96</item> //you can give your color here. that will change all divider color in your app.
-    </style>
-    <style name="Divider.Horizontal" parent="Divider">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">1dp</item> // You can change thickness here.
 
-    </style>
+        <style name="HeaderBar">
+            <item name="android:background">#303F9F</item>
+        </style>
 
     <style name="SCBSwitch" parent="Theme.AppCompat.Light">
         <!-- active thumb & track color (30% transparency) -->

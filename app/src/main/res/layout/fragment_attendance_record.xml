@@ -7,33 +7,34 @@
     android:layout_height="match_parent"
     tools:context=".AttendanceRecord">
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/nv2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:menu="@menu/enroll"
+        android:layout_alignParentBottom="true"
+        android:background="#e2e2e2"
+        app:itemIconTint="@drawable/colorchange"
+        app:itemTextColor="@drawable/colorchange"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView2"
-        android:layout_width="408dp"
-        android:layout_height="324dp"
+        android:layout_width="412dp"
+        android:layout_height="348dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/nv2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout6" />
 
-    <Button
-        android:id="@+id/button8"
-        android:layout_width="266dp"
-        android:layout_height="39dp"
-        android:background="@drawable/btn_rounded"
-        android:text="@string/BackToHome"
-        android:textColor="#FAF7F7"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView2" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout6"
         android:layout_width="417dp"
         android:layout_height="205dp"
-        android:layout_marginTop="56dp"
         android:background="#ececec"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -74,6 +75,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

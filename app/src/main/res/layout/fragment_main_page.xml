@@ -32,15 +32,15 @@
 
             <ImageView
                 android:id="@+id/mainLogo"
-                android:layout_width="405dp"
-                android:layout_height="268dp"
+                android:layout_width="265dp"
+                android:layout_height="244dp"
                 android:layout_marginTop="44dp"
                 android:src="@drawable/smallericon"
                 app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.175"
+                app:layout_constraintVertical_bias="0.136"
                 tools:srcCompat="@drawable/smallericon" />
 
             <androidx.constraintlayout.widget.ConstraintLayout

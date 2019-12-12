@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.tasks.Task
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -51,6 +52,7 @@ class Teacher_login : Fragment() {
     lateinit var mAuth : FirebaseAuth
     lateinit var model : GeneralCommunicator
     lateinit var forgetPass : TextView
+    lateinit var nav : BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +72,7 @@ class Teacher_login : Fragment() {
         password = binding.simpleEditText3
         logInBtn = binding.button
         forgetPass = binding.forgetPass
+        nav = binding.nav4
         model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
         mAuth = FirebaseAuth.getInstance()
         logInBtn.setOnClickListener { view: View ->
@@ -81,7 +84,6 @@ class Teacher_login : Fragment() {
                 this.mAuth.signInWithEmailAndPassword(emailA, pass)
                     .addOnCompleteListener { task: Task<AuthResult> ->
                         if (task.isSuccessful) {
-                            loadingpanel1.visibility = View.VISIBLE
                             refTeacher.orderByChild("email").equalTo(emailA).addValueEventListener(
                                 object : ValueEventListener {
                                     override fun onDataChange(p0: DataSnapshot) {
@@ -101,6 +103,7 @@ class Teacher_login : Fragment() {
                                                     .navigate(R.id.action_teacher_login_to_teacherHomePage)
                                             }
                                         } else {
+                                            loadingpanel1.visibility = View.GONE
                                             val builder = AlertDialog.Builder(context)
                                             builder.setTitle("ERROR")
                                             builder.setMessage("Teacher Email Not Exists")
@@ -117,6 +120,7 @@ class Teacher_login : Fragment() {
                                 }
                             )
                         } else {
+                            loadingpanel1.visibility = View.GONE
                             val builder = AlertDialog.Builder(context)
                             builder.setTitle("ERROR")
                             builder.setMessage("Incorrect Credentials")
@@ -133,6 +137,16 @@ class Teacher_login : Fragment() {
             forgetPass.setOnClickListener{view : View->
                 var bundle: Bundle = bundleOf("Type" to "Teacher")
                 view.findNavController().navigate(R.id.action_teacher_login_to_resetPassword, bundle)
+            }
+            nav.setOnNavigationItemReselectedListener {
+                item->
+                when(item.itemId){
+                    R.id.backHome->{
+                        if(findNavController().currentDestination?.id == R.id.teacher_login){
+                            findNavController().navigate(R.id.mainPage)
+                        }
+                    }
+                }
             }
 
             return binding.root

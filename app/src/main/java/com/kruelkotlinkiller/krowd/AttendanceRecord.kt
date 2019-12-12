@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -46,6 +47,7 @@ class AttendanceRecord : Fragment() {
     private lateinit var btn : Button
     private lateinit var courseName : TextView
     private var arr = ArrayList<Record>()
+    private lateinit var btnNav : BottomNavigationView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -60,8 +62,8 @@ class AttendanceRecord : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_attendance_record, container, false)
         recyclerView = binding.recyclerView2
-        btn = binding.button8
         courseName = binding.textView17
+        btnNav = binding.nv2
 
         val ref1 = FirebaseDatabase.getInstance().getReference("Course")
         ref1.orderByChild("courseId").equalTo(arguments!!.getString("courseId"))
@@ -94,21 +96,26 @@ class AttendanceRecord : Fragment() {
                     }
                 }
             )
-        btn.setOnClickListener {view:View->
-            if(findNavController().currentDestination?.id == R.id.attendanceRecord) {
-                val bundle:Bundle = bundleOf("courseId" to arguments!!.getString("courseId"))
-                val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
-                model.setIdCommunicator(arguments!!.getString("courseId").toString())
-                val myFragment = ManageClasses()
-                val fragmentTransaction = fragmentManager!!.beginTransaction()
-                fragmentTransaction.replace(R.id.myNavHostFragment, myFragment)
-                fragmentTransaction.commit()
-                view.findNavController()
-                    .navigate(R.id.action_attendanceRecord_to_manageClasses, bundle)
+        btnNav.setOnNavigationItemReselectedListener { item->
+            when(item.itemId){
+                R.id.backHome->{
+                    if(findNavController().currentDestination?.id == R.id.attendanceRecord) {
+                        val bundle:Bundle = bundleOf("courseId" to arguments!!.getString("courseId"))
+                        val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
+                        model.setIdCommunicator(arguments!!.getString("courseId").toString())
+                        val myFragment = ManageClasses()
+                        val fragmentTransaction = fragmentManager!!.beginTransaction()
+                        fragmentTransaction.replace(R.id.myNavHostFragment, myFragment)
+                        fragmentTransaction.commit()
+                        findNavController()
+                            .navigate(R.id.action_attendanceRecord_to_manageClasses, bundle)
+                    }
+                }
             }
         }
-
-
+//        btn.setOnClickListener {view:View->
+//
+//        }
         return binding.root
     }
 

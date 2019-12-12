@@ -2,6 +2,7 @@
 <resources>
     <array name="preloaded_fonts" translatable="false">
         <item>@font/aclonica</item>
+        <item>@font/adamina</item>
         <item>@font/architects_daughter</item>
         <item>@font/arizonia</item>
         <item>@font/bilbo_swash_caps</item>

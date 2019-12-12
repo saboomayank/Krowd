@@ -200,6 +200,22 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_begin="19dp" />
 
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/nav5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="#e2e2e2"
+            app:itemIconTint="@drawable/colorchange"
+            app:itemTextColor="@drawable/colorchange"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button"
+            app:layout_constraintVertical_bias="1.0"
+            app:menu="@menu/enroll" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

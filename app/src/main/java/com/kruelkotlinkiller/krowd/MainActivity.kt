@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var drawerLayout: DrawerLayout
     lateinit var email : TextView
     private var MY_PERMISSIONS_REQUEST_READ_LOCATION = 0
+    lateinit var tool : androidx.appcompat.widget.Toolbar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding =
@@ -49,14 +50,17 @@ class MainActivity : AppCompatActivity() {
                 drawerLayout = binding.drawerLayout
                 val navController = this.findNavController(R.id.myNavHostFragment)
 
-                //for the up button
-                NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
+//                //for the up button
+//                NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
                 //to now about the nav view
+                tool = binding.tool
+                setSupportActionBar(tool)
                 NavigationUI.setupWithNavController(binding.navView, navController)
             }
         }
-
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+//
+//        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+//        supportActionBar?.setHomeButtonEnabled(false)
         val navigationView = binding.navView
         val drawer = binding.drawerLayout
         val hView = navigationView.getHeaderView(0)

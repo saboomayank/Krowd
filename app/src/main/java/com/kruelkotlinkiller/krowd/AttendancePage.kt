@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.*
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -53,10 +54,9 @@ class AttendancePage : Fragment() {
     private lateinit var courseDesc : TextView
     private lateinit var professorName : TextView
     private lateinit var attendanceBtn : Button
-    private lateinit var dropBtn : Button
-    private lateinit var back : Button
     private lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
     private val arr = ArrayList<String>()
+    private lateinit var navBtn : BottomNavigationView
 
 
 
@@ -78,8 +78,7 @@ class AttendancePage : Fragment() {
         courseDesc = binding.courseDescrp
         attendanceBtn = binding.attendance
         professorName = binding.professorName
-        dropBtn = binding.dropClass
-        back = binding.backToHome
+        navBtn = binding.btnNav3
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context!!)
 
         val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
@@ -101,9 +100,20 @@ class AttendancePage : Fragment() {
 
                 })
                 detectAttendanceFun(id!!)
-                dropClass(id!!)
-
                 getLocation(id!!)
+
+                navBtn.setOnNavigationItemReselectedListener { item->
+                    when(item.itemId){
+                        R.id.backHome2->{
+                            backFun()
+                        }
+                        R.id.dropCourse->{
+                            dropClass(id!!)
+                        }
+                    }
+                }
+
+
             }
         })
 
@@ -113,7 +123,7 @@ class AttendancePage : Fragment() {
         }
         ft.detach(this).attach(this)
 
-        backFun()
+
 //        val arr = FloatArray(1)
 //        val distanceBtnLoc1And2 = Location.distanceBetween(34.07921,-117.9635383, 34.0793078,-117.9635858,arr)
 //
@@ -245,31 +255,22 @@ class AttendancePage : Fragment() {
        )
    }
    private fun dropClass(courseId: String){
-       dropBtn.setOnClickListener {
+           val user = FirebaseAuth.getInstance().currentUser
            val studentRef = FirebaseDatabase.getInstance().getReference("Student")
-           studentRef.addValueEventListener(
+           studentRef.orderByChild("email").equalTo(user!!.email).addListenerForSingleValueEvent(
                object:ValueEventListener{
                    override fun onCancelled(p0: DatabaseError) {}
                    override fun onDataChange(p0: DataSnapshot) {
                        for(e in p0.children){
                            Log.d("e.child is ", e.getValue().toString())
-                           studentRef.child(e.key!!).child("courseId").addValueEventListener(
+                           studentRef.child(e.key!!).child("courseId").addListenerForSingleValueEvent(
                                object : ValueEventListener{
                                    override fun onDataChange(p1: DataSnapshot) {
                                        for(e1 in p1.children) {
-                                           Log.d("e1.child is ", e1.key)
-                                           studentRef.child(e.key!!).
-                                               orderByChild(e1.key!!).equalTo(courseId).addValueEventListener(
-                                               object : ValueEventListener{
-                                                   override fun onDataChange(p2: DataSnapshot) {
-                                                       Log.d("p2.child is ", p2.toString())
-                                                       if(p2.exists()){
-                                                           studentRef.child(e.key!!).child("courseId").child(e1.key!!).removeValue()
-                                                       }
-                                                   }
-                                                   override fun onCancelled(p2: DatabaseError) {}
-                                               }
-                                           )
+                                           Log.d("e1.child is ", e1.getValue().toString())
+                                           if(e1.getValue().toString() == courseId){
+                                               studentRef.child(e.key!!).child("courseId").child(e1.key!!).removeValue()
+                                           }
                                        }
                                    }
 
@@ -285,25 +286,26 @@ class AttendancePage : Fragment() {
            builder.setMessage("This course is successfully dropped!")
            builder.setIcon(R.drawable.sad)
            builder.setPositiveButton("Ok"){dialog, which ->
-               val user = FirebaseAuth.getInstance().currentUser
-               val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
-               model.setMsgCommunicator(user?.email!!)
-               val myFragment = StudentHomePage()
-               val fragmentTransaction = fragmentManager!!.beginTransaction()
-               fragmentTransaction.replace(R.id.myNavHostFragment, myFragment)
-               fragmentTransaction.addToBackStack(null)
-               fragmentTransaction.commit()
+               if(findNavController().currentDestination?.id == R.id.attendancePage) {
+                   val user = FirebaseAuth.getInstance().currentUser
+                   val model =
+                       ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
+                   model.setMsgCommunicator(user?.email!!)
+                   val myFragment = StudentHomePage()
+                   val fragmentTransaction = fragmentManager!!.beginTransaction()
+                   fragmentTransaction.replace(R.id.myNavHostFragment, myFragment)
+                   fragmentTransaction.addToBackStack(null)
+                   fragmentTransaction.commit()
+                   findNavController().navigate(R.id.action_attendancePage_to_studentHomePage)
+               }
            }
            val alert = builder.create()
            alert.show()
 
 
-
-       }
-
    }
    private fun backFun(){
-      back.setOnClickListener {view:View->
+
           if(findNavController().currentDestination?.id == R.id.attendancePage) {
               val user = FirebaseAuth.getInstance().currentUser
               val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
@@ -313,9 +315,9 @@ class AttendancePage : Fragment() {
               fragmentTransaction.replace(R.id.myNavHostFragment, myFragment)
               fragmentTransaction.addToBackStack(null)
               fragmentTransaction.commit()
-              view.findNavController().navigate(R.id.action_attendancePage_to_studentHomePage)
+              findNavController().navigate(R.id.action_attendancePage_to_studentHomePage)
           }
-      }
+
    }
     // TODO: Rename method, update argument and hook method into UI event
     fun onButtonPressed(uri: Uri) {

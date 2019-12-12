@@ -22,31 +22,19 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.367" />
 
-        <Button
-            android:id="@+id/backToHom"
-            android:layout_width="160dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="49dp"
-            android:background="@drawable/btn_rounded"
-            android:text="@string/BackToHome"
-            android:textColor="#FAF7F7"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/attendanceListView"
-            app:layout_constraintVertical_bias="0.283" />
-
-        <Button
-            android:id="@+id/Export"
-            android:layout_width="160dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="20dp"
-            android:background="@drawable/btn_rounded2"
-            android:text="@string/share"
-            android:textColor="#045FE7"
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/nav2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="#e2e2e2"
+            app:itemIconTint="@drawable/colorchange"
+            app:itemTextColor="@drawable/colorchange"
+            app:menu="@menu/seeresultnav"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/attendanceListView"
-            app:layout_constraintVertical_bias="0.506" />
+            app:layout_constraintVertical_bias="1.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

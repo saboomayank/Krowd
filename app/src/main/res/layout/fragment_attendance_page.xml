@@ -13,26 +13,10 @@
        >
 
 
-        <Button
-            android:id="@+id/backToHome"
-            android:layout_width="266dp"
-            android:layout_height="39dp"
-            android:alpha="1"
-            android:background="@drawable/btn_rounded"
-            android:text="@string/back"
-            android:textColor="#F8F5F5"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.496"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/attendance"
-            app:layout_constraintVertical_bias="0.608" />
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout4"
-            android:layout_width="400dp"
+            android:layout_width="409dp"
             android:layout_height="233dp"
-            android:layout_marginTop="52dp"
             android:background="#ededed"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.454"
@@ -75,21 +59,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
-            android:id="@+id/dropClass"
-            android:layout_width="266dp"
-            android:layout_height="39dp"
-            android:alpha="1"
-            android:background="@drawable/btn_rounded2"
-            android:text="@string/drop"
-            android:textColor="#045FE7"
-            app:layout_constraintBottom_toTopOf="@+id/backToHome"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.503"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/attendance"
-            app:layout_constraintVertical_bias="0.844" />
-
-        <Button
             android:id="@+id/attendance"
             android:layout_width="266dp"
             android:layout_height="39dp"
@@ -98,10 +67,27 @@
             android:background="@drawable/btn_rounded"
             android:text="@string/attendance"
             android:textColor="#F7F2F2"
+            app:layout_constraintBottom_toTopOf="@+id/btnNav3"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.503"
+            app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout4" />
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout4"
+            app:layout_constraintVertical_bias="0.454" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/btnNav3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_alignParentBottom="true"
+            android:background="#e2e2e2"
+            app:itemIconTint="@drawable/colorchange"
+            app:itemTextColor="@drawable/colorchange"
+            app:menu="@menu/attendancepagenav">
+
+
+        </com.google.android.material.bottomnavigation.BottomNavigationView>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,6 +17,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.tasks.Task
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
@@ -52,6 +53,7 @@ class SignUpTeacher : Fragment() {
     lateinit var database : FirebaseDatabase
     lateinit var mAuth : FirebaseAuth
     lateinit var teacherId : String
+    lateinit var nav : BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,6 +73,7 @@ class SignUpTeacher : Fragment() {
         lname = binding.simpleEditText2
         email = binding.simpleEditText5
         password = binding.simpleEditText7
+        nav = binding.nav5
         databaseReference = FirebaseDatabase.getInstance().reference
         mAuth = FirebaseAuth.getInstance()
 
@@ -107,7 +110,16 @@ class SignUpTeacher : Fragment() {
 
             }
         // Inflate the layout for this fragment
-
+        nav.setOnNavigationItemReselectedListener {
+            item->
+            when(item.itemId){
+                R.id.backHome->{
+                    if(findNavController().currentDestination?.id == R.id.signUpTeacher){
+                        findNavController().navigate(R.id.mainPage)
+                    }
+                }
+            }
+        }
 
         return binding.root
     }

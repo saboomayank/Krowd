@@ -20,6 +20,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.gms.tasks.OnCanceledListener
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -54,6 +55,7 @@ class Student_logIn : Fragment() {
     lateinit var logInBtn : Button
     lateinit var mAuth : FirebaseAuth
     lateinit var model : GeneralCommunicator
+    lateinit var nav : BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,6 +75,7 @@ class Student_logIn : Fragment() {
         password = binding.simpleEditText3
         logInBtn = binding.button
         forgetPassword = binding.forgetPass1
+        nav = binding.nav1
         model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
         mAuth = FirebaseAuth.getInstance()
         logInBtn.setOnClickListener {view : View ->
@@ -106,6 +109,7 @@ class Student_logIn : Fragment() {
                                             }
                                             }
                                         else{
+                                            loadingpanel.visibility = View.GONE
                                             val builder = AlertDialog.Builder(context)
                                             builder.setTitle("ERROR")
                                             builder.setMessage("Student Email Not Exists")
@@ -123,6 +127,7 @@ class Student_logIn : Fragment() {
                             )
                         }
                         else{
+                            loadingpanel.visibility = View.GONE
                             val builder = AlertDialog.Builder(context)
                             builder.setTitle("ERROR")
                             builder.setMessage("Incorrect Credentials")
@@ -133,6 +138,16 @@ class Student_logIn : Fragment() {
                             alert.show()
                         }
                     }
+            }
+
+        }
+        nav.setOnNavigationItemReselectedListener { item->
+            when(item.itemId){
+                R.id.backHome->{
+                    if(findNavController().currentDestination?.id == R.id.logIn){
+                        findNavController().navigate(R.id.mainPage)
+                    }
+                }
             }
 
         }

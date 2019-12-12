@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -50,6 +51,7 @@ class TeacherHomePage : Fragment() {
     private lateinit var databaseReference : DatabaseReference
     private var temp : String?=null
     var arrayList = ArrayList<Course>()
+    private lateinit var btnNav : BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +67,7 @@ class TeacherHomePage : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_teacher_home_page, container, false)
-        createClassBtn = binding.button3
+        btnNav = binding.btnnavteacher
         name = binding.nameOfTeacher
         recyclerView = binding.recyclerView
       //  binding.recyclerView.setDivider(R.drawable.recycler_view_divider)
@@ -104,7 +106,7 @@ class TeacherHomePage : Fragment() {
                                 }
 
                                 }
-                                val adapter = CourseAdapter(arrayList)
+                                val adapter = CourseAdapter(arrayList,"Teacher")
                                 recyclerView.adapter = adapter
 
                                 }
@@ -129,12 +131,12 @@ class TeacherHomePage : Fragment() {
                         if(findNavController().currentDestination?.id == R.id.teacherHomePage) {
                             model.setMsgCommunicator(name.text.toString())
                             // here we pass the id of the course to the manage class
-                            model.setIdCommunicator(CourseAdapter(arrayList).getID(position))
-                            Log.d("I clicked ", CourseAdapter(arrayList).getID(position))
+                            model.setIdCommunicator(CourseAdapter(arrayList,"Teacher").getID(position))
+                            Log.d("I clicked ", CourseAdapter(arrayList,"Teacher").getID(position))
                             val myFragment = ManageClasses()
                             val fragmentTransaction = fragmentManager!!.beginTransaction()
                             fragmentTransaction.replace(R.id.myNavHostFragment, myFragment)
-                            var bundle: Bundle = bundleOf("courseId" to CourseAdapter(arrayList).getID(position))
+                            var bundle: Bundle = bundleOf("courseId" to CourseAdapter(arrayList,"Teacher").getID(position))
                             view.findNavController()
                                 .navigate(R.id.action_teacherHomePage_to_manageClasses3, bundle)
                         }
@@ -151,21 +153,25 @@ class TeacherHomePage : Fragment() {
         })
 
 
-
-
-
-        createClassBtn.setOnClickListener {view : View ->
-            model.setMsgCommunicator( name.text.toString())
-            model.setIdCommunicator("-1.0")
-            val myFragment = ManageClasses()
-            val fragmentTransaction = fragmentManager!!.beginTransaction()
-            fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
-            view.findNavController().navigate(R.id.action_teacherHomePage_to_manageClasses3)
+        btnNav.setOnNavigationItemReselectedListener { item->
+            when(item.itemId){
+                R.id.manageclass ->{
+                    if(findNavController().currentDestination?.id == R.id.teacherHomePage) {
+                        model.setMsgCommunicator(name.text.toString())
+                        model.setIdCommunicator("-1.0")
+                        val myFragment = ManageClasses()
+                        val fragmentTransaction = fragmentManager!!.beginTransaction()
+                        fragmentTransaction.replace(R.id.myNavHostFragment, myFragment)
+                        fragmentTransaction.addToBackStack(null)
+                        fragmentTransaction.commit()
+                        findNavController().navigate(R.id.action_teacherHomePage_to_manageClasses3)
+                    }
+                }
+            }
         }
 
-        setHasOptionsMenu(true)
+
+        //setHasOptionsMenu(true)
 
         //sends user back to the log in page if he/she is logged out
         val user = FirebaseAuth.getInstance().currentUser
