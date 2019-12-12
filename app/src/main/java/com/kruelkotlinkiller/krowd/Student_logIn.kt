@@ -10,18 +10,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import com.google.firebase.auth.FirebaseAuth
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.tasks.OnCanceledListener
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.kruelkotlinkiller.krowd.databinding.FragmentStudentLoginBinding
+import kotlinx.android.synthetic.main.fragment_student_login.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -44,10 +50,12 @@ class Student_logIn : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
     private lateinit var binding : FragmentStudentLoginBinding
     lateinit var email : EditText
+    lateinit var forgetPassword : TextView
     lateinit var password : EditText
     lateinit var logInBtn : Button
     lateinit var mAuth : FirebaseAuth
     lateinit var model : GeneralCommunicator
+    lateinit var nav : BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,22 +74,29 @@ class Student_logIn : Fragment() {
         email = binding.simpleEditText
         password = binding.simpleEditText3
         logInBtn = binding.button
+        forgetPassword = binding.forgetPass1
+        nav = binding.nav1
         model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
         mAuth = FirebaseAuth.getInstance()
-        logInBtn.setOnClickListener {view : View ->
+        logInBtn.setOnClickListener { view: View ->
+            if (email.text.toString().isNotEmpty() &&
+                password.text.toString().isNotEmpty()
+            ) {
+
+            loadingpanel.visibility = View.VISIBLE
             val emailA = email.text.toString().trim()
             val pass = password.text.toString().trim()
             val refStudent = FirebaseDatabase.getInstance().getReference("Student")
-            if(emailA.isNotEmpty() && pass.isNotEmpty()){
-                this.mAuth.signInWithEmailAndPassword(emailA,pass)
-                    .addOnCompleteListener{
-                        task: Task<AuthResult> ->
-                        if(task.isSuccessful){
+            if (emailA.isNotEmpty() && pass.isNotEmpty()) {
+                this.mAuth.signInWithEmailAndPassword(emailA, pass)
+                    .addOnCompleteListener { task: Task<AuthResult> ->
+                        if (task.isSuccessful) {
+                            loadingpanel.visibility = View.VISIBLE
                             refStudent.orderByChild("email").equalTo(emailA).addValueEventListener(
-                                object:ValueEventListener{
+                                object : ValueEventListener {
                                     override fun onDataChange(p0: DataSnapshot) {
-                                        if(p0.exists()){
-                                            if(findNavController().currentDestination?.id == R.id.logIn) {
+                                        if (p0.exists()) {
+                                            if (findNavController().currentDestination?.id == R.id.logIn) {
                                                 model.setMsgCommunicator(emailA)
                                                 val myFragment = StudentHomePage()
                                                 val fragmentTransaction =
@@ -95,16 +110,18 @@ class Student_logIn : Fragment() {
                                                 view.findNavController()
                                                     .navigate(R.id.action_logIn_to_studentHomePage)
                                             }
-                                            }
-                                        else{
-                                            val builder = AlertDialog.Builder(context)
-                                            builder.setTitle("ERROR")
-                                            builder.setMessage("Student Email Not Exists")
-                                            builder.setPositiveButton("Ok"){dialog, which ->
-
-                                            }
-                                            val alert = builder.create()
-                                            alert.show()
+                                        } else {
+                                            loadingpanel.visibility = View.GONE
+                                            email.setError("Student Email Not Exists")
+                                            password.setError("Student Email Not Exists")
+//                                            val builder = AlertDialog.Builder(context)
+//                                            builder.setTitle("ERROR")
+//                                            builder.setMessage("Student Email Not Exists")
+//                                            builder.setPositiveButton("Ok"){dialog, which ->
+//
+//                                            }
+//                                            val alert = builder.create()
+//                                            alert.show()
                                         }
                                     }
 
@@ -112,27 +129,49 @@ class Student_logIn : Fragment() {
                                     }
                                 }
                             )
+                        } else {
+                            loadingpanel.visibility = View.GONE
+                            email.setError("Incorrect Credential")
+                            password.setError("Incorrect Credential")
+//                            val builder = AlertDialog.Builder(context)
+//                            builder.setTitle("ERROR")
+//                            builder.setMessage("Incorrect Credentials")
+//                            builder.setPositiveButton("Ok"){dialog, which ->
+//
+//                            }
+//                            val alert = builder.create()
+//                            alert.show()
                         }
-                        else{
-                            val builder = AlertDialog.Builder(context)
-                            builder.setTitle("ERROR")
-                            builder.setMessage("Incorrect Credentials")
-                            builder.setPositiveButton("Ok"){dialog, which ->
 
-                            }
-                            val alert = builder.create()
-                            alert.show()
-                        }
+
                     }
+            }
+        }else{
+                email.setError("Please enter student email")
+                password.setError("Please enter student password")
+            }
+
+        }
+        nav.setOnNavigationItemReselectedListener { item->
+            when(item.itemId){
+                R.id.backHome->{
+                    if(findNavController().currentDestination?.id == R.id.logIn){
+                        findNavController().navigate(R.id.mainPage)
+                    }
+                }
             }
 
         }
 
-
+        forgetPassword.setOnClickListener{view : View ->
+            var bundle: Bundle = bundleOf("Type" to "Student")
+            view.findNavController().navigate(R.id.action_logIn_to_resetPassword, bundle)
+        }
 
         // Inflate the layout for this fragment
         return binding.root
     }
+
 
     fun checkUser(){
 //        val refStudent = FirebaseDatabase.getInstance().getReference("Student")

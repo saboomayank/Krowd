@@ -1,20 +1,27 @@
 package com.kruelkotlinkiller.krowd
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.*
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.kruelkotlinkiller.krowd.databinding.ActivityMainBinding
 import com.kruelkotlinkiller.krowd.databinding.FragmentTeacherHomePageBinding
 
 
@@ -44,6 +51,7 @@ class TeacherHomePage : Fragment() {
     private lateinit var databaseReference : DatabaseReference
     private var temp : String?=null
     var arrayList = ArrayList<Course>()
+    private lateinit var btnNav : BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +67,7 @@ class TeacherHomePage : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_teacher_home_page, container, false)
-        createClassBtn = binding.button3
+        btnNav = binding.btnnavteacher
         name = binding.nameOfTeacher
         recyclerView = binding.recyclerView
       //  binding.recyclerView.setDivider(R.drawable.recycler_view_divider)
@@ -98,7 +106,7 @@ class TeacherHomePage : Fragment() {
                                 }
 
                                 }
-                                val adapter = CourseAdapter(arrayList)
+                                val adapter = CourseAdapter(arrayList,"Teacher")
                                 recyclerView.adapter = adapter
 
                                 }
@@ -123,13 +131,14 @@ class TeacherHomePage : Fragment() {
                         if(findNavController().currentDestination?.id == R.id.teacherHomePage) {
                             model.setMsgCommunicator(name.text.toString())
                             // here we pass the id of the course to the manage class
-                            model.setIdCommunicator(CourseAdapter(arrayList).getID(position))
-                            Log.d("I clicked ", CourseAdapter(arrayList).getID(position))
+                            model.setIdCommunicator(CourseAdapter(arrayList,"Teacher").getID(position))
+                            Log.d("I clicked ", CourseAdapter(arrayList,"Teacher").getID(position))
                             val myFragment = ManageClasses()
                             val fragmentTransaction = fragmentManager!!.beginTransaction()
                             fragmentTransaction.replace(R.id.myNavHostFragment, myFragment)
+                            var bundle: Bundle = bundleOf("courseId" to CourseAdapter(arrayList,"Teacher").getID(position))
                             view.findNavController()
-                                .navigate(R.id.action_teacherHomePage_to_manageClasses3)
+                                .navigate(R.id.action_teacherHomePage_to_manageClasses3, bundle)
                         }
                     }
 
@@ -144,44 +153,80 @@ class TeacherHomePage : Fragment() {
         })
 
 
-
-
-
-        createClassBtn.setOnClickListener {view : View ->
-            model.setMsgCommunicator( name.text.toString())
-            model.setIdCommunicator("-1.0")
-            val myFragment = ManageClasses()
-            val fragmentTransaction = fragmentManager!!.beginTransaction()
-            fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
-            view.findNavController().navigate(R.id.action_teacherHomePage_to_manageClasses3)
+        btnNav.setOnNavigationItemReselectedListener { item->
+            when(item.itemId){
+                R.id.manageclass ->{
+                    if(findNavController().currentDestination?.id == R.id.teacherHomePage) {
+                        model.setMsgCommunicator(name.text.toString())
+                        model.setIdCommunicator("-1.0")
+                        val myFragment = ManageClasses()
+                        val fragmentTransaction = fragmentManager!!.beginTransaction()
+                        fragmentTransaction.replace(R.id.myNavHostFragment, myFragment)
+                        fragmentTransaction.addToBackStack(null)
+                        fragmentTransaction.commit()
+                        findNavController().navigate(R.id.action_teacherHomePage_to_manageClasses3)
+                    }
+                }
+                R.id.manageAccount->{
+                    if(findNavController().currentDestination?.id == R.id.teacherHomePage){
+                        findNavController().navigate(R.id.action_teacherHomePage_to_teacherAccountManagement)
+                    }
+                }
+            }
         }
 
-        setHasOptionsMenu(true)
+
+        //setHasOptionsMenu(true)
 
         //sends user back to the log in page if he/she is logged out
         val user = FirebaseAuth.getInstance().currentUser
         if(user==null){
-            findNavController().navigate(R.id.mainPage)
+            if(findNavController().currentDestination?.id == R.id.teacherHomePage) {
+                findNavController().navigate(R.id.mainPage)
+            }
+        }
+
+        val text = activity!!.findViewById<TextView>(R.id.textView20)
+        val au = FirebaseAuth.getInstance().currentUser
+        text.text = au!!.email
+
+        val navigationView = activity!!.findViewById<NavigationView>(R.id.navView)
+        val drawer = activity!!.findViewById<DrawerLayout>(R.id.drawerLayout)
+        navigationView.setNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.logout -> {
+                    FirebaseAuth.getInstance().signOut()
+                    text.text = "Welcome User"
+                    findNavController().navigate(R.id.mainPage)
+                    drawer.closeDrawers()
+
+                }
+                R.id.about ->{
+                    val i = Intent(activity, AboutActivty::class.java)
+                    drawer.closeDrawers()
+                    startActivity(i)
+                }
+
+            }
+            false
         }
         return binding.root
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-
-        super.onCreateOptionsMenu(menu!!, inflater!!)
-        inflater?.inflate(R.menu.menu, menu)
-    }
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.logout -> {
-                FirebaseAuth.getInstance().signOut()
-                findNavController().navigate(R.id.mainPage)
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
+//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//
+//        super.onCreateOptionsMenu(menu!!, inflater!!)
+//        inflater?.inflate(R.menu.menu, menu)
+//    }
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        when(item.itemId){
+//            R.id.logout -> {
+//                FirebaseAuth.getInstance().signOut()
+//                findNavController().navigate(R.id.mainPage)
+//            }
+//        }
+//        return super.onOptionsItemSelected(item)
+//    }
 
 
 

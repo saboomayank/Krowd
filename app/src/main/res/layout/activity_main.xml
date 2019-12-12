@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     >
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawerLayout"
@@ -13,6 +12,16 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/tool"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ededed"
+
+                >
+
+            </androidx.appcompat.widget.Toolbar>
+
             <fragment
                 android:id="@+id/myNavHostFragment"
                 android:name="androidx.navigation.fragment.NavHostFragment"
@@ -21,13 +30,17 @@
                 app:navGraph="@navigation/navigation"
                 app:defaultNavHost="true"
                 />
+
         </LinearLayout>
         <com.google.android.material.navigation.NavigationView
+            android:layout_marginTop="@dimen/abc_action_bar_default_height_material"
             android:id="@+id/navView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            app:menu="@menu/menu"
+            app:menu="@menu/mainmenu"
+            app:headerLayout="@layout/nav_header"
+
             />
     </androidx.drawerlayout.widget.DrawerLayout>
 </layout>

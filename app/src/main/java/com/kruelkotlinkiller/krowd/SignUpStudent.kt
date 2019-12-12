@@ -15,6 +15,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.tasks.Task
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
@@ -52,6 +53,7 @@ class SignUpStudent : Fragment() {
     lateinit var database : FirebaseDatabase
     lateinit var mAuth : FirebaseAuth
     lateinit var studentId : String
+    lateinit var nav : BottomNavigationView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -70,6 +72,7 @@ class SignUpStudent : Fragment() {
         lName = binding.simpleEditText3
         pWord = binding.simpleEditText6
         email = binding.simpleEditText4
+        nav = binding.nav
         databaseReference = FirebaseDatabase.getInstance().reference
         mAuth = FirebaseAuth.getInstance()
         submitBtn.setOnClickListener{ view : View ->
@@ -96,6 +99,15 @@ class SignUpStudent : Fragment() {
                 val alert = builder.create()
                 alert.show()
 
+            }
+        }
+        nav.setOnNavigationItemReselectedListener { item->
+            when(item.itemId){
+                R.id.backHome->{
+                    if(findNavController().currentDestination?.id == R.id.signUpStudent){
+                        findNavController().navigate(R.id.mainPage)
+                    }
+                }
             }
         }
 

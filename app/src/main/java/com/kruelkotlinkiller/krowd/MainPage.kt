@@ -1,10 +1,8 @@
 package com.kruelkotlinkiller.krowd
 
-import android.animation.Animator
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.os.CountDownTimer
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -70,7 +68,7 @@ class MainPage : Fragment() {
         logInBtn = binding.button1
         sw = binding.switch1
 
-        progressBar = binding.loadingProgressBar
+
 
         afterAnimation = binding.afterAnimation
         sw?.setOnCheckedChangeListener({ _, isChecked ->
@@ -87,10 +85,14 @@ class MainPage : Fragment() {
         signUpBtn.setOnClickListener{ view : View ->
 
                 if(isCheck == true){
-                    view.findNavController().navigate(R.id.action_mainPage_to_signUpTeacher)
+                    if(findNavController().currentDestination?.id == R.id.mainPage) {
+                        view.findNavController().navigate(R.id.signUpTeacher)
+                    }
                 }
                 else{
-                    view.findNavController().navigate(R.id.action_mainPage_to_signUpStudent)
+                   if(findNavController().currentDestination?.id == R.id.mainPage) {
+                        view.findNavController().navigate(R.id.signUpStudent)
+                    }
                 }
 
 
@@ -99,10 +101,14 @@ class MainPage : Fragment() {
         logInBtn.setOnClickListener {view:View->
 
                 if(isCheck == true) {
-                    view.findNavController().navigate(R.id.action_mainPage_to_teacher_login)
-                }
+                   if(findNavController().currentDestination?.id == R.id.mainPage) {
+                        view.findNavController().navigate(R.id.teacher_login)
+                    }
+                    }
                 else{
-                    view.findNavController().navigate(R.id.action_mainPage_to_logIn)
+                    if(findNavController().currentDestination?.id == R.id.mainPage) {
+                        view.findNavController().navigate(R.id.logIn)
+                    }
                 }
 
         }
@@ -157,7 +163,6 @@ class MainPage : Fragment() {
         }else{
 
         }
-
 
 
 

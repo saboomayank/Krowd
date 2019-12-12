@@ -187,7 +187,7 @@
             android:id="@+id/button"
             android:layout_width="266dp"
             android:layout_height="39dp"
-            android:background="#045FE7"
+            android:background="@drawable/btn_rounded"
             android:text="@string/SignUp"
             android:textColor="#FCF8F8"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -196,6 +196,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/hey3"
             app:layout_constraintVertical_bias="0.365" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/nav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="#e2e2e2"
+            app:itemIconTint="@drawable/colorchange"
+            app:itemTextColor="@drawable/colorchange"
+            app:menu="@menu/enroll"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button"
+            app:layout_constraintVertical_bias="0.992" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,88 +15,128 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_begin="20dp" />
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="309dp"
-            android:layout_height="49dp"
 
-            android:fontFamily="sans-serif"
-            android:text="Courses Enrollment"
-            android:textAlignment="center"
-            android:textColor="#FD0A0A0A"
-            android:textSize="20sp"
-            android:textStyle="normal"
-            app:layout_constraintBottom_toTopOf="@+id/courseInput"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+        <!--        <EditText-->
+<!--            android:id="@+id/courseInput"-->
+<!--            android:layout_width="287dp"-->
+<!--            android:layout_height="80dp"-->
+<!--            android:fontFamily="sans-serif"-->
+<!--            android:hint="Please enter course's ID here"-->
+<!--            android:inputType="text"-->
+<!--            android:paddingLeft="10dp"-->
+<!--            android:textColor="#10100F"-->
+<!--            android:textSize="18sp"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/hey" />-->
 
-        <EditText
-            android:id="@+id/courseInput"
-            android:layout_width="287dp"
-            android:layout_height="80dp"
-            android:fontFamily="sans-serif"
-            android:hint="Please enter course's ID here"
-            android:inputType="text"
-            android:paddingLeft="10dp"
-            android:textColor="#10100F"
-            android:textSize="18sp"
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+
+            android:id="@+id/hey4"
+            android:layout_width="407dp"
+            android:layout_height="121dp"
+            android:layout_marginBottom="100dp"
+            app:layout_constraintBottom_toTopOf="@+id/addClassBtn"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintTop_toBottomOf="@+id/hey"
+            app:layout_constraintVertical_bias="0.295">
+
+            <Spinner
+                android:id="@+id/courseInput"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:theme="@android:style/Theme.Holo.Light"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
             android:id="@+id/addClassBtn"
             android:layout_width="266dp"
             android:layout_height="39dp"
-            android:layout_marginTop="52dp"
-            android:background="#045FE7"
+            android:background="@drawable/btn_rounded"
             android:text="Enroll"
             android:textColor="#F8F7F7"
+            app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.496"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/courseInput"
-            tools:text="enroll" />
 
-        <Button
-            android:id="@+id/backButton"
-            android:layout_width="266dp"
-            android:layout_height="39dp"
-            android:layout_marginTop="44dp"
-            android:background="#F7F8FA"
-            android:text="@string/BackToHome"
-            android:textColor="#045FE7"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addClassBtn"
-            app:layout_constraintVertical_bias="0.0"
-            tools:text="@string/BackToHome" />
+            app:layout_constraintTop_toBottomOf="@+id/hey"
+            app:layout_constraintVertical_bias="0.61"
+            tools:text="enroll" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/hey"
-            android:layout_width="413dp"
-            android:layout_height="209dp"
-            android:background="#d3d3d3"
-            app:layout_constraintBottom_toTopOf="@+id/textView"
+            android:layout_width="406dp"
+            android:layout_height="259dp"
+            android:background="#ededed"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.363">
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/imageView3"
-                android:layout_width="361dp"
-                android:layout_height="157dp"
+                android:layout_width="292dp"
+                android:layout_height="159dp"
                 android:src="@drawable/smallericon"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.307"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:srcCompat="@drawable/smallericon" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="309dp"
+                android:layout_height="49dp"
+
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/aclonica"
+                android:text="Courses Enrollment"
+                android:textAlignment="center"
+                android:textColor="#FD746C6C"
+                android:textSize="24sp"
+                android:textStyle="normal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView3"
+                app:layout_constraintVertical_bias="0.0" />
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigationView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="#e2e2e2"
+            app:itemIconTint="@drawable/colorchange"
+            app:itemTextColor="@drawable/colorchange"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:menu="@menu/enroll">
+
+
+        </com.google.android.material.bottomnavigation.BottomNavigationView>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -25,6 +25,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import co.metalab.asyncawait.async
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -64,9 +65,10 @@ class SeeAttendanceResult : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
     private lateinit var binding : FragmentSeeAttendanceResultBinding
     private lateinit var attendedStudentList : RecyclerView
-    private lateinit var back : Button
-    private lateinit var share : Button
+//    private lateinit var back : Button
+//    private lateinit var share : Button
     private var arrayList = ArrayList<Student>()
+    private lateinit var btnNav : BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,14 +84,15 @@ class SeeAttendanceResult : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_see_attendance_result,container,false)
         attendedStudentList = binding.attendanceListView
-        back = binding.backToHom
-        share = binding.Export
+//        back = binding.backToHom
+        btnNav = binding.nav2
+//        share = binding.Export
         val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
 
         model.id.observe(this, object : Observer<Any>{
             override fun onChanged(t: Any?) {
                 val courseId = t.toString()!!
-                shareFun(courseId)
+               // shareFun(courseId)
                 val databaseReference = FirebaseDatabase.getInstance().getReference("Student")
                 databaseReference.addValueEventListener(object : ValueEventListener {
                     override fun onCancelled(p0: DatabaseError) {}
@@ -145,6 +148,30 @@ class SeeAttendanceResult : Fragment() {
 
                                 })
 
+                            btnNav.setOnNavigationItemReselectedListener { item->
+                                when(item.itemId){
+                                    R.id.backHome4->{
+                                        if(findNavController().currentDestination?.id == R.id.seeAttendanceResult) {
+                                            val user = FirebaseAuth.getInstance().currentUser
+                                            model.setMsgCommunicator(user?.email!!)
+                                            val myFragment = TeacherHomePage()
+                                            val fragmentTransaction =
+                                                fragmentManager!!.beginTransaction()
+                                            fragmentTransaction.replace(
+                                                R.id.myNavHostFragment,
+                                                myFragment
+                                            )
+                                            fragmentTransaction.addToBackStack(null)
+                                            fragmentTransaction.commit()
+                                            findNavController().navigate(R.id.teacherHomePage)
+                                        }
+                                    }
+                                    R.id.share->{
+                                        shareFun(courseId!!)
+                                    }
+                                }
+                            }
+
                         }
                     }
 
@@ -154,22 +181,9 @@ class SeeAttendanceResult : Fragment() {
 
 
 
-        back.setOnClickListener {view: View->
-            if(findNavController().currentDestination?.id == R.id.seeAttendanceResult) {
-                val user = FirebaseAuth.getInstance().currentUser
-                model.setMsgCommunicator(user?.email!!)
-                val myFragment = TeacherHomePage()
-                val fragmentTransaction =
-                    fragmentManager!!.beginTransaction()
-                fragmentTransaction.replace(
-                    R.id.myNavHostFragment,
-                    myFragment
-                )
-                fragmentTransaction.addToBackStack(null)
-                fragmentTransaction.commit()
-                view.findNavController().navigate(R.id.teacherHomePage)
-            }
-        }
+//        back.setOnClickListener {view: View->
+//
+//        }
 
 
 
@@ -290,9 +304,6 @@ class SeeAttendanceResult : Fragment() {
 
   }
    fun shareFun(courseId : String){
-       val array = ArrayList<String>()
-
-       share.setOnClickListener {
            val attendanceRef = FirebaseDatabase.getInstance().getReference("AttendanceResult")
            attendanceRef.orderByChild("courseId").equalTo(courseId).addValueEventListener(
                object:ValueEventListener{
@@ -309,7 +320,6 @@ class SeeAttendanceResult : Fragment() {
                                        for(e1 in p1.children){
                                            val course = e1.getValue(Course::class.java)!!
                                            findAbsences(courseId,course?.courseName)
-
                                        }
 
                                    }
@@ -321,7 +331,7 @@ class SeeAttendanceResult : Fragment() {
                    }
                }
            )
-       }
+
    }
 
     // TODO: Rename method, update argument and hook method into UI event

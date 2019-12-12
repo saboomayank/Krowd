@@ -1,6 +1,7 @@
 package com.kruelkotlinkiller.krowd
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -16,7 +18,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.kruelkotlinkiller.krowd.databinding.ActivityMainBinding
 import com.kruelkotlinkiller.krowd.databinding.FragmentStudentHomePageBinding
+import android.os.Build
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationView
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -43,7 +51,7 @@ class StudentHomePage : Fragment() {
     private lateinit var courseList : RecyclerView
     //private lateinit var databaseReference : DatabaseReference
     private var arrayList = ArrayList<Course>()
-
+    private lateinit var btmNav : BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,8 +67,9 @@ class StudentHomePage : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_student_home_page,container,false)
         name = binding.nameOfStudent
-        addClassBtn = binding.button3
+//        addClassBtn = binding.button3
         courseList = binding.courseList
+        btmNav = binding.bottomNav
         val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
         model.message.observe(this,object: Observer<Any> {
             override fun onChanged(t: Any?) {
@@ -131,7 +140,7 @@ class StudentHomePage : Fragment() {
 
                                                                                                 val adapter =
                                                                                                     CourseAdapter(
-                                                                                                        arrayList
+                                                                                                        arrayList,"Student"
                                                                                                     )
                                                                                                 courseList.adapter =
                                                                                                     adapter
@@ -162,15 +171,16 @@ class StudentHomePage : Fragment() {
 
         courseList.addOnItemTouchListener(RecyclerItemClickListenr(context!!, courseList, object : RecyclerItemClickListenr.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
-
-                model.setIdCommunicator(CourseAdapter(arrayList).getID(position))
-                Log.d("I clicked ",CourseAdapter(arrayList).getID(position) )
+            if(findNavController().currentDestination?.id == R.id.studentHomePage) {
+                model.setIdCommunicator(CourseAdapter(arrayList,"Student").getID(position))
+                Log.d("I clicked ", CourseAdapter(arrayList,"Student").getID(position))
                 model.setNameCommunicator(name.text.toString())
                 val myFragment = AttendancePage()
                 val fragmentTransaction = fragmentManager!!.beginTransaction()
-                fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
+                fragmentTransaction.replace(R.id.myNavHostFragment, myFragment)
                 fragmentTransaction.commit()
                 view.findNavController().navigate(R.id.action_studentHomePage_to_attendancePage)
+            }
             }
             override fun onItemLongClick(view: View?, position: Int) {}
         }))
@@ -179,28 +189,84 @@ class StudentHomePage : Fragment() {
 
 
 
-            setHasOptionsMenu(true)
+         //   setHasOptionsMenu(true)
 
 
         //sends user back to the log in page if he/she is logged out
         val user = FirebaseAuth.getInstance().currentUser
         if(user==null){
-            findNavController().navigate(R.id.mainPage)
+            if(findNavController().currentDestination?.id == R.id.studentHomePage) {
+                findNavController().navigate(R.id.mainPage)
+            }
         }
+
+
+        val text = activity!!.findViewById<TextView>(R.id.textView20)
+        val au = FirebaseAuth.getInstance().currentUser
+        text.text = au!!.email
+        val navigationView = activity!!.findViewById<NavigationView>(R.id.navView)
+        val drawer = activity!!.findViewById<DrawerLayout>(R.id.drawerLayout)
+
+        navigationView.setNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.logout -> {
+                    FirebaseAuth.getInstance().signOut()
+                    text.text = "Welcome User"
+                    findNavController().navigate(R.id.mainPage)
+                    drawer.closeDrawers()
+                }
+                R.id.about ->{
+                    val i = Intent(activity, AboutActivty::class.java)
+                    drawer.closeDrawers()
+                    startActivity(i)
+                }
+
+
+
+            }
+            false
+        }
+
+        activity!!.actionBar?.setDisplayHomeAsUpEnabled(false)
+        activity!!.actionBar?.setHomeButtonEnabled(false)
 
         return binding.root
     }
     private fun sendKeyToEnrollment(str : String){
-        addClassBtn.setOnClickListener {view:View->
-            val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
-            model.setMsgCommunicator(str)
-            val myFragment = StudentEnroll()
-            val fragmentTransaction = fragmentManager!!.beginTransaction()
-            fragmentTransaction.replace(R.id.myNavHostFragment,myFragment)
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
-            view.findNavController().navigate(R.id.action_studentHomePage_to_studentEnroll)
+        btmNav.setOnNavigationItemReselectedListener {item->
+            when(item.itemId) {
+                R.id.add -> {
+                    if (findNavController().currentDestination?.id == R.id.studentHomePage) {
+                        var bundle: Bundle = bundleOf("key" to str)
+                        findNavController().navigate(
+                            R.id.action_studentHomePage_to_studentEnroll,
+                            bundle
+                        )
+                    }
+                }
+                R.id.manageAccount ->{
+                    if(findNavController().currentDestination?.id == R.id.studentHomePage){
+                        findNavController().navigate(R.id.action_studentHomePage_to_studentAccountManagement2)
+                    }
+                }
+            }
         }
+
+
+
+//        addClassBtn.setOnClickListener {view:View->
+//            if(findNavController().currentDestination?.id == R.id.studentHomePage) {
+////                val model = ViewModelProviders.of(activity!!).get(GeneralCommunicator::class.java)
+////                model.setMsgCommunicator(str)
+////                val myFragment = StudentEnroll()
+////                val fragmentTransaction = fragmentManager!!.beginTransaction()
+//                var bundle: Bundle = bundleOf("key" to str)
+////                fragmentTransaction.replace(R.id.myNavHostFragment, myFragment)
+////                fragmentTransaction.addToBackStack(null)
+////                fragmentTransaction.commit()
+//                view.findNavController().navigate(R.id.action_studentHomePage_to_studentEnroll, bundle)
+//            }
+//        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
