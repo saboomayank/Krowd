@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/mainPage">
+    <fragment
+        android:id="@+id/mainPage"
+        android:name="com.kruelkotlinkiller.krowd.MainPage"
+        android:label="Main Page">
+        <action
+            android:id="@+id/action_mainPage_to_signUpStudent"
+            app:destination="@id/signUpStudent" />
+        <action
+            android:id="@+id/action_mainPage_to_logIn"
+            app:destination="@id/logIn" />
+        <action
+            android:id="@+id/action_mainPage_to_signUpTeacher"
+            app:destination="@id/signUpTeacher" />
+        <action
+            android:id="@+id/action_mainPage_to_teacher_login"
+            app:destination="@id/teacher_login" />
+        <action
+            android:id="@+id/action_mainPage_to_studentHomePage"
+            app:destination="@id/studentHomePage" />
+        <action
+            android:id="@+id/action_mainPage_to_teacherHomePage"
+            app:destination="@id/teacherHomePage" />
+    </fragment>
+    <fragment
+        android:id="@+id/manageClasses"
+        android:name="com.kruelkotlinkiller.krowd.ManageClasses"
+        android:label=" Manage Classes">
+        <action
+            android:id="@+id/action_manageClasses_to_teacherHomePage"
+            app:destination="@id/teacherHomePage" />
+        <action
+            android:id="@+id/action_manageClasses_to_seeAttendanceResult"
+            app:destination="@id/seeAttendanceResult" />
+        <action
+            android:id="@+id/action_manageClasses_to_attendanceRecord"
+            app:destination="@id/attendanceRecord" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUpStudent"
+        android:name="com.kruelkotlinkiller.krowd.SignUpStudent"
+        android:label="Sign Up">
+        <action
+            android:id="@+id/action_signUpStudent_to_logIn"
+            app:destination="@id/logIn" />
+    </fragment>
+    <fragment
+        android:id="@+id/studentHomePage"
+        android:name="com.kruelkotlinkiller.krowd.StudentHomePage"
+        android:label="Home Page">
+        <action
+            android:id="@+id/action_studentHomePage_to_studentEnroll"
+            app:destination="@id/studentEnroll" />
+        <action
+            android:id="@+id/action_studentHomePage_to_attendancePage"
+            app:destination="@id/attendancePage" />
+        <action
+            android:id="@+id/action_studentHomePage_to_studentAccountManagement"
+            app:destination="@id/studentAccountManagement" />
+        <action
+            android:id="@+id/action_studentHomePage_to_studentAccountManagement2"
+            app:destination="@id/studentAccountManagement" />
+    </fragment>
+    <fragment
+        android:id="@+id/teacherHomePage"
+        android:name="com.kruelkotlinkiller.krowd.TeacherHomePage"
+        android:label="Home Page">
+
+        <action
+            android:id="@+id/action_teacherHomePage_to_manageClasses3"
+            app:destination="@id/manageClasses" />
+        <action
+            android:id="@+id/action_teacherHomePage_to_teacherAccountManagement"
+            app:destination="@id/teacherAccountManagement" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUpTeacher"
+        android:name="com.kruelkotlinkiller.krowd.SignUpTeacher"
+        android:label="Sign Up">
+        <action
+            android:id="@+id/action_signUpTeacher_to_teacher_login"
+            app:destination="@id/teacher_login" />
+    </fragment>
+    <fragment
+        android:id="@+id/teacher_login"
+        android:name="com.kruelkotlinkiller.krowd.Teacher_login"
+        android:label="Teacher Login">
+        <action
+            android:id="@+id/action_teacher_login_to_teacherHomePage"
+            app:destination="@id/teacherHomePage" />
+        <action
+            android:id="@+id/action_teacher_login_to_resetPassword"
+            app:destination="@id/resetPassword" />
+    </fragment>
+    <fragment
+        android:id="@+id/logIn"
+        android:name="com.kruelkotlinkiller.krowd.Student_logIn"
+        android:label="Student Log In">
+        <action
+            android:id="@+id/action_logIn_to_studentHomePage"
+            app:destination="@id/studentHomePage" />
+        <action
+            android:id="@+id/action_logIn_to_resetPassword"
+            app:destination="@id/resetPassword" />
+    </fragment>
+    <fragment
+        android:id="@+id/studentEnroll"
+        android:name="com.kruelkotlinkiller.krowd.StudentEnroll"
+        android:label="Enroll Classes"
+        tools:layout="@layout/fragment_student_enroll">
+        <action
+            android:id="@+id/action_studentEnroll_to_studentHomePage"
+            app:destination="@id/studentHomePage" />
+    </fragment>
+    <fragment
+        android:id="@+id/attendancePage"
+        android:name="com.kruelkotlinkiller.krowd.AttendancePage"
+        android:label="Attendance Page"
+        tools:layout="@layout/fragment_attendance_page">
+        <action
+            android:id="@+id/action_attendancePage_to_studentHomePage"
+            app:destination="@id/studentHomePage" />
+    </fragment>
+    <fragment
+        android:id="@+id/seeAttendanceResult"
+        android:name="com.kruelkotlinkiller.krowd.SeeAttendanceResult"
+        android:label="See Attendance"
+        tools:layout="@layout/fragment_see_attendance_result" />
+    <fragment
+        android:id="@+id/resetPassword"
+        android:name="com.kruelkotlinkiller.krowd.ResetPassword"
+        android:label="Reset Password"
+        tools:layout="@layout/fragment_reset_password">
+        <action
+            android:id="@+id/action_resetPassword_to_logIn"
+            app:destination="@id/logIn" />
+        <action
+            android:id="@+id/action_resetPassword_to_teacher_login"
+            app:destination="@id/teacher_login" />
+    </fragment>
+    <fragment
+        android:id="@+id/attendanceRecord"
+        android:name="com.kruelkotlinkiller.krowd.AttendanceRecord"
+        android:label="Attendance Record"
+        tools:layout="@layout/fragment_attendance_record">
+        <action
+            android:id="@+id/action_attendanceRecord_to_manageClasses"
+            app:destination="@id/manageClasses" />
+    </fragment>
+    <fragment
+        android:id="@+id/studentAccountManagement"
+        android:name="com.kruelkotlinkiller.krowd.StudentAccountManagement"
+        android:label="fragment_student_account_management"
+        tools:layout="@layout/fragment_student_account_management" >
+        <action
+            android:id="@+id/action_studentAccountManagement_to_studentHomePage"
+            app:destination="@id/studentHomePage" />
+    </fragment>
+    <fragment
+        android:id="@+id/teacherAccountManagement"
+        android:name="com.kruelkotlinkiller.krowd.TeacherAccountManagement"
+        android:label="fragment_teacher_account_management"
+        tools:layout="@layout/fragment_teacher_account_management" >
+        <action
+            android:id="@+id/action_teacherAccountManagement_to_teacherHomePage"
+            app:destination="@id/teacherHomePage" />
+    </fragment>
+</navigation>

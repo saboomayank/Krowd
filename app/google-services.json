@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "980499726797",
+    "firebase_url": "https://krowd-20a39.firebaseio.com",
+    "project_id": "krowd-20a39",
+    "storage_bucket": "krowd-20a39.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:980499726797:android:d988c08e1b16b5831bc484",
+        "android_client_info": {
+          "package_name": "com.kruelkotlinkiller.krowd"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "980499726797-f0g3u7d7p6mf8ttr3v8sjtfuia2kl24c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kruelkotlinkiller.krowd",
+            "certificate_hash": "39c23693b3d71464a82ad0cc7dd840b71f8b0636"
+          }
+        },
+        {
+          "client_id": "980499726797-u2m36f5df31nsbfnkosu1nquo1mfm902.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5pteKiGitWUowKjyVw5mV3G2xUbaLFYk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "980499726797-u2m36f5df31nsbfnkosu1nquo1mfm902.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
