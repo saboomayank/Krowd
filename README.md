@@ -19,7 +19,7 @@ Enter your information and **Sign Up** and that's that. You're in.
 
 ## Teachers
 #### Teacher Login
-<img src="https://i.imgur.com/Q4auFtS.gif" class="screenshot">
+**Add Image**
 Enter the correcet credential at teacher login page will lead you to teacher home page.
 
 <img src="https://i.imgur.com/HMmT9F2.png" class="screenshot">
