@@ -1,66 +1,77 @@
-# *Krowd*
+<p align="center">
+<img src="https://github.com/saboomayank/Krowd/blob/master/app/src/main/res/drawable/logo.png?raw=true" class="icon" height="150px" width="150px">
+</p>
 
-### A location based attendance app
+### _A location based attendance app_
 
-Being present in the class is essential as you learn new things interact with professor(s) & classmate(s). This app allows students to take attandance through the phone when they are in class, base on their location. It allow the professors to know who is currently in the class in an efficient way.
+#### Being present in the class is essential as you learn new things interact with professor(s) & classmate(s). This app allows students to take attendance through the phone when they are in class, based on their location. It allow the professor(s) to know who is currently in the class in an efficient way.
 
-## Getting started
+# _Getting started_
 
-### Splash Page
-<img src="https://i.imgur.com/5peW7Mg.gif" class="screenshot">
+## Splash Page
+<img src="https://i.imgur.com/62DLFHU.gif" class="screenshot">
 
-### Signing Up
+## Signing Up
 First select *Teacher* or *Student* and then press **Sign Up**.
 
-<img src="https://i.imgur.com/5DCS7oG.gif" class="screenshot">
 Enter your information and **Sign Up** and that's that. You're in.
 
 <img src="https://i.imgur.com/kw1kPsu.gif" class="screenshot">
 
-## Teachers
-#### Teacher Login
-**Add Image**
-Enter the correcet credential at teacher login page will lead you to teacher home page.
+# _Teachers_
+## Teacher Login
+<img src="https://i.imgur.com/ZAImAoL.gif" class="screenshot">
 
-<img src="https://i.imgur.com/HMmT9F2.png" class="screenshot">
+Enter the correct credential and the teacher login page will lead you to teacher home page.
+
+<img src="https://i.imgur.com/n4J4Dzy.gif" class="screenshot">
+
 Here you can view and select your classes to begin taking attendance or view the overall attendance record of the students that have added that class.
 
-### Taking Attendance
+## Taking Attendance
 This will start taking attendance for the day. There is a time limit for the students to mark themselves as present.
-<img src="https://i.imgur.com/nhVtdpO.gif" class="screenshot">
+
+<img src="https://i.imgur.com/S5t1qg9.gif" class="screenshot">
 
 Attendance requires the student's presence and so the app does too. It will only allow a student to mark themselves as present if they are physically in class.
-### Manage Courses
-To **Add** classes press the **Manage Courses** button.
-To **Delete**, select a course and press delete at right top corner.
-<img src="https://i.imgur.com/aimnCNA.gif" class="screenshot">
 
-### Adding Classes
+## Manage Courses
+
+## Adding Courses
 This requires the class name and course description. It will then add the class to your list.
 
-### Deleting Classes
-Selecting a course will remove the class from your list.
+## Deleting Courses
+<span style="color:red"> *Note* - This action is irreversible. </span>
 
-## Students
+<img src="https://i.imgur.com/5Cicl4X.gif" class="screenshot">
+
+# Students
 Here you can view and select your classes to begin taking attendance for a class
-<img src="https://i.imgur.com/EBxEofy.gif" class="screenshot">
 
-### Adding & Dropping Classes
-This will allow you to join the class list of an insturctor's class. It only requires the specific course id provided by your instructor.
+<img src="https://i.imgur.com/zzqAXsw.gif" class="screenshot">
 
-<img src="https://i.imgur.com/Q3wHRCW.gif" class="screenshot">
+## Adding & Dropping Classes
+This will allow you to join the class list of an instructor's class or drop out of a specific class. Make sure to select the appropriate class.
 
-### Taking Attendance
+<img src="https://i.imgur.com/7K49BHN.gif" class="screenshot">
+
+## Taking Attendance
 Select a class that you want to mark yourself present.
-#### *Without professor opening attandance*
-<img src="https://i.imgur.com/3VlLnZP.gif" class="screenshot">
+#### *Without professor opening attendance*
 
-The **Take Attendance** button will mark you as present in class if you are in the classes location and do so within limit of time of the teacher opening up attendance.
+<img src="https://i.imgur.com/BRdNbLg.gif" class="screenshot">
 
-It will only allow you to press the button per *Limite of time* to limit gaming the system.
-## Contributors
-#### Zac
-#### Jim
-#### Fadi
-#### Mayank Saboo
-#### Douglas Weisse
+The **Take Attendance** button will mark you as present in class if you are in the specific location radius and do so within the time limit.
+
+<img src="https://i.imgur.com/ocRmTts.gif" class="screenshot">
+
+## Sign-out sure!
+
+<img src="https://i.imgur.com/jTWMi8F.gif" class="screenshot">
+
+# Contributors
+### Zac You
+### Jim Zhu
+### Fadi Haddad
+### Mayank Saboo
+### Douglas Weisse
