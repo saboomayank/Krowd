@@ -58,13 +58,15 @@
 ## Taking Attendance
 ### Select a class that you want to mark yourself present.
 #### *Without professor opening attendance*
-<img src="https://i.imgur.com/3VlLnZP.gif" class="screenshot">
+<img src="https://i.imgur.com/l4HAPyl.gif" class="screenshot">
 
 ### The **Take Attendance** button will mark you as present in class if you are in the specific location radius and do so within the time limit.
 <img src="https://i.imgur.com/ocRmTts.gif" class="screenshot">
 
 
+## Sign-out sure!
 
+<img src="https://i.imgur.com/jTWMi8F.gif" class="screenshot">
 
 # Contributors
 ### Zac You
