@@ -14,8 +14,6 @@
 ## Signing Up
 First select *Teacher* or *Student* and then press **Sign Up**.
 
-<img src="https://i.imgur.com/iUSs5fr.jpg" class="screenshot" width="365" height="651">
-
 Enter your information and **Sign Up** and that's that. You're in.
 
 <img src="https://i.imgur.com/kw1kPsu.gif" class="screenshot">
