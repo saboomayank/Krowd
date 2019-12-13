@@ -61,7 +61,7 @@ Select a class that you want to mark yourself present.
 #### *Without professor opening attendance*
 <img src="https://i.imgur.com/l4HAPyl.gif" class="screenshot">
 
-### The **Take Attendance** button will mark you as present in class if you are in the specific location radius and do so within the time limit.
+xThe **Take Attendance** button will mark you as present in class if you are in the specific location radius and do so within the time limit.
 <img src="https://i.imgur.com/ocRmTts.gif" class="screenshot">
 
 ## Sign-out sure!
@@ -70,7 +70,7 @@ Select a class that you want to mark yourself present.
 
 # Contributors
 ### Zac You
-### Jim
+### Jim Zhu
 ### Fadi Haddad
 ### Mayank Saboo
 ### Douglas Weisse
