@@ -9,7 +9,7 @@
 # _Getting started_
 
 ## Splash Page
-<img src="https://i.imgur.com/5peW7Mg.gif" class="screenshot">
+<img src="https://i.imgur.com/62DLFHU.gif" class="screenshot">
 
 ## Signing Up
 First select *Teacher* or *Student* and then press **Sign Up**.
@@ -59,7 +59,7 @@ This will allow you to join the class list of an instructor's class or drop out 
 Select a class that you want to mark yourself present.
 #### *Without professor opening attendance*
 
-<img src="https://i.imgur.com/l4HAPyl.gif" class="screenshot">
+<img src="https://i.imgur.com/BRdNbLg.gif" class="screenshot">
 
 The **Take Attendance** button will mark you as present in class if you are in the specific location radius and do so within the time limit.
 
