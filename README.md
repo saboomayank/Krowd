@@ -1,9 +1,9 @@
 <!-- # <span style ="color:#CC3333"> *Krowd* </span>  -->
 ![alt text](https://github.com/saboomayank/Krowd/blob/master/app/src/main/res/drawable/logo.png?raw=true "Krowd logo")
 
-## _A location based attendance app_
+### _A location based attendance app_
 
-### Being present in the class is essential as you learn new things interact with professor(s) & classmate(s). This app allows students to take attendance through the phone when they are in class, based on their location. It allow the professor(s) to know who is currently in the class in an efficient way.
+#### Being present in the class is essential as you learn new things interact with professor(s) & classmate(s). This app allows students to take attendance through the phone when they are in class, based on their location. It allow the professor(s) to know who is currently in the class in an efficient way.
 
 # _Getting started_
 
