@@ -48,7 +48,7 @@ This requires the class name and course description. It will then add the class 
 # Students
 Here you can view and select your classes to begin taking attendance for a class
 
-<img src="https://i.imgur.com/zzqAXsw.gif" class="screenshot">\
+<img src="https://i.imgur.com/zzqAXsw.gif" class="screenshot">
 
 ## Adding & Dropping Classes
 This will allow you to join the class list of an instructor's class or drop out of a specific class. Make sure to select the appropriate class.
@@ -58,6 +58,7 @@ This will allow you to join the class list of an instructor's class or drop out 
 ## Taking Attendance
 Select a class that you want to mark yourself present.
 #### *Without professor opening attendance*
+
 <img src="https://i.imgur.com/l4HAPyl.gif" class="screenshot">
 
 The **Take Attendance** button will mark you as present in class if you are in the specific location radius and do so within the time limit.
