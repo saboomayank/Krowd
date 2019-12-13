@@ -1,5 +1,6 @@
-<!-- # <span style ="color:#CC3333"> *Krowd* </span>  -->
-![alt text](https://github.com/saboomayank/Krowd/blob/master/app/src/main/res/drawable/logo.png?raw=true "Krowd logo")
+<p align="center">
+<img src="https://github.com/saboomayank/Krowd/blob/master/app/src/main/res/drawable/logo.png?raw=true" class="icon" height="150px" width="150px">
+</p>
 
 ### _A location based attendance app_
 
@@ -13,7 +14,7 @@
 ## Signing Up
 First select *Teacher* or *Student* and then press **Sign Up**.
 
-<img src="https://i.imgur.com/5DCS7oG.gif" class="screenshot">
+<img src="https://i.imgur.com/iUSs5fr.jpg" class="screenshot">
 
 Enter your information and **Sign Up** and that's that. You're in.
 
