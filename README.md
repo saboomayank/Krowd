@@ -42,7 +42,7 @@ This requires the class name and course description. It will then add the class 
 
 ## Deleting Courses
 
-<span style="color:red">*Note* - This action is irreversible.</span>
+<span style="color:red">Note - This action is irreversible.</span>
 
 <img src="https://i.imgur.com/5Cicl4X.gif" class="screenshot">
 
