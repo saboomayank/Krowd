@@ -70,6 +70,9 @@ The **Take Attendance** button will mark you as present in class if you are in t
 
 <img src="https://i.imgur.com/jTWMi8F.gif" class="screenshot">
 
+## Demo Video
+https://www.youtube.com/watch?v=wEkA8go10n8
+
 # Contributors
 ### Zac You
 ### Jim Zhu
